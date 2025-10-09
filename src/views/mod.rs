@@ -8,11 +8,16 @@
 //! The [`Navbar`] component will be rendered on all pages of our app since every page is under the layout. The layout defines
 //! a common wrapper around all child routes.
 
+mod components;
+mod components_index;
+mod docs;
 mod home;
+mod layout;
+
+pub use components::ButtonPage;
+pub use components_index::ComponentsIndex;
+pub use docs::{Guide, Introduction, QuickStart, Version};
 pub use home::Home;
-
-mod blog;
-pub use blog::Blog;
-
-mod navbar;
-pub use navbar::Navbar;
+pub use layout::{
+    ComponentsSidebar, DocPage, DocsSidebar, PageToc, Sidebar, SidebarItem, TopNavbar,
+};
