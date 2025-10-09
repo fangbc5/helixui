@@ -3,7 +3,8 @@
 use dioxus::prelude::*;
 
 use views::{
-    ButtonPage, ComponentsIndex, Guide, Home, Introduction, QuickStart, TopNavbar, Version,
+    ButtonPage, ComponentsIndex, Guide, Home, IconPage, Introduction, QuickStart, TopNavbar,
+    Version,
 };
 
 /// Define a components module that contains all shared components for our app.
@@ -40,6 +41,8 @@ enum Route {
         
         #[route("/component/button")]
         ButtonPage {},
+        #[route("/component/icon")]
+        IconPage {},
 }
 
 // We can import assets in dioxus with the `asset!` macro. This macro takes a path to an asset relative to the crate root.

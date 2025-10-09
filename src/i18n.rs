@@ -7,6 +7,7 @@ pub enum Language {
 }
 
 impl Language {
+    #[allow(dead_code)]
     pub fn code(&self) -> &'static str {
         match self {
             Language::ZhCN => "zh-CN",
@@ -139,6 +140,8 @@ pub fn t(key: &str) -> String {
         // 组件页面
         (Language::ZhCN, "component.button") => "按钮 Button",
         (Language::EnUS, "component.button") => "Button",
+        (Language::ZhCN, "component.icon") => "图标 Icon",
+        (Language::EnUS, "component.icon") => "Icon",
         
         // 默认
         _ => key,

@@ -2,13 +2,12 @@
 //! They can be used to defined common UI elements like buttons, forms, and modals. In this template, we define a Hero
 //! component  to be used in our app.
 
-mod button;
+pub mod common;
 mod copyright;
+mod demo_box;
 mod footer;
-mod hero;
 mod logo;
 mod navbar;
 
-pub use button::{Button, ButtonSize, ButtonType};
-pub use hero::Hero;
-pub use logo::ImageLogo;
+pub use common::{Button, ButtonSize, ButtonType, Icon, IconSize, IconType};
+pub use demo_box::DemoBox;

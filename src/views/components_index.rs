@@ -39,6 +39,13 @@ pub fn ComponentsIndex() -> Element {
                                 status: ComponentStatus::Available,
                             },
                             ComponentCard {
+                                name: "Icon".to_string(),
+                                name_zh: "图标".to_string(),
+                                description: "语义化的矢量图形。".to_string(),
+                                route: crate::Route::IconPage {},
+                                status: ComponentStatus::Available,
+                            },
+                            ComponentCard {
                                 name: "Avatar".to_string(),
                                 name_zh: "头像".to_string(),
                                 description: "用来展示用户头像或其他图片。".to_string(),

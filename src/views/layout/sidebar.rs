@@ -100,10 +100,10 @@ fn SidebarNode(item: SidebarItem) -> Element {
 pub fn ComponentsSidebar() -> Element {
     let items = vec![SidebarItem::category(
         i18n::t("sidebar.components"),
-        vec![SidebarItem::link(
-            i18n::t("component.button"),
-            crate::Route::ButtonPage {},
-        )],
+        vec![
+            SidebarItem::link(i18n::t("component.button"), crate::Route::ButtonPage {}),
+            SidebarItem::link(i18n::t("component.icon"), crate::Route::IconPage {}),
+        ],
     )];
 
     rsx! {

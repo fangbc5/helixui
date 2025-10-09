@@ -29,6 +29,7 @@ impl ButtonType {
 /// Button 组件的尺寸
 #[derive(Clone, PartialEq)]
 pub enum ButtonSize {
+    Tiny,
     Small,
     Medium,
     Large,
@@ -37,6 +38,7 @@ pub enum ButtonSize {
 impl ButtonSize {
     pub fn to_class(&self) -> &str {
         match self {
+            ButtonSize::Tiny => "px-2 py-0.5 text-xs",
             ButtonSize::Small => "px-3 py-1 text-sm",
             ButtonSize::Medium => "px-4 py-2 text-base",
             ButtonSize::Large => "px-6 py-3 text-lg",
