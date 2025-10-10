@@ -65,7 +65,7 @@ impl ButtonSize {
 
     pub fn icon_class(&self) -> &str {
         match self {
-            ButtonSize::Tiny => "w-3 h-3",
+            ButtonSize::Tiny => "w-3.5 h-3.5", // 从 3x3 改为 3.5x3.5，与 7x7 按钮更好匹配
             ButtonSize::Small => "w-4 h-4",
             ButtonSize::Medium => "w-5 h-5",
             ButtonSize::Large => "w-6 h-6",
@@ -74,9 +74,9 @@ impl ButtonSize {
 
     pub fn icon_only_class(&self) -> &str {
         match self {
-            ButtonSize::Tiny => "p-1",
-            ButtonSize::Small => "p-1.5",
-            ButtonSize::Medium => "p-2",
+            ButtonSize::Tiny => "p-1.5", // 从 p-1 改为 p-1.5，为 7x7 按钮提供更好的图标居中
+            ButtonSize::Small => "p-2",  // 从 p-1.5 改为 p-2，为 8x8 按钮提供更好的图标居中
+            ButtonSize::Medium => "p-2.5", // 从 p-2 改为 p-2.5，为 10x10 按钮提供更好的图标居中
             ButtonSize::Large => "p-3",
         }
     }
@@ -95,7 +95,7 @@ impl ButtonShape {
     pub fn size_class(&self, size: &ButtonSize) -> &str {
         match self {
             ButtonShape::Circle => match size {
-                ButtonSize::Tiny => "w-6 h-6",
+                ButtonSize::Tiny => "w-7 h-7", // 从 6x6 改为 7x7，提供更好的图标空间
                 ButtonSize::Small => "w-8 h-8",
                 ButtonSize::Medium => "w-10 h-10",
                 ButtonSize::Large => "w-12 h-12",
