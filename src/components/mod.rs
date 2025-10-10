@@ -10,7 +10,9 @@ mod footer;
 mod logo;
 mod navbar;
 
-pub use common::{Button, ButtonSize, ButtonType, Icon, IconSize, IconType};
+pub use common::{
+    Button, ButtonShape, ButtonSize, ButtonType, ButtonVariant, Icon, IconSize, IconType,
+};
 pub use demo_box::DemoBox;
 pub use feedback::{
     show_message, show_message_with_duration, show_message_with_position, GlobalMessageContainer,

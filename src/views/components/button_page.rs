@@ -1,4 +1,6 @@
-use crate::components::{Button, ButtonSize, ButtonType, DemoBox};
+use crate::components::{
+    Button, ButtonShape, ButtonSize, ButtonType, ButtonVariant, DemoBox, IconType,
+};
 use crate::views::{ComponentsSidebar, DocPage};
 use dioxus::prelude::*;
 
@@ -175,10 +177,221 @@ rsx! {
                         Button { button_type: ButtonType::Success, disabled: true, "Success" }
                     }
                 }
-            }
+                    }
 
-            // API
-            section {
+                    // 图标按钮
+                    section {
+                        id: "icon",
+                        class: "mb-12",
+                        h2 {
+                            class: "text-2xl font-semibold text-gray-900 dark:text-white mb-4",
+                            "图标按钮"
+                        }
+
+                        DemoBox {
+                            title: "纯图标按钮".to_string(),
+                            description: "只显示图标的按钮，适合工具栏和紧凑布局。".to_string(),
+                            code: r#"use helixui::components::{Button, ButtonType, ButtonVariant, IconType};
+
+        rsx! {
+            Button {
+                button_type: ButtonType::Default,
+                variant: ButtonVariant::Icon,
+                icon: Some(IconType::ChevronLeft),
+                "←"
+            }
+            Button {
+                button_type: ButtonType::Primary,
+                variant: ButtonVariant::Icon,
+                icon: Some(IconType::ChevronRight),
+                "→"
+            }
+            Button {
+                button_type: ButtonType::Info,
+                variant: ButtonVariant::Icon,
+                icon: Some(IconType::Settings),
+                "⚙"
+            }
+        }"#.to_string(),
+
+                            div {
+                                class: "flex flex-wrap gap-3",
+                                Button {
+                                    button_type: ButtonType::Default,
+                                    variant: ButtonVariant::Icon,
+                                    icon: Some(IconType::ChevronLeft),
+                                }
+                                Button {
+                                    button_type: ButtonType::Primary,
+                                    variant: ButtonVariant::Icon,
+                                    icon: Some(IconType::ChevronRight),
+                                }
+                                Button {
+                                    button_type: ButtonType::Info,
+                                    variant: ButtonVariant::Icon,
+                                    icon: Some(IconType::Settings),
+                                }
+                            }
+                        }
+
+                        DemoBox {
+                            title: "图标+文字按钮".to_string(),
+                            description: "同时显示图标和文字的按钮。".to_string(),
+                            code: r#"use helixui::components::{Button, ButtonType, ButtonVariant, IconType};
+
+        rsx! {
+            Button {
+                button_type: ButtonType::Primary,
+                variant: ButtonVariant::IconText,
+                icon: Some(IconType::Check),
+                "确认"
+            }
+            Button {
+                button_type: ButtonType::Error,
+                variant: ButtonVariant::IconText,
+                icon: Some(IconType::Close),
+                "取消"
+            }
+        }"#.to_string(),
+
+                            div {
+                                class: "flex flex-wrap gap-3",
+                                Button {
+                                    button_type: ButtonType::Primary,
+                                    variant: ButtonVariant::IconText,
+                                    icon: Some(IconType::Check),
+                                    "确认"
+                                }
+                                Button {
+                                    button_type: ButtonType::Error,
+                                    variant: ButtonVariant::IconText,
+                                    icon: Some(IconType::Close),
+                                    "取消"
+                                }
+                            }
+                        }
+                    }
+
+                    // 按钮形状
+                    section {
+                        id: "shape",
+                        class: "mb-12",
+                        h2 {
+                            class: "text-2xl font-semibold text-gray-900 dark:text-white mb-4",
+                            "按钮形状"
+                        }
+
+                        DemoBox {
+                            title: "不同形状的按钮".to_string(),
+                            description: "按钮支持多种形状：默认矩形、圆角矩形、圆形和椭圆形。".to_string(),
+                            code: r#"use helixui::components::{Button, ButtonShape, ButtonType, ButtonVariant, IconType};
+
+        rsx! {
+            // 默认矩形
+            Button {
+                button_type: ButtonType::Primary,
+                shape: ButtonShape::Default,
+                "默认"
+            }
+            // 圆角矩形
+            Button {
+                button_type: ButtonType::Primary,
+                shape: ButtonShape::Rounded,
+                "圆角"
+            }
+            // 圆形
+            Button {
+                button_type: ButtonType::Primary,
+                variant: ButtonVariant::Icon,
+                shape: ButtonShape::Circle,
+                icon: Some(IconType::Settings),
+            }
+            // 椭圆形
+            Button {
+                button_type: ButtonType::Primary,
+                shape: ButtonShape::Ellipse,
+                "椭圆形"
+            }
+        }"#.to_string(),
+
+                            div {
+                                class: "flex flex-wrap items-center gap-4",
+                                Button {
+                                    button_type: ButtonType::Primary,
+                                    shape: ButtonShape::Default,
+                                    "默认"
+                                }
+                                Button {
+                                    button_type: ButtonType::Primary,
+                                    shape: ButtonShape::Rounded,
+                                    "圆角"
+                                }
+                                Button {
+                                    button_type: ButtonType::Primary,
+                                    variant: ButtonVariant::Icon,
+                                    shape: ButtonShape::Circle,
+                                    icon: Some(IconType::Settings),
+                                }
+                                Button {
+                                    button_type: ButtonType::Primary,
+                                    shape: ButtonShape::Ellipse,
+                                    "椭圆形"
+                                }
+                            }
+                        }
+
+                        DemoBox {
+                            title: "圆形图标按钮".to_string(),
+                            description: "圆形按钮特别适合图标按钮，提供紧凑的视觉体验。".to_string(),
+                            code: r#"use helixui::components::{Button, ButtonShape, ButtonType, ButtonVariant, IconType};
+
+        rsx! {
+            Button {
+                button_type: ButtonType::Default,
+                variant: ButtonVariant::Icon,
+                shape: ButtonShape::Circle,
+                icon: Some(IconType::ChevronLeft),
+            }
+            Button {
+                button_type: ButtonType::Primary,
+                variant: ButtonVariant::Icon,
+                shape: ButtonShape::Circle,
+                icon: Some(IconType::ChevronRight),
+            }
+            Button {
+                button_type: ButtonType::Info,
+                variant: ButtonVariant::Icon,
+                shape: ButtonShape::Circle,
+                icon: Some(IconType::Settings),
+            }
+        }"#.to_string(),
+
+                            div {
+                                class: "flex flex-wrap gap-3",
+                                Button {
+                                    button_type: ButtonType::Default,
+                                    variant: ButtonVariant::Icon,
+                                    shape: ButtonShape::Circle,
+                                    icon: Some(IconType::ChevronLeft),
+                                }
+                                Button {
+                                    button_type: ButtonType::Primary,
+                                    variant: ButtonVariant::Icon,
+                                    shape: ButtonShape::Circle,
+                                    icon: Some(IconType::ChevronRight),
+                                }
+                                Button {
+                                    button_type: ButtonType::Info,
+                                    variant: ButtonVariant::Icon,
+                                    shape: ButtonShape::Circle,
+                                    icon: Some(IconType::Settings),
+                                }
+                            }
+                        }
+                    }
+
+                    // API
+                    section {
                 id: "api",
                 class: "mb-12",
                 h2 {
@@ -227,10 +440,38 @@ rsx! {
                                 td { class: "p-3 text-gray-600 dark:text-gray-300", "是否禁用" }
                             }
                             tr {
+                                class: "border-b border-gray-100 dark:border-gray-800",
                                 td { class: "p-3 text-gray-900 dark:text-white font-mono text-sm", "secondary" }
                                 td { class: "p-3 text-gray-600 dark:text-gray-300 font-mono text-sm", "bool" }
                                 td { class: "p-3 text-gray-600 dark:text-gray-300", "false" }
                                 td { class: "p-3 text-gray-600 dark:text-gray-300", "是否为次要按钮" }
+                            }
+                            tr {
+                                class: "border-b border-gray-100 dark:border-gray-800",
+                                td { class: "p-3 text-gray-900 dark:text-white font-mono text-sm", "variant" }
+                                td { class: "p-3 text-gray-600 dark:text-gray-300 font-mono text-sm", "ButtonVariant" }
+                                td { class: "p-3 text-gray-600 dark:text-gray-300", "Text" }
+                                td { class: "p-3 text-gray-600 dark:text-gray-300", "按钮变体（Text/Icon/IconText）" }
+                            }
+                            tr {
+                                class: "border-b border-gray-100 dark:border-gray-800",
+                                td { class: "p-3 text-gray-900 dark:text-white font-mono text-sm", "icon" }
+                                td { class: "p-3 text-gray-600 dark:text-gray-300 font-mono text-sm", "Option<IconType>" }
+                                td { class: "p-3 text-gray-600 dark:text-gray-300", "None" }
+                                td { class: "p-3 text-gray-600 dark:text-gray-300", "按钮图标（仅 Icon 和 IconText 变体）" }
+                            }
+                            tr {
+                                class: "border-b border-gray-100 dark:border-gray-800",
+                                td { class: "p-3 text-gray-900 dark:text-white font-mono text-sm", "shape" }
+                                td { class: "p-3 text-gray-600 dark:text-gray-300 font-mono text-sm", "ButtonShape" }
+                                td { class: "p-3 text-gray-600 dark:text-gray-300", "Rounded" }
+                                td { class: "p-3 text-gray-600 dark:text-gray-300", "按钮形状（Default/Rounded/Circle/Ellipse）" }
+                            }
+                            tr {
+                                td { class: "p-3 text-gray-900 dark:text-white font-mono text-sm", "class" }
+                                td { class: "p-3 text-gray-600 dark:text-gray-300 font-mono text-sm", "Option<String>" }
+                                td { class: "p-3 text-gray-600 dark:text-gray-300", "None" }
+                                td { class: "p-3 text-gray-600 dark:text-gray-300", "自定义 CSS 类名" }
                             }
                         }
                     }
