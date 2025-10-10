@@ -165,10 +165,10 @@ pub fn ComponentsSidebar() -> Element {
         ),
         SidebarItem::category(
             i18n::t("sidebar.feedback"),
-            vec![SidebarItem::link(
-                i18n::t("component.message"),
-                crate::Route::MessagePage {},
-            )],
+            vec![
+                SidebarItem::link(i18n::t("component.message"), crate::Route::MessagePage {}),
+                SidebarItem::link(i18n::t("component.dialog"), crate::Route::DialogPage {}),
+            ],
         ),
     ];
 

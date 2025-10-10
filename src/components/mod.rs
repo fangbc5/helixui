@@ -15,6 +15,8 @@ pub use common::{
 };
 pub use demo_box::DemoBox;
 pub use feedback::{
-    show_message, show_message_with_duration, show_message_with_position, GlobalMessageContainer,
-    Message, MessagePosition, MessageType,
+    close_all_dialogs, close_dialog, show_confirm_dialog, show_error_dialog, show_info_dialog,
+    show_message, show_message_with_duration, show_message_with_position, show_success_dialog,
+    show_warning_dialog, Dialog, DialogData, DialogManager, DialogType, GlobalDialogContainer,
+    GlobalMessageContainer, Message, MessagePosition, MessageType,
 };

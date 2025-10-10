@@ -139,13 +139,15 @@ pub fn t(key: &str) -> String {
         (Language::ZhCN, "version.current") => "当前版本",
         (Language::EnUS, "version.current") => "Current Version",
         
-        // 组件页面
-        (Language::ZhCN, "component.button") => "按钮 Button",
-        (Language::EnUS, "component.button") => "Button",
-        (Language::ZhCN, "component.icon") => "图标 Icon",
-        (Language::EnUS, "component.icon") => "Icon",
-        (Language::ZhCN, "component.message") => "消息 Message",
-        (Language::EnUS, "component.message") => "Message",
+                // 组件页面
+                (Language::ZhCN, "component.button") => "按钮 Button",
+                (Language::EnUS, "component.button") => "Button",
+                (Language::ZhCN, "component.icon") => "图标 Icon",
+                (Language::EnUS, "component.icon") => "Icon",
+                (Language::ZhCN, "component.message") => "消息 Message",
+                (Language::EnUS, "component.message") => "Message",
+                (Language::ZhCN, "component.dialog") => "对话框 Dialog",
+                (Language::EnUS, "component.dialog") => "Dialog",
         
         // 默认
         _ => key,
