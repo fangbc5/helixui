@@ -2,9 +2,10 @@
 // need dioxus
 use dioxus::prelude::*;
 
+use crate::components::GlobalMessageContainer;
 use views::{
-    ButtonPage, ComponentsIndex, Guide, Home, IconPage, Introduction, QuickStart, TopNavbar,
-    Version,
+    ButtonPage, ComponentsIndex, Guide, Home, IconPage, Introduction, MessagePage, QuickStart,
+    TopNavbar, Version,
 };
 
 /// Define a components module that contains all shared components for our app.
@@ -43,6 +44,8 @@ enum Route {
         ButtonPage {},
         #[route("/component/icon")]
         IconPage {},
+        #[route("/component/message")]
+        MessagePage {},
 }
 
 // We can import assets in dioxus with the `asset!` macro. This macro takes a path to an asset relative to the crate root.
@@ -75,5 +78,8 @@ fn App() -> Element {
         // The router component renders the route enum we defined above. It will handle synchronization of the URL and render
         // the layouts and components for the active route.
         Router::<Route> {}
+
+        // 全局消息容器
+        GlobalMessageContainer {}
     }
 }

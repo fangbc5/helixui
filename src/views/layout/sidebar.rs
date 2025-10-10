@@ -98,13 +98,21 @@ fn SidebarNode(item: SidebarItem) -> Element {
 /// 左侧组件导航（只包含组件列表）
 #[component]
 pub fn ComponentsSidebar() -> Element {
-    let items = vec![SidebarItem::category(
-        i18n::t("sidebar.components"),
-        vec![
-            SidebarItem::link(i18n::t("component.button"), crate::Route::ButtonPage {}),
-            SidebarItem::link(i18n::t("component.icon"), crate::Route::IconPage {}),
-        ],
-    )];
+    let items = vec![
+        SidebarItem::category(
+            i18n::t("sidebar.general"),
+            vec![
+                SidebarItem::link(i18n::t("component.button"), crate::Route::ButtonPage {}),
+                SidebarItem::link(i18n::t("component.icon"), crate::Route::IconPage {}),
+            ],
+        ),
+        SidebarItem::category(
+            i18n::t("sidebar.feedback"),
+            vec![
+                SidebarItem::link(i18n::t("component.message"), crate::Route::MessagePage {}),
+            ],
+        ),
+    ];
 
     rsx! {
         Sidebar { items: items }

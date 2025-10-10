@@ -82,6 +82,8 @@ pub fn t(key: &str) -> String {
         (Language::EnUS, "sidebar.components") => "Components",
         (Language::ZhCN, "sidebar.general") => "通用组件",
         (Language::EnUS, "sidebar.general") => "General",
+        (Language::ZhCN, "sidebar.feedback") => "反馈组件",
+        (Language::EnUS, "sidebar.feedback") => "Feedback",
         (Language::ZhCN, "sidebar.data-input") => "数据输入",
         (Language::EnUS, "sidebar.data-input") => "Data Input",
         
@@ -142,6 +144,8 @@ pub fn t(key: &str) -> String {
         (Language::EnUS, "component.button") => "Button",
         (Language::ZhCN, "component.icon") => "图标 Icon",
         (Language::EnUS, "component.icon") => "Icon",
+        (Language::ZhCN, "component.message") => "消息 Message",
+        (Language::EnUS, "component.message") => "Message",
         
         // 默认
         _ => key,

@@ -14,10 +14,8 @@ mod docs;
 mod home;
 mod layout;
 
-pub use components::{ButtonPage, IconPage};
+pub use components::{ButtonPage, IconPage, MessagePage};
 pub use components_index::ComponentsIndex;
 pub use docs::{Guide, Introduction, QuickStart, Version};
 pub use home::Home;
-pub use layout::{
-    ComponentsSidebar, DocPage, DocsSidebar, TopNavbar,
-};
+pub use layout::{ComponentsSidebar, DocPage, DocsSidebar, TopNavbar};

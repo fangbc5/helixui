@@ -53,6 +53,7 @@ pub fn Button(
     #[props(default = ButtonSize::Medium)] size: ButtonSize,
     #[props(default = false)] disabled: bool,
     #[props(default = false)] secondary: bool,
+    #[props(default)] onclick: Option<EventHandler<()>>,
     children: Element,
 ) -> Element {
     let type_class = button_type.to_class();
@@ -79,6 +80,11 @@ pub fn Button(
         button {
             class: "rounded-md font-medium transition-colors duration-200 {secondary_class} {size_class} {disabled_class}",
             disabled: disabled,
+            onclick: move |_| {
+                if let Some(handler) = &onclick {
+                    handler.call(());
+                }
+            },
             {children}
         }
     }

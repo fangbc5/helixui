@@ -91,6 +91,35 @@ pub fn ComponentsIndex() -> Element {
                         ],
                     }
 
+                    // 反馈组件
+                    ComponentCategory {
+                        title: "反馈组件",
+                        description: "向用户反馈信息",
+                        components: vec![
+                            ComponentCard {
+                                name: "Message".to_string(),
+                                name_zh: "消息".to_string(),
+                                description: "轻量级的全局提示反馈。".to_string(),
+                                route: crate::Route::MessagePage {},
+                                status: ComponentStatus::Available,
+                            },
+                            ComponentCard {
+                                name: "Notification".to_string(),
+                                name_zh: "通知".to_string(),
+                                description: "显示通知提醒消息。".to_string(),
+                                route: crate::Route::ComponentsIndex {},
+                                status: ComponentStatus::ComingSoon,
+                            },
+                            ComponentCard {
+                                name: "Alert".to_string(),
+                                name_zh: "警告".to_string(),
+                                description: "静态的信息提示。".to_string(),
+                                route: crate::Route::ComponentsIndex {},
+                                status: ComponentStatus::ComingSoon,
+                            },
+                        ],
+                    }
+
                     // 数据展示
                     ComponentCategory {
                         title: "数据展示",
