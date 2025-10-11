@@ -9,16 +9,19 @@ pub struct SidebarItem {
     pub route: Option<Route>,
     pub children: Vec<SidebarItem>,
     pub expanded: bool,
+    pub count: Option<u32>, // 组件数量
 }
 
 impl SidebarItem {
     /// 创建一个分类项（没有路由）
     pub fn category(label: String, children: Vec<SidebarItem>) -> Self {
+        let count = Some(children.len() as u32);
         Self {
             label,
             route: None,
             children,
             expanded: true, // 默认展开
+            count,
         }
     }
 
@@ -29,6 +32,7 @@ impl SidebarItem {
             route: Some(route),
             children: vec![],
             expanded: true, // 链接项不需要展开状态
+            count: None,
         }
     }
 }
@@ -91,6 +95,12 @@ fn SidebarNode(item: SidebarItem, on_toggle: EventHandler<usize>, index: usize) 
                     h3 {
                         class: "text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider group-hover:text-gray-700 dark:group-hover:text-gray-300 transition-colors",
                         "{item.label}"
+                        if let Some(count) = item.count {
+                            span {
+                                class: "ml-1 text-gray-400 dark:text-gray-500 group-hover:text-gray-600 dark:group-hover:text-gray-300",
+                                "({count})"
+                            }
+                        }
                     }
 
                     // 展开/收起图标（展开时向下，收起时向右）
@@ -161,6 +171,7 @@ pub fn ComponentsSidebar() -> Element {
             i18n::t("sidebar.general"),
             vec![
                 SidebarItem::link(i18n::t("component.button"), crate::Route::ButtonPage {}),
+                SidebarItem::link(i18n::t("component.card"), crate::Route::CardPage {}),
                 SidebarItem::link(i18n::t("component.icon"), crate::Route::IconPage {}),
             ],
         ),

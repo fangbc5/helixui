@@ -1,5 +1,6 @@
 use crate::i18n;
 use dioxus::prelude::*;
+use helixui::components::DefaultFooter;
 
 /// The Home page component that will be rendered when the current route is `[Route::Home]`
 #[component]
@@ -35,11 +36,11 @@ pub fn Home() -> Element {
                         class: "px-8 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-lg font-medium",
                         "{i18n::t(\"home.get_started\")}"
                     }
-                    a {
-                        href: "https://github.com/fangbc5/helixui",
-                        class: "px-8 py-3 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-2 border-gray-300 dark:border-gray-700 rounded-lg hover:border-gray-400 dark:hover:border-gray-600 transition-colors text-lg font-medium",
-                        "GitHub"
-                    }
+                    // a {
+                    //     href: "https://github.com/fangbc5/helixui",
+                    //     class: "px-8 py-3 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-2 border-gray-300 dark:border-gray-700 rounded-lg hover:border-gray-400 dark:hover:border-gray-600 transition-colors text-lg font-medium",
+                    //     "GitHub"
+                    // }
                 }
             }
 
@@ -101,6 +102,9 @@ pub fn Home() -> Element {
                     }
                 }
             }
+
+            // Footer
+            DefaultFooter {}
         }
     }
 }
