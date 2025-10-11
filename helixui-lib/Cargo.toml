@@ -1,0 +1,31 @@
+[package]
+name = "helixui"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+description = "A modern UI component library for Dioxus applications"
+license = "MIT"
+repository = "https://github.com/fangbaichun/helixui"
+homepage = "https://github.com/fangbaichun/helixui"
+documentation = "https://docs.rs/helixui"
+readme = "README.md"
+keywords = ["dioxus", "ui", "components", "rust", "web", "frontend"]
+categories = ["gui", "web-programming", "development-tools"]
+rust-version = "1.70"
+
+[lib]
+name = "helixui"
+path = "src/lib.rs"
+
+[dependencies]
+dioxus.workspace = true
+gloo-timers.workspace = true
+web-sys.workspace = true
+wasm-bindgen.workspace = true
+js-sys.workspace = true
+
+[features]
+default = ["web"]
+web = ["dioxus/web"]
+desktop = ["dioxus/desktop"]
+mobile = ["dioxus/mobile"]

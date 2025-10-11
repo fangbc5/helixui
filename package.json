@@ -1,9 +1,0 @@
-{
-  "scripts": {
-    "css:watch": "tailwindcss -i ./tailwind.css -o ./assets/tailwind.css --watch",
-    "css:build": "tailwindcss -i ./tailwind.css -o ./assets/tailwind.css --minify"
-  },
-  "devDependencies": {
-    "tailwindcss": "^3.4.17"
-  }
-}
