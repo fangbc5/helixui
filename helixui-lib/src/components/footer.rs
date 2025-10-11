@@ -186,7 +186,7 @@ pub fn DefaultFooter() -> Element {
                 },
                 FooterLink {
                     text: "Discord".to_string(),
-                    href: Some("https://discord.gg/BxxwDrhw".to_string()),
+                    href: Some("https://discord.gg/62xP3wRDXf".to_string()),
                 },
                 FooterLink {
                     text: "钉钉".to_string(),
