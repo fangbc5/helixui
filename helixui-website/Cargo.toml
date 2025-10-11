@@ -1,0 +1,24 @@
+[package]
+name = "helixui-website"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+description = "HelixUI official website and documentation"
+
+[[bin]]
+name = "helixui-website"
+path = "src/main.rs"
+
+[dependencies]
+helixui = { path = "../helixui-lib" }
+dioxus.workspace = true
+gloo-timers.workspace = true
+web-sys.workspace = true
+wasm-bindgen.workspace = true
+js-sys.workspace = true
+
+[features]
+default = ["web"]
+web = ["dioxus/web"]
+desktop = ["dioxus/desktop"]
+mobile = ["dioxus/mobile"]
