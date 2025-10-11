@@ -96,20 +96,27 @@ pub fn ComponentsIndex() -> Element {
                         title: "反馈组件",
                         description: "向用户反馈信息",
                         components: vec![
-                                    ComponentCard {
-                                        name: "Message".to_string(),
-                                        name_zh: "消息".to_string(),
-                                        description: "轻量级的全局提示反馈。".to_string(),
-                                        route: crate::Route::MessagePage {},
-                                        status: ComponentStatus::Available,
-                                    },
-                                    ComponentCard {
-                                        name: "Dialog".to_string(),
-                                        name_zh: "对话框".to_string(),
-                                        description: "模态对话框，在保留当前页面状态的情况下，告知用户并承载相关操作。".to_string(),
-                                        route: crate::Route::DialogPage {},
-                                        status: ComponentStatus::Available,
-                                    },
+                            ComponentCard {
+                                name: "Badge".to_string(),
+                                name_zh: "标记".to_string(),
+                                description: "用于显示状态标记或数量信息。".to_string(),
+                                route: crate::Route::BadgePage {},
+                                status: ComponentStatus::Available,
+                            },
+                            ComponentCard {
+                                name: "Message".to_string(),
+                                name_zh: "消息".to_string(),
+                                description: "轻量级的全局提示反馈。".to_string(),
+                                route: crate::Route::MessagePage {},
+                                status: ComponentStatus::Available,
+                            },
+                            ComponentCard {
+                                name: "Dialog".to_string(),
+                                name_zh: "对话框".to_string(),
+                                description: "模态对话框，在保留当前页面状态的情况下，告知用户并承载相关操作。".to_string(),
+                                route: crate::Route::DialogPage {},
+                                status: ComponentStatus::Available,
+                            },
                             ComponentCard {
                                 name: "Notification".to_string(),
                                 name_zh: "通知".to_string(),

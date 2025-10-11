@@ -4,8 +4,8 @@ use dioxus::prelude::*;
 
 use crate::components::{GlobalDialogContainer, GlobalMessageContainer};
 use views::{
-    ButtonPage, ComponentsIndex, DialogPage, Guide, Home, IconPage, Introduction, MessagePage,
-    QuickStart, TopNavbar, Version,
+    BadgePage, ButtonPage, ComponentsIndex, DialogPage, Guide, Home, IconPage, Introduction,
+    MessagePage, QuickStart, TopNavbar, Version,
 };
 
 /// Define a components module that contains all shared components for our app.
@@ -40,6 +40,8 @@ enum Route {
         #[route("/docs/version")]
         Version {},
         
+                #[route("/component/badge")]
+                BadgePage {},
                 #[route("/component/button")]
                 ButtonPage {},
                 #[route("/component/icon")]
