@@ -9,7 +9,7 @@ repository = "https://github.com/fangbaichun/helixui"
 homepage = "https://github.com/fangbaichun/helixui"
 documentation = "https://docs.rs/helixui"
 readme = "README.md"
-keywords = ["dioxus", "ui", "components", "rust", "web", "frontend"]
+keywords = ["dioxus", "ui", "components", "rust", "web"]
 categories = ["gui", "web-programming", "development-tools"]
 rust-version = "1.70"
 
