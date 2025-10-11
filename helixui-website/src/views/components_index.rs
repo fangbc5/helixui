@@ -49,8 +49,8 @@ pub fn ComponentsIndex() -> Element {
                                 name: "Avatar".to_string(),
                                 name_zh: "头像".to_string(),
                                 description: "用来展示用户头像或其他图片。".to_string(),
-                                route: crate::Route::ComponentsIndex {},
-                                status: ComponentStatus::ComingSoon,
+                                route: crate::Route::AvatarPage {},
+                                status: ComponentStatus::Available,
                             },
         ComponentCard {
             name: "Card".to_string(),

@@ -1,8 +1,10 @@
+mod avatar;
 mod button;
 mod card;
 mod divider;
 mod icon;
 
+pub use avatar::{Avatar, AvatarGroup, AvatarGroupProps, AvatarProps, AvatarShape, AvatarSize};
 pub use button::{Button, ButtonShape, ButtonSize, ButtonType, ButtonVariant};
 pub use card::{
     Card, CardContent, CardFooter, CardGrid, CardGroup, CardHeader, CardProps, CardShadow, CardSize,

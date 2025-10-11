@@ -140,6 +140,8 @@ pub fn t(key: &str) -> String {
         (Language::EnUS, "version.current") => "Current Version",
         
         // 组件页面
+        (Language::ZhCN, "component.avatar") => "头像 Avatar",
+        (Language::EnUS, "component.avatar") => "Avatar",
         (Language::ZhCN, "component.badge") => "标记 Badge",
         (Language::EnUS, "component.badge") => "Badge",
         (Language::ZhCN, "component.button") => "按钮 Button",

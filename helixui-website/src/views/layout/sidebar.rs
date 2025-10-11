@@ -170,10 +170,11 @@ pub fn ComponentsSidebar() -> Element {
         SidebarItem::category(
             i18n::t("sidebar.general"),
             vec![
+                SidebarItem::link(i18n::t("component.avatar"), crate::Route::AvatarPage {}),
                 SidebarItem::link(i18n::t("component.button"), crate::Route::ButtonPage {}),
-                        SidebarItem::link(i18n::t("component.card"), crate::Route::CardPage {}),
-                        SidebarItem::link(i18n::t("component.divider"), crate::Route::DividerPage {}),
-                        SidebarItem::link(i18n::t("component.icon"), crate::Route::IconPage {}),
+                SidebarItem::link(i18n::t("component.card"), crate::Route::CardPage {}),
+                SidebarItem::link(i18n::t("component.divider"), crate::Route::DividerPage {}),
+                SidebarItem::link(i18n::t("component.icon"), crate::Route::IconPage {}),
             ],
         ),
         SidebarItem::category(

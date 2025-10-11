@@ -4,7 +4,7 @@ use dioxus::prelude::*;
 
 use helixui::components::{GlobalDialogContainer, GlobalMessageContainer};
 use views::{
-    BadgePage, ButtonPage, CardPage, ComponentsIndex, DialogPage, DividerPage, Guide, Home,
+    AvatarPage, BadgePage, ButtonPage, CardPage, ComponentsIndex, DialogPage, DividerPage, Guide, Home,
     IconPage, Introduction, MessagePage, QuickStart, TopNavbar, Version,
 };
 
@@ -38,6 +38,8 @@ enum Route {
         #[route("/docs/version")]
         Version {},
         
+                #[route("/component/avatar")]
+                AvatarPage {},
                 #[route("/component/badge")]
                 BadgePage {},
                 #[route("/component/button")]
