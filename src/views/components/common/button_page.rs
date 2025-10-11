@@ -1,15 +1,56 @@
 use crate::components::{
     Button, ButtonShape, ButtonSize, ButtonType, ButtonVariant, DemoBox, IconType,
 };
+use crate::views::layout::TocItem;
 use crate::views::{ComponentsSidebar, DocPage};
 use dioxus::prelude::*;
 
 /// Button 组件文档页面
 #[component]
 pub fn ButtonPage() -> Element {
+    // 定义目录项
+    let toc_items = vec![
+        TocItem {
+            id: "basic".to_string(),
+            title: "演示".to_string(),
+            level: 1,
+        },
+        TocItem {
+            id: "secondary".to_string(),
+            title: "次要按钮".to_string(),
+            level: 1,
+        },
+        TocItem {
+            id: "size".to_string(),
+            title: "尺寸".to_string(),
+            level: 1,
+        },
+        TocItem {
+            id: "disabled".to_string(),
+            title: "禁用".to_string(),
+            level: 1,
+        },
+        TocItem {
+            id: "icon".to_string(),
+            title: "图标".to_string(),
+            level: 1,
+        },
+        TocItem {
+            id: "shape".to_string(),
+            title: "形状".to_string(),
+            level: 1,
+        },
+        TocItem {
+            id: "api".to_string(),
+            title: "API".to_string(),
+            level: 1,
+        },
+    ];
+
     rsx! {
         DocPage {
             sidebar: rsx! { ComponentsSidebar {} },
+            toc_items,
 
             div {
                 class: "component-doc",

@@ -1,13 +1,54 @@
 use crate::components::{DemoBox, Icon, IconSize, IconType};
+use crate::views::layout::TocItem;
 use crate::views::{ComponentsSidebar, DocPage};
 use dioxus::prelude::*;
 
 /// Icon 组件文档页面
 #[component]
 pub fn IconPage() -> Element {
+    // 定义目录项
+    let toc_items = vec![
+        TocItem {
+            id: "basic".to_string(),
+            title: "演示".to_string(),
+            level: 1,
+        },
+        TocItem {
+            id: "size".to_string(),
+            title: "尺寸".to_string(),
+            level: 1,
+        },
+        TocItem {
+            id: "color".to_string(),
+            title: "颜色".to_string(),
+            level: 1,
+        },
+        TocItem {
+            id: "status".to_string(),
+            title: "状态".to_string(),
+            level: 1,
+        },
+        TocItem {
+            id: "loading".to_string(),
+            title: "加载".to_string(),
+            level: 1,
+        },
+        TocItem {
+            id: "all".to_string(),
+            title: "所有图标".to_string(),
+            level: 1,
+        },
+        TocItem {
+            id: "api".to_string(),
+            title: "API".to_string(),
+            level: 1,
+        },
+    ];
+
     rsx! {
         DocPage {
             sidebar: rsx! { ComponentsSidebar {} },
+            toc_items,
 
             div {
                 class: "component-doc",

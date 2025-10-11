@@ -2,6 +2,7 @@ use crate::components::{
     feedback::{Badge, BadgeType},
     Button, ButtonSize, ButtonType, DemoBox,
 };
+use crate::views::layout::TocItem;
 use crate::views::{ComponentsSidebar, DocPage};
 use dioxus::prelude::*;
 
@@ -30,9 +31,64 @@ pub fn BadgePage() -> Element {
         *controlled_count_str.write() = controlled_count.read().to_string();
     });
 
+    // 定义目录项
+    let toc_items = vec![
+        TocItem {
+            id: "basic".to_string(),
+            title: "演示".to_string(),
+            level: 1,
+        },
+        TocItem {
+            id: "types".to_string(),
+            title: "类型".to_string(),
+            level: 1,
+        },
+        TocItem {
+            id: "processing".to_string(),
+            title: "处理中".to_string(),
+            level: 1,
+        },
+        TocItem {
+            id: "show-zero".to_string(),
+            title: "显示 0".to_string(),
+            level: 1,
+        },
+        TocItem {
+            id: "overflow".to_string(),
+            title: "溢出".to_string(),
+            level: 1,
+        },
+        TocItem {
+            id: "controlled".to_string(),
+            title: "受控显示".to_string(),
+            level: 1,
+        },
+        TocItem {
+            id: "custom-content".to_string(),
+            title: "自定义内容".to_string(),
+            level: 1,
+        },
+        TocItem {
+            id: "custom-color".to_string(),
+            title: "自定义颜色".to_string(),
+            level: 1,
+        },
+        TocItem {
+            id: "custom-offset".to_string(),
+            title: "自定义偏移".to_string(),
+            level: 1,
+        },
+        TocItem {
+            id: "api".to_string(),
+            title: "API".to_string(),
+            level: 1,
+        },
+    ];
+
     rsx! {
         DocPage {
             sidebar: rsx! { ComponentsSidebar {} },
+            toc_items,
 
             div {
                 class: "component-doc",

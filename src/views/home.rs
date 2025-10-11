@@ -10,7 +10,7 @@ pub fn Home() -> Element {
 
             // Hero 区域
             div {
-                class: "container mx-auto px-4 py-32 text-center",
+                class: "container mx-auto px-4 pt-32 pb-0 text-center",
 
                 h1 {
                     class: "text-6xl font-bold text-gray-900 dark:text-white mb-4",

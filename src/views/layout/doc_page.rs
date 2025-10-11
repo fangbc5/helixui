@@ -1,5 +1,6 @@
 use super::{PageToc, TopNavbar};
 use crate::components::{Button, ButtonShape, ButtonSize, ButtonType, ButtonVariant, IconType};
+use crate::views::layout::TocItem;
 use dioxus::prelude::*;
 
 /// 文档页面布局包装器
@@ -9,6 +10,10 @@ use dioxus::prelude::*;
 /// rsx! {
 ///     DocPage {
 ///         sidebar: rsx! { ComponentsSidebar {} },
+///         toc_items: vec![
+///             TocItem { id: "basic".to_string(), title: "基础用法".to_string(), level: 1 },
+///             TocItem { id: "api".to_string(), title: "API".to_string(), level: 1 },
+///         ],
 ///         // 页面内容
 ///         h1 { "标题" }
 ///         p { "内容" }
@@ -16,12 +21,13 @@ use dioxus::prelude::*;
 /// }
 /// ```
 #[component]
-pub fn DocPage(sidebar: Element, children: Element) -> Element {
+pub fn DocPage(sidebar: Element, toc_items: Vec<TocItem>, children: Element) -> Element {
     let mut sidebar_collapsed = use_signal(|| false);
 
     rsx! {
         div {
             class: "min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors",
+            style: "scroll-behavior: smooth;",
 
             TopNavbar {}
 
@@ -54,7 +60,7 @@ pub fn DocPage(sidebar: Element, children: Element) -> Element {
                 // 右侧目录
                 aside {
                     class: "w-64 bg-white dark:bg-gray-800 border-l border-gray-200 dark:border-gray-700 fixed right-0 h-[calc(100vh-4rem)] overflow-y-auto transition-colors",
-                    PageToc {}
+                    PageToc { items: toc_items }
                 }
 
                 // 侧边栏切换按钮

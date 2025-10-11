@@ -10,6 +10,7 @@ pub fn QuickStart() -> Element {
     rsx! {
         DocPage {
             sidebar: rsx! { DocsSidebar {} },
+            toc_items: vec![],
 
             div {
                 class: "doc-page",
