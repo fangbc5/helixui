@@ -52,13 +52,20 @@ pub fn ComponentsIndex() -> Element {
                                 route: crate::Route::ComponentsIndex {},
                                 status: ComponentStatus::ComingSoon,
                             },
-                            ComponentCard {
-                                name: "Card".to_string(),
-                                name_zh: "卡片".to_string(),
-                                description: "容器组件，用于组织内容。".to_string(),
-                                route: crate::Route::CardPage {},
-                                status: ComponentStatus::Available,
-                            },
+        ComponentCard {
+            name: "Card".to_string(),
+            name_zh: "卡片".to_string(),
+            description: "容器组件，用于组织内容。".to_string(),
+            route: crate::Route::CardPage {},
+            status: ComponentStatus::Available,
+        },
+        ComponentCard {
+            name: "Divider".to_string(),
+            name_zh: "分割线".to_string(),
+            description: "用于分隔内容的分割线组件。".to_string(),
+            route: crate::Route::DividerPage {},
+            status: ComponentStatus::Available,
+        },
                         ],
                     }
 

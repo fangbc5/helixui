@@ -146,6 +146,8 @@ pub fn t(key: &str) -> String {
         (Language::EnUS, "component.button") => "Button",
         (Language::ZhCN, "component.card") => "卡片 Card",
         (Language::EnUS, "component.card") => "Card",
+        (Language::ZhCN, "component.divider") => "分割线 Divider",
+        (Language::EnUS, "component.divider") => "Divider",
         (Language::ZhCN, "component.icon") => "图标 Icon",
         (Language::EnUS, "component.icon") => "Icon",
         (Language::ZhCN, "component.message") => "消息 Message",
