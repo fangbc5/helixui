@@ -2,8 +2,8 @@ use crate::components::{
     show_message, show_message_with_duration, show_message_with_position, Button, ButtonType,
     DemoBox, Message, MessagePosition, MessageType,
 };
-use crate::views::{ComponentsSidebar, DocPage};
 use crate::views::layout::TocItem;
+use crate::views::{ComponentsSidebar, DocPage};
 use dioxus::prelude::*;
 
 /// 消息数据结构
@@ -47,14 +47,46 @@ pub fn MessagePage() -> Element {
 
     // 定义目录项
     let toc_items = vec![
-        TocItem { id: "basic".to_string(), title: "演示".to_string(), level: 1 },
-        TocItem { id: "interactive".to_string(), title: "交互演示".to_string(), level: 1 },
-        TocItem { id: "loading".to_string(), title: "加载状态".to_string(), level: 1 },
-        TocItem { id: "closable".to_string(), title: "可关闭".to_string(), level: 1 },
-        TocItem { id: "global".to_string(), title: "全局消息".to_string(), level: 1 },
-        TocItem { id: "position".to_string(), title: "位置控制".to_string(), level: 1 },
-        TocItem { id: "duration".to_string(), title: "持续时间".to_string(), level: 1 },
-        TocItem { id: "api".to_string(), title: "API".to_string(), level: 1 },
+        TocItem {
+            id: "basic".to_string(),
+            title: "演示".to_string(),
+            level: 1,
+        },
+        TocItem {
+            id: "interactive".to_string(),
+            title: "交互演示".to_string(),
+            level: 1,
+        },
+        TocItem {
+            id: "loading".to_string(),
+            title: "加载状态".to_string(),
+            level: 1,
+        },
+        TocItem {
+            id: "closable".to_string(),
+            title: "可关闭".to_string(),
+            level: 1,
+        },
+        TocItem {
+            id: "global".to_string(),
+            title: "全局消息".to_string(),
+            level: 1,
+        },
+        TocItem {
+            id: "position".to_string(),
+            title: "位置控制".to_string(),
+            level: 1,
+        },
+        TocItem {
+            id: "duration".to_string(),
+            title: "持续时间".to_string(),
+            level: 1,
+        },
+        TocItem {
+            id: "api".to_string(),
+            title: "API".to_string(),
+            level: 1,
+        },
     ];
 
     rsx! {

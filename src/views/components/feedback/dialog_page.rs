@@ -2,8 +2,8 @@ use crate::components::{
     show_confirm_dialog, show_error_dialog, show_info_dialog, show_success_dialog,
     show_warning_dialog, Button, ButtonType, DemoBox,
 };
-use crate::views::{ComponentsSidebar, DocPage};
 use crate::views::layout::TocItem;
+use crate::views::{ComponentsSidebar, DocPage};
 use dioxus::prelude::*;
 
 /// Dialog 组件文档页面
@@ -11,11 +11,31 @@ use dioxus::prelude::*;
 pub fn DialogPage() -> Element {
     // 定义目录项
     let toc_items = vec![
-        TocItem { id: "basic".to_string(), title: "演示".to_string(), level: 1 },
-        TocItem { id: "type".to_string(), title: "类型".to_string(), level: 1 },
-        TocItem { id: "mask".to_string(), title: "遮罩".to_string(), level: 1 },
-        TocItem { id: "interactive".to_string(), title: "交互".to_string(), level: 1 },
-        TocItem { id: "api".to_string(), title: "API".to_string(), level: 1 },
+        TocItem {
+            id: "basic".to_string(),
+            title: "演示".to_string(),
+            level: 1,
+        },
+        TocItem {
+            id: "type".to_string(),
+            title: "类型".to_string(),
+            level: 1,
+        },
+        TocItem {
+            id: "mask".to_string(),
+            title: "遮罩".to_string(),
+            level: 1,
+        },
+        TocItem {
+            id: "interactive".to_string(),
+            title: "交互".to_string(),
+            level: 1,
+        },
+        TocItem {
+            id: "api".to_string(),
+            title: "API".to_string(),
+            level: 1,
+        },
     ];
 
     rsx! {
