@@ -4,8 +4,8 @@ use dioxus::prelude::*;
 
 use helixui::components::{GlobalDialogContainer, GlobalMessageContainer};
 use views::{
-    AvatarPage, BadgePage, ButtonPage, CardPage, ComponentsIndex, DialogPage, DividerPage, Guide, Home,
-    IconPage, Introduction, MessagePage, QuickStart, TopNavbar, Version,
+    AvatarPage, BadgePage, ButtonPage, CardPage, ComponentsIndex, DialogPage, DividerPage, Guide,
+    Home, IconPage, Introduction, MessagePage, QuickStart, TopNavbar, Version,
 };
 
 /// i18n internationalization support
