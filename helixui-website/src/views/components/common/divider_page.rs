@@ -196,36 +196,6 @@ rsx! {
                     }
 
                     DemoBox {
-                        title: "实线分割线".to_string(),
-                        description: "默认的实线分割线".to_string(),
-                        code: r#"use helixui::components::DividerHorizontal;
-
-rsx! {
-    div {
-        class: "space-y-4",
-        div { "实线分割线" }
-        DividerHorizontal {}
-        div { "更多内容" }
-    }
-}"#.to_string(),
-
-                        div {
-                            class: "space-y-4",
-                            div {
-                                class: "text-gray-700 dark:text-gray-300",
-                                "实线分割线"
-                            }
-
-                            DividerHorizontal {}
-
-                            div {
-                                class: "text-gray-700 dark:text-gray-300",
-                                "更多内容"
-                            }
-                        }
-                    }
-
-                    DemoBox {
                         title: "虚线分割线".to_string(),
                         description: "虚线样式的分割线".to_string(),
                         code: r#"use helixui::components::DividerHorizontal;

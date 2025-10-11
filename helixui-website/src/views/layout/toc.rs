@@ -1,3 +1,4 @@
+use crate::views::layout::use_scroll_observer;
 use dioxus::prelude::*;
 
 /// 目录项结构
@@ -51,12 +52,33 @@ fn TocItemComponent(props: TocItemProps) -> Element {
 pub struct PageTocProps {
     /// 目录项列表
     pub items: Vec<TocItem>,
+    /// 当前激活的目录项ID（可选，用于外部控制）
+    #[props(default)]
+    pub active_id: Option<String>,
+    /// 是否启用滚动监听（默认启用）
+    #[props(default = true)]
+    pub enable_scroll_highlight: bool,
 }
 
 /// 右侧页面目录
 #[component]
 pub fn PageToc(props: PageTocProps) -> Element {
-    let active_id = use_signal(|| String::new());
+    // 如果启用滚动监听，使用滚动监听 Hook
+    let scroll_active_id = if props.enable_scroll_highlight {
+        let item_ids = props.items.iter().map(|item| item.id.clone()).collect();
+        Some(use_scroll_observer(item_ids))
+    } else {
+        None
+    };
+
+    // 使用外部传入的 active_id 或滚动监听结果
+    let active_id = if let Some(external_id) = &props.active_id {
+        external_id.clone()
+    } else if let Some(scroll_id) = scroll_active_id {
+        scroll_id.read().clone()
+    } else {
+        String::new()
+    };
 
     // 点击目录项时的滚动处理
     let handle_toc_click = move |item_id: String| {
@@ -90,7 +112,7 @@ pub fn PageToc(props: PageTocProps) -> Element {
                 for item in props.items.into_iter() {
                     TocItemComponent {
                         item: item.clone(),
-                        is_active: *active_id.read() == item.id,
+                        is_active: active_id == item.id,
                         onclick: move |_| handle_toc_click(item.id.clone()),
                     }
                 }
