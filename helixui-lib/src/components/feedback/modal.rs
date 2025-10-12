@@ -162,6 +162,18 @@ pub struct ModalProps {
     /// 自定义类名
     #[props(default)]
     pub class: Option<String>,
+    
+    /// 变换原点
+    #[props(default = "center".to_string())]
+    pub transform_origin: String,
+    
+    /// 是否显示遮罩层
+    #[props(default = true)]
+    pub show_mask: bool,
+    
+    /// 是否可拖拽
+    #[props(default = false)]
+    pub draggable: bool,
 }
 
 /// 模态框组件
@@ -206,29 +218,43 @@ pub fn Modal(props: ModalProps) -> Element {
         }
     };
 
+    // 键盘事件处理
+    let handle_keydown = move |event: KeyboardEvent| {
+        if event.key() == Key::Escape && props.mask_closable {
+            is_visible.set(false);
+            if let Some(handler) = &props.on_close {
+                handler.call(());
+            }
+        }
+    };
+
     if !is_visible() {
         return rsx! { div {} };
     }
 
     let modal_class = format!(
-        "fixed inset-0 z-50 flex {} justify-center p-4 bg-black bg-opacity-50 transition-opacity duration-300",
-        props.position.to_class()
+        "fixed inset-0 z-[9999] flex {} justify-center p-4 {} transition-opacity duration-300",
+        props.position.to_class(),
+        if props.show_mask { "bg-black bg-opacity-50" } else { "" }
     );
 
     let content_class = format!(
-        "relative w-full {} bg-white dark:bg-gray-800 rounded-lg shadow-xl transform transition-all duration-300 {}",
+        "relative w-full {} bg-white dark:bg-gray-800 rounded-lg shadow-xl transform transition-all duration-300 {} {}",
         props.size.to_class(),
-        props.class.unwrap_or_default()
+        props.class.unwrap_or_default(),
+        if props.draggable { "cursor-move" } else { "" }
     );
 
     rsx! {
         div {
             class: modal_class,
             onclick: handle_mask_click,
+            onkeydown: handle_keydown,
             tabindex: "-1",
             
             div {
                 class: content_class,
+                style: format!("transform-origin: {}", props.transform_origin),
                 onclick: move |e| e.stop_propagation(),
                 
                 // 头部
@@ -345,5 +371,45 @@ impl ModalManager {
 impl Default for ModalManager {
     fn default() -> Self {
         Self::new()
+    }
+}
+
+/// 命令式模态框 API
+pub struct ImperativeModal {
+    id: u32,
+}
+
+impl ImperativeModal {
+    pub fn new() -> Self {
+        Self { id: 0 }
+    }
+
+    /// 显示基础模态框
+    pub fn show_basic(_title: String, _content: String) -> u32 {
+        // 这里需要与全局模态框容器集成
+        // 暂时返回一个 ID
+        1
+    }
+
+    /// 显示确认对话框
+    pub fn show_confirm(_title: String, _content: String) -> u32 {
+        // 这里需要与全局模态框容器集成
+        // 暂时返回一个 ID
+        2
+    }
+
+    /// 关闭模态框
+    pub fn close(_id: u32) {
+        // 这里需要与全局模态框容器集成
+    }
+}
+
+/// 全局模态框容器
+#[component]
+pub fn GlobalModalContainer() -> Element {
+    rsx! {
+        div {
+            // 这里将渲染所有通过命令式 API 创建的模态框
+        }
     }
 }

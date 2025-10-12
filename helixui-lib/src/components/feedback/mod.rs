@@ -13,4 +13,4 @@ pub use message::{
     show_message, show_message_with_duration, show_message_with_position, GlobalMessageContainer,
     Message, MessagePosition, MessageType,
 };
-pub use modal::{Modal, ModalManager, ModalPosition, ModalProps, ModalSize, ModalType};
+pub use modal::{Modal, ModalManager, ModalPosition, ModalProps, ModalSize, ModalType, ImperativeModal, GlobalModalContainer};

@@ -1,5 +1,5 @@
 use dioxus::prelude::*;
-use helixui::components::{Button, ButtonType, DemoBox, Modal, ModalSize, ModalType};
+use helixui::components::{Button, ButtonType, DemoBox, Modal, ModalSize, ModalType, ImperativeModal};
 use crate::views::layout::{ComponentsSidebar, DocPage, TocItem};
 
 #[component]
@@ -9,11 +9,19 @@ pub fn ModalPage() -> Element {
     let mut size_medium = use_signal(|| false);
     let mut size_large = use_signal(|| false);
     let mut confirm_modal = use_signal(|| false);
+    let mut controlled_modal = use_signal(|| false);
+    let mut transform_origin_modal = use_signal(|| false);
+    let mut no_mask_modal = use_signal(|| false);
+    let mut draggable_modal = use_signal(|| false);
 
     let toc_items = vec![
         TocItem { id: "basic".to_string(), title: "基础用法".to_string(), level: 1 },
+        TocItem { id: "controlled".to_string(), title: "受控显示".to_string(), level: 1 },
         TocItem { id: "size".to_string(), title: "不同尺寸".to_string(), level: 1 },
         TocItem { id: "confirm".to_string(), title: "确认对话框".to_string(), level: 1 },
+        TocItem { id: "transform".to_string(), title: "变换原点".to_string(), level: 1 },
+        TocItem { id: "no-mask".to_string(), title: "不显示遮罩层".to_string(), level: 1 },
+        TocItem { id: "draggable".to_string(), title: "可拖拽".to_string(), level: 1 },
         TocItem { id: "api".to_string(), title: "API".to_string(), level: 1 },
     ];
 
@@ -60,6 +68,43 @@ rsx! {
                                 title: Some("基础模态框".to_string()),
                                 on_close: move |_| basic_modal.set(false),
                                 "这是一个基础的模态框内容。你可以在这里放置任何内容。"
+                            }
+                        }
+                    }
+                }
+
+                section { id: "controlled", class: "mb-12",
+                    h2 { class: "text-2xl font-semibold text-gray-900 dark:text-white mb-4", "受控显示" }
+                    
+                    DemoBox {
+                        title: "受控显示".to_string(),
+                        description: "模态框的显示可以是受控的，通过外部状态控制。".to_string(),
+                        code: r#"use helixui::components::{Button, Modal};
+
+rsx! {
+    Button {
+        button_type: ButtonType::Primary,
+        onclick: move |_| controlled_modal.set(true),
+        "打开受控模态框"
+    }
+    Modal {
+        visible: controlled_modal(),
+        title: Some("受控模态框".to_string()),
+        on_close: move |_| controlled_modal.set(false),
+        "这是一个受控的模态框，显示状态完全由外部控制。"
+    }
+}"#.to_string(),
+                        children: rsx! {
+                            Button {
+                                button_type: ButtonType::Primary,
+                                onclick: move |_| controlled_modal.set(true),
+                                "打开受控模态框"
+                            }
+                            Modal {
+                                visible: controlled_modal(),
+                                title: Some("受控模态框".to_string()),
+                                on_close: move |_| controlled_modal.set(false),
+                                "这是一个受控的模态框，显示状态完全由外部控制。"
                             }
                         }
                     }
@@ -149,6 +194,123 @@ rsx! {
                     }
                 }
 
+                section { id: "transform", class: "mb-12",
+                    h2 { class: "text-2xl font-semibold text-gray-900 dark:text-white mb-4", "变换原点" }
+                    
+                    DemoBox {
+                        title: "变换原点".to_string(),
+                        description: "控制模态框动画的展开原点，可以设置为 center 或其他位置。".to_string(),
+                        code: r#"use helixui::components::{Button, Modal};
+
+rsx! {
+    Button {
+        button_type: ButtonType::Primary,
+        onclick: move |_| transform_modal.set(true),
+        "打开变换原点模态框"
+    }
+    Modal {
+        visible: transform_modal(),
+        title: Some("变换原点模态框".to_string()),
+        transform_origin: "center".to_string(),
+        on_close: move |_| transform_modal.set(false),
+        "这个模态框的动画从中心点展开。"
+    }
+}"#.to_string(),
+                        children: rsx! {
+                            Button {
+                                button_type: ButtonType::Primary,
+                                onclick: move |_| transform_origin_modal.set(true),
+                                "打开变换原点模态框"
+                            }
+                            Modal {
+                                visible: transform_origin_modal(),
+                                title: Some("变换原点模态框".to_string()),
+                                transform_origin: "center".to_string(),
+                                on_close: move |_| transform_origin_modal.set(false),
+                                "这个模态框的动画从中心点展开。"
+                            }
+                        }
+                    }
+                }
+
+                section { id: "no-mask", class: "mb-12",
+                    h2 { class: "text-2xl font-semibold text-gray-900 dark:text-white mb-4", "不显示遮罩层" }
+                    
+                    DemoBox {
+                        title: "不显示遮罩层".to_string(),
+                        description: "可以设置不显示遮罩层，适合做悬浮窗。".to_string(),
+                        code: r#"use helixui::components::{Button, Modal};
+
+rsx! {
+    Button {
+        button_type: ButtonType::Primary,
+        onclick: move |_| no_mask_modal.set(true),
+        "打开无遮罩模态框"
+    }
+    Modal {
+        visible: no_mask_modal(),
+        title: Some("无遮罩模态框".to_string()),
+        show_mask: false,
+        on_close: move |_| no_mask_modal.set(false),
+        "这个模态框没有遮罩层，可以当作悬浮窗使用。"
+    }
+}"#.to_string(),
+                        children: rsx! {
+                            Button {
+                                button_type: ButtonType::Primary,
+                                onclick: move |_| no_mask_modal.set(true),
+                                "打开无遮罩模态框"
+                            }
+                            Modal {
+                                visible: no_mask_modal(),
+                                title: Some("无遮罩模态框".to_string()),
+                                show_mask: false,
+                                on_close: move |_| no_mask_modal.set(false),
+                                "这个模态框没有遮罩层，可以当作悬浮窗使用。"
+                            }
+                        }
+                    }
+                }
+
+                section { id: "draggable", class: "mb-12",
+                    h2 { class: "text-2xl font-semibold text-gray-900 dark:text-white mb-4", "可拖拽" }
+                    
+                    DemoBox {
+                        title: "可拖拽模态框".to_string(),
+                        description: "设置 draggable 属性为 true，模态框即可拖拽。".to_string(),
+                        code: r#"use helixui::components::{Button, Modal};
+
+rsx! {
+    Button {
+        button_type: ButtonType::Primary,
+        onclick: move |_| draggable_modal.set(true),
+        "打开可拖拽模态框"
+    }
+    Modal {
+        visible: draggable_modal(),
+        title: Some("可拖拽模态框".to_string()),
+        draggable: true,
+        on_close: move |_| draggable_modal.set(false),
+        "这个模态框可以被拖拽移动位置。"
+    }
+}"#.to_string(),
+                        children: rsx! {
+                            Button {
+                                button_type: ButtonType::Primary,
+                                onclick: move |_| draggable_modal.set(true),
+                                "打开可拖拽模态框"
+                            }
+                            Modal {
+                                visible: draggable_modal(),
+                                title: Some("可拖拽模态框".to_string()),
+                                draggable: true,
+                                on_close: move |_| draggable_modal.set(false),
+                                "这个模态框可以被拖拽移动位置。"
+                            }
+                        }
+                    }
+                }
+
                 section { id: "api", class: "mb-12",
                     h2 { class: "text-2xl font-semibold text-gray-900 dark:text-white mb-4", "API" }
                     h3 { class: "text-xl font-semibold text-gray-900 dark:text-white mb-3", "Modal Props" }
@@ -211,6 +373,30 @@ rsx! {
                                     td { class: "p-3 font-mono text-sm", "Option<EventHandler<()>>" }
                                     td { class: "p-3", "None" }
                                     td { class: "p-3", "关闭事件" }
+                                }
+                                tr { class: "border-b",
+                                    td { class: "p-3 font-mono text-sm", "transform_origin" }
+                                    td { class: "p-3 font-mono text-sm", "String" }
+                                    td { class: "p-3", "\"center\"" }
+                                    td { class: "p-3", "变换原点，控制动画展开位置" }
+                                }
+                                tr { class: "border-b",
+                                    td { class: "p-3 font-mono text-sm", "show_mask" }
+                                    td { class: "p-3 font-mono text-sm", "bool" }
+                                    td { class: "p-3", "true" }
+                                    td { class: "p-3", "是否显示遮罩层" }
+                                }
+                                tr { class: "border-b",
+                                    td { class: "p-3 font-mono text-sm", "draggable" }
+                                    td { class: "p-3 font-mono text-sm", "bool" }
+                                    td { class: "p-3", "false" }
+                                    td { class: "p-3", "是否可拖拽" }
+                                }
+                                tr {
+                                    td { class: "p-3 font-mono text-sm", "class" }
+                                    td { class: "p-3 font-mono text-sm", "Option<String>" }
+                                    td { class: "p-3", "None" }
+                                    td { class: "p-3", "自定义 CSS 类名" }
                                 }
                             }
                         }

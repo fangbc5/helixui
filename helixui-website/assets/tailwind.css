@@ -668,6 +668,10 @@ video {
   z-index: 50;
 }
 
+.z-\[9999\] {
+  z-index: 9999;
+}
+
 .mx-2 {
   margin-left: 0.5rem;
   margin-right: 0.5rem;
@@ -1021,6 +1025,10 @@ video {
 
 .cursor-pointer {
   cursor: pointer;
+}
+
+.cursor-move {
+  cursor: move;
 }
 
 .select-none {
