@@ -5,7 +5,7 @@ use dioxus::prelude::*;
 use helixui::components::{GlobalDialogContainer, GlobalMessageContainer};
 use views::{
     AvatarPage, BadgePage, ButtonPage, CardPage, ComponentsIndex, DialogPage, DividerPage, Guide,
-    Home, IconPage, Introduction, MessagePage, QuickStart, TopNavbar, Version,
+    Home, IconPage, Introduction, MessagePage, ModalPage, QuickStart, TopNavbar, Version,
 };
 
 /// i18n internationalization support
@@ -50,6 +50,8 @@ enum Route {
                 DividerPage {},
                 #[route("/component/icon")]
                 IconPage {},
+                #[route("/component/modal")]
+                ModalPage {},
                 #[route("/component/message")]
                 MessagePage {},
                 #[route("/component/dialog")]

@@ -52,20 +52,20 @@ pub fn ComponentsIndex() -> Element {
                                 route: crate::Route::AvatarPage {},
                                 status: ComponentStatus::Available,
                             },
-        ComponentCard {
-            name: "Card".to_string(),
-            name_zh: "卡片".to_string(),
-            description: "容器组件，用于组织内容。".to_string(),
-            route: crate::Route::CardPage {},
-            status: ComponentStatus::Available,
-        },
-        ComponentCard {
-            name: "Divider".to_string(),
-            name_zh: "分割线".to_string(),
-            description: "用于分隔内容的分割线组件。".to_string(),
-            route: crate::Route::DividerPage {},
-            status: ComponentStatus::Available,
-        },
+                            ComponentCard {
+                                name: "Card".to_string(),
+                                name_zh: "卡片".to_string(),
+                                description: "容器组件，用于组织内容。".to_string(),
+                                route: crate::Route::CardPage {},
+                                status: ComponentStatus::Available,
+                            },
+                            ComponentCard {
+                                name: "Divider".to_string(),
+                                name_zh: "分割线".to_string(),
+                                description: "用于分隔内容的分割线组件。".to_string(),
+                                route: crate::Route::DividerPage {},
+                                status: ComponentStatus::Available,
+                            },
                         ],
                     }
 
@@ -122,6 +122,13 @@ pub fn ComponentsIndex() -> Element {
                                 name_zh: "对话框".to_string(),
                                 description: "模态对话框，在保留当前页面状态的情况下，告知用户并承载相关操作。".to_string(),
                                 route: crate::Route::DialogPage {},
+                                status: ComponentStatus::Available,
+                            },
+                            ComponentCard {
+                                name: "Modal".to_string(),
+                                name_zh: "模态框".to_string(),
+                                description: "模态对话框，用于显示重要信息或收集用户输入。".to_string(),
+                                route: crate::Route::ModalPage {},
                                 status: ComponentStatus::Available,
                             },
                             ComponentCard {
