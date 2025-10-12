@@ -183,6 +183,7 @@ pub fn ComponentsSidebar() -> Element {
                 SidebarItem::link(i18n::t("component.badge"), crate::Route::BadgePage {}),
                 SidebarItem::link(i18n::t("component.message"), crate::Route::MessagePage {}),
                 SidebarItem::link(i18n::t("component.dialog"), crate::Route::DialogPage {}),
+                SidebarItem::link(i18n::t("component.modal"), crate::Route::ModalPage {}),
             ],
         ),
     ];

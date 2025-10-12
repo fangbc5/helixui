@@ -156,6 +156,8 @@ pub fn t(key: &str) -> String {
         (Language::EnUS, "component.message") => "Message",
         (Language::ZhCN, "component.dialog") => "对话框 Dialog",
         (Language::EnUS, "component.dialog") => "Dialog",
+        (Language::ZhCN, "component.modal") => "模态框 Modal",
+        (Language::EnUS, "component.modal") => "Modal",
 
         // 默认
         _ => key,

@@ -179,15 +179,10 @@ pub struct ModalProps {
 /// 模态框组件
 #[component]
 pub fn Modal(props: ModalProps) -> Element {
-    let mut is_visible = use_signal(|| props.visible);
-    
-    // 监听 visible 属性变化
-    use_effect(move || {
-        is_visible.set(props.visible);
-    });
+    // 直接使用 props.visible，不使用内部状态管理
+    let is_visible = props.visible;
 
     let handle_close = move |_: MouseEvent| {
-        is_visible.set(false);
         if let Some(handler) = &props.on_close {
             handler.call(());
         }
@@ -195,7 +190,6 @@ pub fn Modal(props: ModalProps) -> Element {
 
     let handle_mask_click = move |_: MouseEvent| {
         if props.mask_closable {
-            is_visible.set(false);
             if let Some(handler) = &props.on_close {
                 handler.call(());
             }
@@ -212,7 +206,6 @@ pub fn Modal(props: ModalProps) -> Element {
         if let Some(handler) = &props.on_cancel {
             handler.call(());
         }
-        is_visible.set(false);
         if let Some(handler) = &props.on_close {
             handler.call(());
         }
@@ -221,14 +214,13 @@ pub fn Modal(props: ModalProps) -> Element {
     // 键盘事件处理
     let handle_keydown = move |event: KeyboardEvent| {
         if event.key() == Key::Escape && props.mask_closable {
-            is_visible.set(false);
             if let Some(handler) = &props.on_close {
                 handler.call(());
             }
         }
     };
 
-    if !is_visible() {
+    if !is_visible {
         return rsx! { div {} };
     }
 
