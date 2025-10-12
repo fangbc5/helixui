@@ -2,7 +2,7 @@
 // need dioxus
 use dioxus::prelude::*;
 
-use helixui::components::{GlobalDialogContainer, GlobalMessageContainer};
+use helixui::components::{GlobalMessageContainer};
 use views::{
     AvatarPage, BadgePage, ButtonPage, CardPage, ComponentsIndex, DialogPage, DividerPage, Guide,
     Home, IconPage, Introduction, MessagePage, ModalPage, QuickStart, TopNavbar, Version,
@@ -91,8 +91,5 @@ fn App() -> Element {
 
                 // 全局消息容器
                 GlobalMessageContainer {}
-
-                // 全局对话框容器
-                GlobalDialogContainer {}
     }
 }

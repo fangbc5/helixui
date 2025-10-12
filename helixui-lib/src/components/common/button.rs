@@ -211,26 +211,39 @@ pub fn Button(
     };
 
     // 处理自定义 hover 颜色
-    let final_class_with_hover = if let Some(hover_color) = hover_color {
+    let final_class_with_hover = if let Some(ref hover_color) = hover_color {
         // 移除默认的 hover 颜色类，添加自定义的
-        let hover_class = match button_type {
-            ButtonType::PureText | ButtonType::PureIcon => {
-                format!("hover:text-[{}]", hover_color)
-            },
-            _ => {
-                // 对于其他按钮类型，可能需要更复杂的处理
-                // 这里先简单处理为文字颜色
-                format!("hover:text-[{}]", hover_color)
-            }
-        };
-        format!("{} {}", final_class, hover_class)
+        let base_class_without_hover = final_class
+            .replace("hover:text-green-600", "")
+            .replace("hover:text-green-700", "")
+            .replace("hover:text-gray-700", "")
+            .replace("hover:text-gray-900", "")
+            .replace("hover:text-gray-500", "")
+            .replace("hover:text-gray-400", "");
+        
+        // 添加自定义 hover 颜色 - 使用 style 属性而不是 Tailwind 类
+        let hover_class = format!("hover:text-[{}]", hover_color);
+        format!("{} {}", base_class_without_hover, hover_class)
     } else {
         final_class
+    };
+
+    // 处理自定义 hover 颜色的样式
+    let hover_style = if let Some(hover_color) = hover_color {
+        let full_color = if hover_color.starts_with('#') { 
+            hover_color.clone() 
+        } else { 
+            format!("#{}", hover_color) 
+        };
+        format!("--hover-color: {};", full_color)
+    } else {
+        "".to_string()
     };
 
     rsx! {
         button {
             class: final_class_with_hover,
+            style: hover_style,
             disabled: disabled,
             onclick: move |_| {
                 if let Some(handler) = &onclick {

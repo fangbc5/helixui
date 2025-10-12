@@ -51,6 +51,11 @@ pub fn ButtonPage() -> Element {
             level: 1,
         },
         TocItem {
+            id: "hover-color".to_string(),
+            title: "自定义 hover 颜色".to_string(),
+            level: 1,
+        },
+        TocItem {
             id: "group".to_string(),
             title: "按钮组".to_string(),
             level: 1,
@@ -782,62 +787,76 @@ rsx! {
                                 }
                             }
                         }
+                    }
+
+                    // 自定义 hover 颜色
+                    section {
+                        id: "hover-color",
+                        class: "mb-12",
+                        h2 {
+                            class: "text-2xl font-semibold text-gray-900 dark:text-white mb-4",
+                            "自定义 hover 颜色"
+                        }
+                        p {
+                            class: "text-gray-600 dark:text-gray-300 mb-4",
+                            "纯文字和纯图标按钮支持自定义 hover 颜色，使用 hover_color 属性指定颜色。"
+                        }
 
                         DemoBox {
                             title: "自定义 hover 颜色".to_string(),
                             description: "纯文字和纯图标按钮支持自定义 hover 颜色，使用 hover_color 属性指定颜色。".to_string(),
-                            code: "use helixui::components::{Button, ButtonType, ButtonVariant, IconType};
+                            code: r#"use helixui::components::{Button, ButtonType, ButtonVariant, IconType};
 
 rsx! {
-    div { class: \"flex gap-4\",
+    div { class: "flex gap-4",
         Button {
             button_type: ButtonType::PureText,
-            hover_color: Some(\"#ff6b6b\".to_string()),
-            \"红色 hover\"
+            hover_color: Some("ff6b6b".to_string()),
+            "红色 hover"
         }
         Button {
             button_type: ButtonType::PureText,
-            hover_color: Some(\"#4ecdc4\".to_string()),
-            \"青色 hover\"
+            hover_color: Some("4ecdc4".to_string()),
+            "青色 hover"
         }
         Button {
             button_type: ButtonType::PureIcon,
             variant: ButtonVariant::Icon,
             icon: Some(IconType::Settings),
-            hover_color: Some(\"#ff6b6b\".to_string()),
+            hover_color: Some("ff6b6b".to_string()),
         }
         Button {
             button_type: ButtonType::PureIcon,
             variant: ButtonVariant::Icon,
             icon: Some(IconType::User),
-            hover_color: Some(\"#4ecdc4\".to_string()),
+            hover_color: Some("4ecdc4".to_string()),
         }
     }
-}".to_string(),
+}"#.to_string(),
                             children: rsx! {
                                 div {
                                     class: "flex flex-wrap gap-4",
                                     Button {
                                         button_type: ButtonType::PureText,
-                                        hover_color: Some("#ff6b6b".to_string()),
+                                        hover_color: Some("ff6b6b".to_string()),
                                         "红色 hover"
                                     }
                                     Button {
                                         button_type: ButtonType::PureText,
-                                        hover_color: Some("#4ecdc4".to_string()),
+                                        hover_color: Some("4ecdc4".to_string()),
                                         "青色 hover"
                                     }
                                     Button {
                                         button_type: ButtonType::PureIcon,
                                         variant: ButtonVariant::Icon,
                                         icon: Some(IconType::Settings),
-                                        hover_color: Some("#ff6b6b".to_string()),
+                                        hover_color: Some("ff6b6b".to_string()),
                                     }
                                     Button {
                                         button_type: ButtonType::PureIcon,
                                         variant: ButtonVariant::Icon,
                                         icon: Some(IconType::User),
-                                        hover_color: Some("#4ecdc4".to_string()),
+                                        hover_color: Some("4ecdc4".to_string()),
                                     }
                                 }
                             }
@@ -1170,7 +1189,7 @@ rsx! {
                                 td { class: "p-3 text-gray-900 dark:text-white font-mono text-sm", "hover_color" }
                                 td { class: "p-3 text-gray-600 dark:text-gray-300 font-mono text-sm", "Option<String>" }
                                 td { class: "p-3 text-gray-600 dark:text-gray-300", "None" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300", "自定义 hover 颜色（如 #ff6b6b）" }
+                                td { class: "p-3 text-gray-600 dark:text-gray-300", "自定义 hover 颜色（如 ff6b6b）" }
                             }
                         }
                     }

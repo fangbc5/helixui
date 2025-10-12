@@ -84,8 +84,8 @@ pub fn Divider(props: DividerProps) -> Element {
                 // 左侧分割线
                 if props.title_placement != "left" {
                     div {
-                        class: format!("flex-1 h-px bg-gray-200 dark:bg-gray-700 {}", custom_class),
-                        style: if props.dashed { "border-top: 1px dashed currentColor;" } else { "" },
+                        class: format!("flex-1 h-px border-t border-gray-200 dark:border-gray-700 {}", custom_class),
+                        style: if props.dashed { "border-style: dashed;" } else { "" },
                     }
                 }
 
@@ -98,8 +98,8 @@ pub fn Divider(props: DividerProps) -> Element {
                 // 右侧分割线
                 if props.title_placement != "right" {
                     div {
-                        class: format!("flex-1 h-px bg-gray-200 dark:bg-gray-700 {}", custom_class),
-                        style: if props.dashed { "border-top: 1px dashed currentColor;" } else { "" },
+                        class: format!("flex-1 h-px border-t border-gray-200 dark:border-gray-700 {}", custom_class),
+                        style: if props.dashed { "border-style: dashed;" } else { "" },
                     }
                 }
             }
@@ -114,24 +114,21 @@ pub fn Divider(props: DividerProps) -> Element {
             "border-solid"
         };
 
-        let final_class = format!(
-            "bg-gray-200 dark:bg-gray-700 {} {} {} {}",
-            direction_class, position_class, dashed_class, custom_class
-        );
-
-        let border_style = if props.dashed {
-            match props.direction {
-                DividerDirection::Horizontal => "border-top: 1px dashed currentColor;",
-                DividerDirection::Vertical => "border-left: 1px dashed currentColor;",
-            }
-        } else {
-            ""
+        // 根据方向设置边框
+        let border_class = match props.direction {
+            DividerDirection::Horizontal => "border-t",
+            DividerDirection::Vertical => "border-l",
         };
+
+        let final_class = format!(
+            "{} border-gray-200 dark:border-gray-700 {} {} {} {}",
+            direction_class, border_class, position_class, dashed_class, custom_class
+        );
 
         rsx! {
             div {
                 class: final_class,
-                style: format!("{} {}", custom_style, border_style),
+                style: custom_style,
             }
         }
     }

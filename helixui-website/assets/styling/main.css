@@ -40,3 +40,8 @@ body {
 #header {
     max-width: 1200px;
 }
+
+/* 自定义 hover 颜色支持 */
+button[style*="--hover-color"]:hover {
+    color: var(--hover-color) !important;
+}
