@@ -303,6 +303,70 @@ rsx! {
                         }
 
                         DemoBox {
+                            title: "不同尺寸的图标按钮".to_string(),
+                            description: "图标按钮支持多种尺寸，图标会自动居中显示。".to_string(),
+                            code: r#"use helixui::components::{Button, ButtonSize, ButtonType, ButtonVariant, IconType};
+
+rsx! {
+    div { class: "flex items-center gap-3",
+        Button {
+            button_type: ButtonType::Primary,
+            size: ButtonSize::Tiny,
+            variant: ButtonVariant::Icon,
+            icon: Some(IconType::Settings),
+        }
+        Button {
+            button_type: ButtonType::Primary,
+            size: ButtonSize::Small,
+            variant: ButtonVariant::Icon,
+            icon: Some(IconType::Settings),
+        }
+        Button {
+            button_type: ButtonType::Primary,
+            size: ButtonSize::Medium,
+            variant: ButtonVariant::Icon,
+            icon: Some(IconType::Settings),
+        }
+        Button {
+            button_type: ButtonType::Primary,
+            size: ButtonSize::Large,
+            variant: ButtonVariant::Icon,
+            icon: Some(IconType::Settings),
+        }
+    }
+}"#.to_string(),
+                            children: rsx! {
+                                div {
+                                    class: "flex items-center gap-3",
+                                    Button {
+                                        button_type: ButtonType::Primary,
+                                        size: ButtonSize::Tiny,
+                                        variant: ButtonVariant::Icon,
+                                        icon: Some(IconType::Settings),
+                                    }
+                                    Button {
+                                        button_type: ButtonType::Primary,
+                                        size: ButtonSize::Small,
+                                        variant: ButtonVariant::Icon,
+                                        icon: Some(IconType::Settings),
+                                    }
+                                    Button {
+                                        button_type: ButtonType::Primary,
+                                        size: ButtonSize::Medium,
+                                        variant: ButtonVariant::Icon,
+                                        icon: Some(IconType::Settings),
+                                    }
+                                    Button {
+                                        button_type: ButtonType::Primary,
+                                        size: ButtonSize::Large,
+                                        variant: ButtonVariant::Icon,
+                                        icon: Some(IconType::Settings),
+                                    }
+                                }
+                            }
+                        }
+
+                        DemoBox {
                             title: "图标+文字按钮".to_string(),
                             description: "同时显示图标和文字的按钮。".to_string(),
                             code: r#"use helixui::components::{Button, ButtonType, ButtonVariant, IconType};

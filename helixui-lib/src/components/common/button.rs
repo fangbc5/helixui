@@ -187,7 +187,7 @@ pub fn Button(
                 size.icon_only_class()
             };
             format!(
-                "{} font-medium transition-colors duration-200 {} {} {} {} {}",
+                "{} font-medium transition-colors duration-200 {} {} {} {} {} flex items-center justify-center",
                 shape_class, secondary_class, dashed_class, padding_class, shape_size_class, disabled_class
             )
         }
