@@ -1,4 +1,5 @@
 use dioxus::prelude::*;
+use super::icon::{Icon, IconSize, IconType};
 
 /// 头像尺寸
 #[derive(Debug, Clone, PartialEq)]
@@ -130,6 +131,9 @@ pub fn Avatar(props: AvatarProps) -> Element {
         size_class, shape_class, custom_class
     );
 
+    // 图片加载失败状态
+    let mut image_error = use_signal(|| false);
+
     rsx! {
         div {
             class: base_class,
@@ -139,11 +143,28 @@ pub fn Avatar(props: AvatarProps) -> Element {
                 {children}
             } else if let Some(src) = &props.src {
                 // 图片头像
-                img {
-                    src: src.clone(),
-                    alt: props.fallback_text.as_deref().unwrap_or(""),
-                    class: "w-full h-full object-cover",
-                    style: shape_class,
+                if !image_error() {
+                    img {
+                        src: src.clone(),
+                        alt: props.fallback_text.as_deref().unwrap_or(""),
+                        class: "w-full h-full object-cover",
+                        style: shape_class,
+                        onerror: move |_| {
+                            image_error.set(true);
+                        }
+                    }
+                } else {
+                    // 图片加载失败时显示裂开图标
+                    Icon {
+                        icon: IconType::ImageBroken,
+                        size: match props.size {
+                            AvatarSize::Small => IconSize::Small,
+                            AvatarSize::Medium => IconSize::Medium,
+                            AvatarSize::Large => IconSize::Large,
+                            AvatarSize::Custom(_) => IconSize::Medium,
+                        },
+                        class: "text-gray-400".to_string(),
+                    }
                 }
             } else if let Some(text) = &props.text {
                 // 文字头像

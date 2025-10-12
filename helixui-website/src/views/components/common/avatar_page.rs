@@ -296,10 +296,10 @@ rsx! {
                 h2 { class: "text-2xl font-semibold text-gray-900 dark:text-white mb-4",
                     "图片头像"
                 }
-                p { class: "text-gray-600 dark:text-gray-300 mb-4", "可以使用图片作为头像，支持图片加载失败时的备用文字。" },
+                p { class: "text-gray-600 dark:text-gray-300 mb-4", "可以使用图片作为头像，图片加载失败时会自动显示裂开图标。" },
                 DemoBox {
                     title: "图片头像".to_string(),
-                    description: "使用图片作为头像，支持备用文字。".to_string(),
+                    description: "使用图片作为头像，图片加载失败时自动显示裂开图标。".to_string(),
                     code: "use helixui::components::Avatar;
 
 // 图片头像示例
@@ -307,21 +307,16 @@ rsx! {
     div { class: \"flex gap-4\",
         Avatar {
             src: Some(\"https://api.dicebear.com/7.x/avataaars/svg?seed=1\".to_string()),
-            fallback_text: Some(\"用户\".to_string()),
         }
         Avatar {
             src: Some(\"https://api.dicebear.com/7.x/avataaars/svg?seed=2\".to_string()),
-            fallback_text: Some(\"张三\".to_string()),
         }
         Avatar {
             src: Some(\"https://api.dicebear.com/7.x/avataaars/svg?seed=3\".to_string()),
-            fallback_text: Some(\"李四\".to_string()),
         }
         Avatar {
             src: Some(\"https://invalid-url.com/image.jpg\".to_string()),
-            fallback_text: Some(\"加载失败\".to_string()),
             background_color: Some(\"#f0f0f0\".to_string()),
-            color: Some(\"#666666\".to_string()),
         }
     }
 }".to_string(),
@@ -329,21 +324,16 @@ rsx! {
                         div { class: "flex gap-4",
                             Avatar {
                                 src: Some("https://api.dicebear.com/7.x/avataaars/svg?seed=1".to_string()),
-                                fallback_text: Some("用户".to_string()),
                             }
                             Avatar {
                                 src: Some("https://api.dicebear.com/7.x/avataaars/svg?seed=2".to_string()),
-                                fallback_text: Some("张三".to_string()),
                             }
                             Avatar {
                                 src: Some("https://api.dicebear.com/7.x/avataaars/svg?seed=3".to_string()),
-                                fallback_text: Some("李四".to_string()),
                             }
                             Avatar {
                                 src: Some("https://invalid-url.com/image.jpg".to_string()),
-                                fallback_text: Some("加载失败".to_string()),
                                 background_color: Some("#f0f0f0".to_string()),
-                                color: Some("#666666".to_string()),
                             }
                         }
                     }
@@ -688,7 +678,7 @@ rsx! {
                                     td { class: "py-2 px-3 text-gray-900 dark:text-white", "src" }
                                     td { class: "py-2 px-3 text-gray-600 dark:text-gray-300", "Option<String>" }
                                     td { class: "py-2 px-3 text-gray-600 dark:text-gray-300", "None" }
-                                    td { class: "py-2 px-3 text-gray-600 dark:text-gray-300", "头像图片源 URL" }
+                                    td { class: "py-2 px-3 text-gray-600 dark:text-gray-300", "头像图片源 URL，加载失败时自动显示裂开图标" }
                                 }
                                 tr { class: "border-b border-gray-200 dark:border-gray-700",
                                     td { class: "py-2 px-3 text-gray-900 dark:text-white", "fallback_text" }
