@@ -1,5 +1,5 @@
 use dioxus::prelude::*;
-use helixui::components::{Button, ButtonType, DemoBox, Modal, ModalSize, ModalType, ImperativeModal};
+use helixui::components::{Button, ButtonType, DemoBox, Modal, ModalSize, ModalType};
 use crate::views::layout::{ComponentsSidebar, DocPage, TocItem};
 
 #[component]
@@ -319,84 +319,84 @@ rsx! {
                         table { class: "w-full border-collapse border border-gray-200 dark:border-gray-700",
                             thead {
                                 tr { class: "bg-gray-50 dark:bg-gray-800",
-                                    th { class: "p-3 text-left", "属性" }
-                                    th { class: "p-3 text-left", "类型" }
-                                    th { class: "p-3 text-left", "默认值" }
-                                    th { class: "p-3 text-left", "描述" }
+                                    th { class: "p-3 text-left text-gray-900 dark:text-white font-semibold", "属性" }
+                                    th { class: "p-3 text-left text-gray-900 dark:text-white font-semibold", "类型" }
+                                    th { class: "p-3 text-left text-gray-900 dark:text-white font-semibold", "默认值" }
+                                    th { class: "p-3 text-left text-gray-900 dark:text-white font-semibold", "描述" }
                                 }
                             }
                             tbody {
-                                tr { class: "border-b",
-                                    td { class: "p-3 font-mono text-sm", "visible" }
-                                    td { class: "p-3 font-mono text-sm", "bool" }
-                                    td { class: "p-3", "false" }
-                                    td { class: "p-3", "是否显示模态框" }
+                                tr { class: "border-b border-gray-100 dark:border-gray-800",
+                                    td { class: "p-3 text-gray-900 dark:text-white font-mono text-sm", "visible" }
+                                    td { class: "p-3 text-gray-600 dark:text-gray-300 font-mono text-sm", "bool" }
+                                    td { class: "p-3 text-gray-600 dark:text-gray-300", "false" }
+                                    td { class: "p-3 text-gray-600 dark:text-gray-300", "是否显示模态框" }
                                 }
-                                tr { class: "border-b",
-                                    td { class: "p-3 font-mono text-sm", "title" }
-                                    td { class: "p-3 font-mono text-sm", "Option<String>" }
-                                    td { class: "p-3", "None" }
-                                    td { class: "p-3", "模态框标题" }
+                                tr { class: "border-b border-gray-100 dark:border-gray-800",
+                                    td { class: "p-3 text-gray-900 dark:text-white font-mono text-sm", "title" }
+                                    td { class: "p-3 text-gray-600 dark:text-gray-300 font-mono text-sm", "Option<String>" }
+                                    td { class: "p-3 text-gray-600 dark:text-gray-300", "None" }
+                                    td { class: "p-3 text-gray-600 dark:text-gray-300", "模态框标题" }
                                 }
-                                tr { class: "border-b",
-                                    td { class: "p-3 font-mono text-sm", "size" }
-                                    td { class: "p-3 font-mono text-sm", "ModalSize" }
-                                    td { class: "p-3", "Medium" }
-                                    td { class: "p-3", "模态框尺寸" }
+                                tr { class: "border-b border-gray-100 dark:border-gray-800",
+                                    td { class: "p-3 text-gray-900 dark:text-white font-mono text-sm", "size" }
+                                    td { class: "p-3 text-gray-600 dark:text-gray-300 font-mono text-sm", "ModalSize" }
+                                    td { class: "p-3 text-gray-600 dark:text-gray-300", "Medium" }
+                                    td { class: "p-3 text-gray-600 dark:text-gray-300", "模态框尺寸" }
                                 }
-                                tr { class: "border-b",
-                                    td { class: "p-3 font-mono text-sm", "position" }
-                                    td { class: "p-3 font-mono text-sm", "ModalPosition" }
-                                    td { class: "p-3", "Center" }
-                                    td { class: "p-3", "模态框位置" }
+                                tr { class: "border-b border-gray-100 dark:border-gray-800",
+                                    td { class: "p-3 text-gray-900 dark:text-white font-mono text-sm", "position" }
+                                    td { class: "p-3 text-gray-600 dark:text-gray-300 font-mono text-sm", "ModalPosition" }
+                                    td { class: "p-3 text-gray-600 dark:text-gray-300", "Center" }
+                                    td { class: "p-3 text-gray-600 dark:text-gray-300", "模态框位置" }
                                 }
-                                tr { class: "border-b",
-                                    td { class: "p-3 font-mono text-sm", "modal_type" }
-                                    td { class: "p-3 font-mono text-sm", "ModalType" }
-                                    td { class: "p-3", "Default" }
-                                    td { class: "p-3", "模态框类型" }
+                                tr { class: "border-b border-gray-100 dark:border-gray-800",
+                                    td { class: "p-3 text-gray-900 dark:text-white font-mono text-sm", "modal_type" }
+                                    td { class: "p-3 text-gray-600 dark:text-gray-300 font-mono text-sm", "ModalType" }
+                                    td { class: "p-3 text-gray-600 dark:text-gray-300", "Default" }
+                                    td { class: "p-3 text-gray-600 dark:text-gray-300", "模态框类型" }
                                 }
-                                tr { class: "border-b",
-                                    td { class: "p-3 font-mono text-sm", "show_confirm" }
-                                    td { class: "p-3 font-mono text-sm", "bool" }
-                                    td { class: "p-3", "false" }
-                                    td { class: "p-3", "是否显示确认按钮" }
+                                tr { class: "border-b border-gray-100 dark:border-gray-800",
+                                    td { class: "p-3 text-gray-900 dark:text-white font-mono text-sm", "show_confirm" }
+                                    td { class: "p-3 text-gray-600 dark:text-gray-300 font-mono text-sm", "bool" }
+                                    td { class: "p-3 text-gray-600 dark:text-gray-300", "false" }
+                                    td { class: "p-3 text-gray-600 dark:text-gray-300", "是否显示确认按钮" }
                                 }
-                                tr { class: "border-b",
-                                    td { class: "p-3 font-mono text-sm", "show_cancel" }
-                                    td { class: "p-3 font-mono text-sm", "bool" }
-                                    td { class: "p-3", "false" }
-                                    td { class: "p-3", "是否显示取消按钮" }
+                                tr { class: "border-b border-gray-100 dark:border-gray-800",
+                                    td { class: "p-3 text-gray-900 dark:text-white font-mono text-sm", "show_cancel" }
+                                    td { class: "p-3 text-gray-600 dark:text-gray-300 font-mono text-sm", "bool" }
+                                    td { class: "p-3 text-gray-600 dark:text-gray-300", "false" }
+                                    td { class: "p-3 text-gray-600 dark:text-gray-300", "是否显示取消按钮" }
+                                }
+                                tr { class: "border-b border-gray-100 dark:border-gray-800",
+                                    td { class: "p-3 text-gray-900 dark:text-white font-mono text-sm", "on_close" }
+                                    td { class: "p-3 text-gray-600 dark:text-gray-300 font-mono text-sm", "Option<EventHandler<()>>" }
+                                    td { class: "p-3 text-gray-600 dark:text-gray-300", "None" }
+                                    td { class: "p-3 text-gray-600 dark:text-gray-300", "关闭事件" }
+                                }
+                                tr { class: "border-b border-gray-100 dark:border-gray-800",
+                                    td { class: "p-3 text-gray-900 dark:text-white font-mono text-sm", "transform_origin" }
+                                    td { class: "p-3 text-gray-600 dark:text-gray-300 font-mono text-sm", "String" }
+                                    td { class: "p-3 text-gray-600 dark:text-gray-300", "\"center\"" }
+                                    td { class: "p-3 text-gray-600 dark:text-gray-300", "变换原点，控制动画展开位置" }
+                                }
+                                tr { class: "border-b border-gray-100 dark:border-gray-800",
+                                    td { class: "p-3 text-gray-900 dark:text-white font-mono text-sm", "show_mask" }
+                                    td { class: "p-3 text-gray-600 dark:text-gray-300 font-mono text-sm", "bool" }
+                                    td { class: "p-3 text-gray-600 dark:text-gray-300", "true" }
+                                    td { class: "p-3 text-gray-600 dark:text-gray-300", "是否显示遮罩层" }
+                                }
+                                tr { class: "border-b border-gray-100 dark:border-gray-800",
+                                    td { class: "p-3 text-gray-900 dark:text-white font-mono text-sm", "draggable" }
+                                    td { class: "p-3 text-gray-600 dark:text-gray-300 font-mono text-sm", "bool" }
+                                    td { class: "p-3 text-gray-600 dark:text-gray-300", "false" }
+                                    td { class: "p-3 text-gray-600 dark:text-gray-300", "是否可拖拽" }
                                 }
                                 tr {
-                                    td { class: "p-3 font-mono text-sm", "on_close" }
-                                    td { class: "p-3 font-mono text-sm", "Option<EventHandler<()>>" }
-                                    td { class: "p-3", "None" }
-                                    td { class: "p-3", "关闭事件" }
-                                }
-                                tr { class: "border-b",
-                                    td { class: "p-3 font-mono text-sm", "transform_origin" }
-                                    td { class: "p-3 font-mono text-sm", "String" }
-                                    td { class: "p-3", "\"center\"" }
-                                    td { class: "p-3", "变换原点，控制动画展开位置" }
-                                }
-                                tr { class: "border-b",
-                                    td { class: "p-3 font-mono text-sm", "show_mask" }
-                                    td { class: "p-3 font-mono text-sm", "bool" }
-                                    td { class: "p-3", "true" }
-                                    td { class: "p-3", "是否显示遮罩层" }
-                                }
-                                tr { class: "border-b",
-                                    td { class: "p-3 font-mono text-sm", "draggable" }
-                                    td { class: "p-3 font-mono text-sm", "bool" }
-                                    td { class: "p-3", "false" }
-                                    td { class: "p-3", "是否可拖拽" }
-                                }
-                                tr {
-                                    td { class: "p-3 font-mono text-sm", "class" }
-                                    td { class: "p-3 font-mono text-sm", "Option<String>" }
-                                    td { class: "p-3", "None" }
-                                    td { class: "p-3", "自定义 CSS 类名" }
+                                    td { class: "p-3 text-gray-900 dark:text-white font-mono text-sm", "class" }
+                                    td { class: "p-3 text-gray-600 dark:text-gray-300 font-mono text-sm", "Option<String>" }
+                                    td { class: "p-3 text-gray-600 dark:text-gray-300", "None" }
+                                    td { class: "p-3 text-gray-600 dark:text-gray-300", "自定义 CSS 类名" }
                                 }
                             }
                         }
