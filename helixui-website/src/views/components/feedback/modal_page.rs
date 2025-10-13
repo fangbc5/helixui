@@ -1,6 +1,6 @@
+use crate::views::layout::{ComponentsSidebar, DocPage, TocItem};
 use dioxus::prelude::*;
 use helixui::components::{Button, ButtonType, DemoBox, Modal, ModalSize, ModalType};
-use crate::views::layout::{ComponentsSidebar, DocPage, TocItem};
 
 #[component]
 pub fn ModalPage() -> Element {
@@ -15,14 +15,46 @@ pub fn ModalPage() -> Element {
     let mut draggable_modal = use_signal(|| false);
 
     let toc_items = vec![
-        TocItem { id: "basic".to_string(), title: "基础用法".to_string(), level: 1 },
-        TocItem { id: "controlled".to_string(), title: "受控显示".to_string(), level: 1 },
-        TocItem { id: "size".to_string(), title: "不同尺寸".to_string(), level: 1 },
-        TocItem { id: "confirm".to_string(), title: "确认对话框".to_string(), level: 1 },
-        TocItem { id: "transform".to_string(), title: "变换原点".to_string(), level: 1 },
-        TocItem { id: "no-mask".to_string(), title: "不显示遮罩层".to_string(), level: 1 },
-        TocItem { id: "draggable".to_string(), title: "可拖拽".to_string(), level: 1 },
-        TocItem { id: "api".to_string(), title: "API".to_string(), level: 1 },
+        TocItem {
+            id: "basic".to_string(),
+            title: "基础用法".to_string(),
+            level: 1,
+        },
+        TocItem {
+            id: "controlled".to_string(),
+            title: "受控显示".to_string(),
+            level: 1,
+        },
+        TocItem {
+            id: "size".to_string(),
+            title: "不同尺寸".to_string(),
+            level: 1,
+        },
+        TocItem {
+            id: "confirm".to_string(),
+            title: "确认对话框".to_string(),
+            level: 1,
+        },
+        TocItem {
+            id: "transform".to_string(),
+            title: "变换原点".to_string(),
+            level: 1,
+        },
+        TocItem {
+            id: "no-mask".to_string(),
+            title: "不显示遮罩层".to_string(),
+            level: 1,
+        },
+        TocItem {
+            id: "draggable".to_string(),
+            title: "可拖拽".to_string(),
+            level: 1,
+        },
+        TocItem {
+            id: "api".to_string(),
+            title: "API".to_string(),
+            level: 1,
+        },
     ];
 
     rsx! {
@@ -38,7 +70,7 @@ pub fn ModalPage() -> Element {
 
                 section { id: "basic", class: "mb-12",
                     h2 { class: "text-2xl font-semibold text-gray-900 dark:text-white mb-4", "基础用法" }
-                    
+
                     DemoBox {
                         title: "基础模态框".to_string(),
                         description: "最简单的模态框，包含标题和内容。".to_string(),
@@ -75,7 +107,7 @@ rsx! {
 
                 section { id: "controlled", class: "mb-12",
                     h2 { class: "text-2xl font-semibold text-gray-900 dark:text-white mb-4", "受控显示" }
-                    
+
                     DemoBox {
                         title: "受控显示".to_string(),
                         description: "模态框的显示可以是受控的，通过外部状态控制。".to_string(),
@@ -112,7 +144,7 @@ rsx! {
 
                 section { id: "size", class: "mb-12",
                     h2 { class: "text-2xl font-semibold text-gray-900 dark:text-white mb-4", "不同尺寸" }
-                    
+
                     DemoBox {
                         title: "尺寸对比".to_string(),
                         description: "模态框支持小型、中型、大型三种尺寸。".to_string(),
@@ -156,7 +188,7 @@ rsx! {
 
                 section { id: "confirm", class: "mb-12",
                     h2 { class: "text-2xl font-semibold text-gray-900 dark:text-white mb-4", "确认对话框" }
-                    
+
                     DemoBox {
                         title: "确认对话框".to_string(),
                         description: "带有确认和取消按钮的模态框。".to_string(),
@@ -183,12 +215,9 @@ rsx! {
                                 visible: confirm_modal(),
                                 title: Some("确认删除".to_string()),
                                 modal_type: ModalType::Confirm,
-                                show_confirm: true,
-                                show_cancel: true,
-                                confirm_text: "删除".to_string(),
                                 on_confirm: move |_| confirm_modal.set(false),
                                 on_cancel: move |_| confirm_modal.set(false),
-                                "你确定要删除这个项目吗？此操作不可撤销。"
+                                div { class: "whitespace-pre-wrap", "你确定要删除这个项目吗？此操作不可撤销。" }
                             }
                         }
                     }
@@ -196,7 +225,7 @@ rsx! {
 
                 section { id: "transform", class: "mb-12",
                     h2 { class: "text-2xl font-semibold text-gray-900 dark:text-white mb-4", "变换原点" }
-                    
+
                     DemoBox {
                         title: "变换原点".to_string(),
                         description: "控制模态框动画的展开原点，可以设置为 center 或其他位置。".to_string(),
@@ -225,9 +254,8 @@ rsx! {
                             Modal {
                                 visible: transform_origin_modal(),
                                 title: Some("变换原点模态框".to_string()),
-                                transform_origin: "center".to_string(),
                                 on_close: move |_| transform_origin_modal.set(false),
-                                "这个模态框的动画从中心点展开。"
+                                div { class: "whitespace-pre-wrap", "这个模态框的动画从中心点展开。" }
                             }
                         }
                     }
@@ -235,7 +263,7 @@ rsx! {
 
                 section { id: "no-mask", class: "mb-12",
                     h2 { class: "text-2xl font-semibold text-gray-900 dark:text-white mb-4", "不显示遮罩层" }
-                    
+
                     DemoBox {
                         title: "不显示遮罩层".to_string(),
                         description: "可以设置不显示遮罩层，适合做悬浮窗。".to_string(),
@@ -264,9 +292,9 @@ rsx! {
                             Modal {
                                 visible: no_mask_modal(),
                                 title: Some("无遮罩模态框".to_string()),
-                                show_mask: false,
+                                show_mask: true,
                                 on_close: move |_| no_mask_modal.set(false),
-                                "这个模态框没有遮罩层，可以当作悬浮窗使用。"
+                                div { class: "whitespace-pre-wrap", "这个模态框没有遮罩层，可以当作悬浮窗使用。" }
                             }
                         }
                     }
@@ -274,7 +302,7 @@ rsx! {
 
                 section { id: "draggable", class: "mb-12",
                     h2 { class: "text-2xl font-semibold text-gray-900 dark:text-white mb-4", "可拖拽" }
-                    
+
                     DemoBox {
                         title: "可拖拽模态框".to_string(),
                         description: "设置 draggable 属性为 true，模态框即可拖拽。".to_string(),
@@ -305,7 +333,7 @@ rsx! {
                                 title: Some("可拖拽模态框".to_string()),
                                 draggable: true,
                                 on_close: move |_| draggable_modal.set(false),
-                                "这个模态框可以被拖拽移动位置。"
+                                div { class: "whitespace-pre-wrap", "这个模态框可以被拖拽移动位置。" }
                             }
                         }
                     }
@@ -314,7 +342,7 @@ rsx! {
                 section { id: "api", class: "mb-12",
                     h2 { class: "text-2xl font-semibold text-gray-900 dark:text-white mb-4", "API" }
                     h3 { class: "text-xl font-semibold text-gray-900 dark:text-white mb-3", "Modal Props" }
-                    
+
                     div { class: "overflow-x-auto",
                         table { class: "w-full border-collapse border border-gray-200 dark:border-gray-700",
                             thead {
@@ -406,4 +434,3 @@ rsx! {
         }
     }
 }
-

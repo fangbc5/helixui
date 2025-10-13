@@ -1,19 +1,34 @@
-use helixui::components::{
-    Button, ButtonType, DemoBox, Dialog, DialogProps, DialogSize, DialogPosition, DialogType,
-    show_confirm_dialog, show_error_dialog, show_info_dialog, show_success_dialog, show_warning_dialog,
-};
 use crate::views::layout::TocItem;
 use crate::views::layout::{ComponentsSidebar, DocPage};
 use dioxus::prelude::*;
+use helixui::components::{
+    show_confirm_dialog, show_error_dialog, show_info_dialog, show_success_dialog, Button, ButtonType, DemoBox,
+};
 
 /// Dialog 组件文档页面
 #[component]
 pub fn DialogPage() -> Element {
     let toc_items = vec![
-        TocItem { id: "basic".to_string(), title: "基础用法".to_string(), level: 1 },
-        TocItem { id: "types".to_string(), title: "不同类型".to_string(), level: 1 },
-        TocItem { id: "mask".to_string(), title: "遮罩层控制".to_string(), level: 1 },
-        TocItem { id: "api".to_string(), title: "API".to_string(), level: 1 },
+        TocItem {
+            id: "basic".to_string(),
+            title: "基础用法".to_string(),
+            level: 1,
+        },
+        TocItem {
+            id: "types".to_string(),
+            title: "不同类型".to_string(),
+            level: 1,
+        },
+        TocItem {
+            id: "mask".to_string(),
+            title: "遮罩层控制".to_string(),
+            level: 1,
+        },
+        TocItem {
+            id: "api".to_string(),
+            title: "API".to_string(),
+            level: 1,
+        },
     ];
 
     rsx! {
@@ -30,7 +45,7 @@ pub fn DialogPage() -> Element {
                 // 基础用法
                 section { id: "basic", class: "mb-12",
                     h2 { class: "text-2xl font-semibold text-gray-900 dark:text-white mb-4", "基础用法" }
-                    
+
                     DemoBox {
                         title: "基础对话框".to_string(),
                         description: "最简单的对话框，包含标题和内容。".to_string(),
@@ -51,7 +66,7 @@ rsx! {
                             Button {
                                 button_type: ButtonType::Primary,
                                 onclick: move |_| {
-                                    show_info_dialog("信息", "这是一条信息提示。");
+                                    show_info_dialog("信息".to_string(), "这是一条信息提示。".to_string());
                                 },
                                 "显示对话框"
                             }
@@ -62,7 +77,7 @@ rsx! {
                 // 不同类型
                 section { id: "types", class: "mb-12",
                     h2 { class: "text-2xl font-semibold text-gray-900 dark:text-white mb-4", "不同类型" }
-                    
+
                     DemoBox {
                         title: "不同类型的对话框".to_string(),
                         description: "支持确认、信息、成功、警告、错误等不同类型的对话框。".to_string(),
@@ -93,7 +108,12 @@ rsx! {
                             Button {
                                 button_type: ButtonType::Warning,
                                 onclick: move |_| {
-                                    show_confirm_dialog("警告", "你确定?");
+                                    show_confirm_dialog(
+                                        "警告".to_string(),
+                                        "你确定?".to_string(),
+                                        || {},
+                                        || {},
+                                    );
                                 },
                                 "确认对话框"
                             }
@@ -101,7 +121,7 @@ rsx! {
                             Button {
                                 button_type: ButtonType::Success,
                                 onclick: move |_| {
-                                    show_success_dialog("成功", "操作成功完成！");
+                                    show_success_dialog("成功".to_string(), "操作成功完成！".to_string());
                                 },
                                 "成功对话框"
                             }
@@ -109,7 +129,7 @@ rsx! {
                             Button {
                                 button_type: ButtonType::Error,
                                 onclick: move |_| {
-                                    show_error_dialog("错误", "操作失败，请重试。");
+                                    show_error_dialog("错误".to_string(), "操作失败，请重试。".to_string());
                                 },
                                 "错误对话框"
                             }
@@ -120,7 +140,7 @@ rsx! {
                 // 遮罩层控制
                 section { id: "mask", class: "mb-12",
                     h2 { class: "text-2xl font-semibold text-gray-900 dark:text-white mb-4", "遮罩层控制" }
-                    
+
                     DemoBox {
                         title: "遮罩层测试".to_string(),
                         description: "点击遮罩层可以关闭对话框。".to_string(),
@@ -141,7 +161,10 @@ rsx! {
                             Button {
                                 button_type: ButtonType::Info,
                                 onclick: move |_| {
-                                    show_info_dialog("遮罩层测试", "点击遮罩层可以关闭此对话框。");
+                                    show_info_dialog(
+                                        "遮罩层测试".to_string(),
+                                        "点击遮罩层可以关闭此对话框。".to_string(),
+                                    );
                                 },
                                 "测试遮罩层"
                             }
@@ -152,9 +175,9 @@ rsx! {
                 // API
                 section { id: "api", class: "mb-12",
                     h2 { class: "text-2xl font-semibold text-gray-900 dark:text-white mb-4", "API" }
-                    
+
                     h3 { class: "text-xl font-semibold text-gray-900 dark:text-white mb-3", "Dialog Props" }
-                    
+
                     div { class: "overflow-x-auto",
                         table { class: "w-full text-left border-collapse",
                             thead {

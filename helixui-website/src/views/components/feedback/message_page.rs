@@ -1,16 +1,17 @@
-use helixui::components::{
-    show_message, show_message_with_duration, show_message_with_position, Button, ButtonType,
-    DemoBox, Message, MessagePosition, MessageType,
-};
 use crate::views::layout::TocItem;
 use crate::views::layout::{ComponentsSidebar, DocPage};
 use dioxus::prelude::*;
+use helixui::components::{Button, ButtonType, DemoBox};
+use helixui::overlay::{
+    show_message, show_message_with_duration, show_message_with_position,
+    SimpleMessageType, SimpleMessagePosition,
+};
 
 /// 消息数据结构
 #[derive(Clone, PartialEq)]
 struct MessageData {
     id: u32,
-    message_type: MessageType,
+    message_type: SimpleMessageType,
     content: String,
 }
 
@@ -21,13 +22,25 @@ fn MessageList(messages: Vec<MessageData>, on_remove: EventHandler<u32>) -> Elem
         div {
             class: "space-y-2",
             for message in messages {
-                Message {
+                div {
                     key: "{message.id}",
-                    visible: true,
-                    message_type: message.message_type,
-                    content: message.content,
-                    closable: true,
-                    on_close: move |_| on_remove.call(message.id),
+                    class: format!("p-4 rounded-lg border shadow-sm {}", match message.message_type {
+                        SimpleMessageType::Success => "bg-green-50 border-green-200 text-green-800",
+                        SimpleMessageType::Warning => "bg-yellow-50 border-yellow-200 text-yellow-800",
+                        SimpleMessageType::Error => "bg-red-50 border-red-200 text-red-800",
+                        SimpleMessageType::Info => "bg-blue-50 border-blue-200 text-blue-800",
+                        SimpleMessageType::Loading => "bg-blue-50 border-blue-200 text-blue-800",
+                    }),
+                    
+                    div {
+                        class: "flex items-center justify-between",
+                        span { "{message.content}" }
+                        button {
+                            class: "ml-2 text-gray-400 hover:text-gray-600",
+                            onclick: move |_| on_remove.call(message.id),
+                            "×"
+                        }
+                    }
                 }
             }
         }
@@ -122,57 +135,55 @@ pub fn MessagePage() -> Element {
 
                     DemoBox {
                         title: "基础消息".to_string(),
-                        description: "Message 有四种类型：info、success、warning、error。".to_string(),
-                        code: r#"use helixui::components::{Message, MessageType};
+                        description: "Message 有四种类型：info、success、warning、error。点击按钮查看不同类型的消息。".to_string(),
+                        code: r#"use helixui::components::{Button, ButtonType, show_message, MessageType};
 
 rsx! {
-    Message {
-        visible: true,
-        message_type: MessageType::Info,
-        content: "这是一条信息提示".to_string(),
-    }
-    Message {
-        visible: true,
-        message_type: MessageType::Success,
-        content: "操作成功！".to_string(),
-    }
-    Message {
-        visible: true,
-        message_type: MessageType::Warning,
-        content: "这是一条警告信息".to_string(),
-    }
-    Message {
-        visible: true,
-        message_type: MessageType::Error,
-        content: "操作失败，请重试".to_string(),
+    div { class: "flex gap-3",
+        Button {
+            button_type: ButtonType::Info,
+            onclick: move |_| show_message("这是一条信息提示".to_string(), SimpleMessageType::Info),
+            "信息"
+        }
+        Button {
+            button_type: ButtonType::Success,
+            onclick: move |_| show_message("操作成功！".to_string(), SimpleMessageType::Success),
+            "成功"
+        }
+        Button {
+            button_type: ButtonType::Warning,
+            onclick: move |_| show_message("这是一条警告信息".to_string(), SimpleMessageType::Warning),
+            "警告"
+        }
+        Button {
+            button_type: ButtonType::Error,
+            onclick: move |_| show_message("操作失败，请重试".to_string(), SimpleMessageType::Error),
+            "错误"
+        }
     }
 }"#.to_string(),
 
                         div {
-                            class: "flex flex-col gap-3",
-                            Message {
-                                visible: true,
-                                message_type: MessageType::Info,
-                                content: "这是一条信息提示".to_string(),
-                                position: MessagePosition::TopLeft,
+                            class: "flex gap-3",
+                            Button {
+                                button_type: ButtonType::Info,
+                                onclick: move |_| show_message("这是一条信息提示", SimpleMessageType::Info),
+                                "信息"
                             }
-                            Message {
-                                visible: true,
-                                message_type: MessageType::Success,
-                                content: "操作成功！".to_string(),
-                                position: MessagePosition::TopLeft,
+                            Button {
+                                button_type: ButtonType::Success,
+                                onclick: move |_| show_message("操作成功！", SimpleMessageType::Success),
+                                "成功"
                             }
-                            Message {
-                                visible: true,
-                                message_type: MessageType::Warning,
-                                content: "这是一条警告信息".to_string(),
-                                position: MessagePosition::TopLeft,
+                            Button {
+                                button_type: ButtonType::Warning,
+                                onclick: move |_| show_message("这是一条警告信息", SimpleMessageType::Warning),
+                                "警告"
                             }
-                            Message {
-                                visible: true,
-                                message_type: MessageType::Error,
-                                content: "操作失败，请重试".to_string(),
-                                position: MessagePosition::TopLeft,
+                            Button {
+                                button_type: ButtonType::Error,
+                                onclick: move |_| show_message("操作失败，请重试", SimpleMessageType::Error),
+                                "错误"
                             }
                         }
                     }
@@ -217,27 +228,27 @@ fn InteractiveDemo() -> Element {
                 class: "flex flex-wrap gap-3",
                 Button {
                     button_type: ButtonType::Info,
-                    onclick: move |_| add_message(MessageType::Info, "这是一条信息提示".to_string()),
+                    onclick: move |_| add_message(SimpleMessageType::Info, "这是一条信息提示".to_string()),
                     "信息消息"
                 }
                 Button {
                     button_type: ButtonType::Success,
-                    onclick: move |_| add_message(MessageType::Success, "操作成功！".to_string()),
+                    onclick: move |_| add_message(SimpleMessageType::Success, "操作成功！".to_string()),
                     "成功消息"
                 }
                 Button {
                     button_type: ButtonType::Warning,
-                    onclick: move |_| add_message(MessageType::Warning, "这是一条警告信息".to_string()),
+                    onclick: move |_| add_message(SimpleMessageType::Warning, "这是一条警告信息".to_string()),
                     "警告消息"
                 }
                 Button {
                     button_type: ButtonType::Error,
-                    onclick: move |_| add_message(MessageType::Error, "操作失败，请重试".to_string()),
+                    onclick: move |_| add_message(SimpleMessageType::Error, "操作失败，请重试".to_string()),
                     "错误消息"
                 }
                 Button {
                     button_type: ButtonType::Primary,
-                    onclick: move |_| add_message(MessageType::Loading, "正在加载中...".to_string()),
+                    onclick: move |_| add_message(SimpleMessageType::Loading, "正在加载中...".to_string()),
                     "加载消息"
                 }
             }
@@ -273,7 +284,7 @@ fn InteractiveDemo() -> Element {
                                         *message_id_counter.write() += 1;
                                         messages.write().push(MessageData {
                                             id,
-                                            message_type: MessageType::Info,
+                                            message_type: SimpleMessageType::Info,
                                             content: "这是一条信息提示".to_string(),
                                         });
                                     },
@@ -286,7 +297,7 @@ fn InteractiveDemo() -> Element {
                                         *message_id_counter.write() += 1;
                                         messages.write().push(MessageData {
                                             id,
-                                            message_type: MessageType::Success,
+                                            message_type: SimpleMessageType::Success,
                                             content: "操作成功！".to_string(),
                                         });
                                     },
@@ -299,7 +310,7 @@ fn InteractiveDemo() -> Element {
                                         *message_id_counter.write() += 1;
                                         messages.write().push(MessageData {
                                             id,
-                                            message_type: MessageType::Warning,
+                                            message_type: SimpleMessageType::Warning,
                                             content: "这是一条警告信息".to_string(),
                                         });
                                     },
@@ -312,7 +323,7 @@ fn InteractiveDemo() -> Element {
                                         *message_id_counter.write() += 1;
                                         messages.write().push(MessageData {
                                             id,
-                                            message_type: MessageType::Error,
+                                            message_type: SimpleMessageType::Error,
                                             content: "操作失败，请重试".to_string(),
                                         });
                                     },
@@ -325,7 +336,7 @@ fn InteractiveDemo() -> Element {
                                         *message_id_counter.write() += 1;
                                         messages.write().push(MessageData {
                                             id,
-                                            message_type: MessageType::Loading,
+                                            message_type: SimpleMessageType::Loading,
                                             content: "正在加载中...".to_string(),
                                         });
                                     },
@@ -353,26 +364,23 @@ fn InteractiveDemo() -> Element {
 
                     DemoBox {
                         title: "加载消息".to_string(),
-                        description: "显示加载中的消息，图标会旋转。".to_string(),
-                        code: r#"use helixui::components::{Message, MessageType};
+                        description: "显示加载中的消息，图标会旋转。点击按钮查看加载消息。".to_string(),
+                        code: r#"use helixui::components::{Button, ButtonType, show_message, MessageType};
 
 rsx! {
-    Message {
-        visible: true,
-        message_type: MessageType::Loading,
-        content: "正在加载中...".to_string(),
-        closable: false,
+    Button {
+        button_type: ButtonType::Info,
+        onclick: move |_| show_message("正在加载中...".to_string(), SimpleMessageType::Loading),
+        "显示加载消息"
     }
 }"#.to_string(),
 
                         div {
-                            class: "flex flex-col gap-3",
-                            Message {
-                                visible: true,
-                                message_type: MessageType::Loading,
-                                content: "正在加载中...".to_string(),
-                                closable: false,
-                                position: MessagePosition::TopLeft,
+                            class: "flex gap-3",
+                            Button {
+                                button_type: ButtonType::Info,
+                                onclick: move |_| show_message("正在加载中...", SimpleMessageType::Loading),
+                                "显示加载消息"
                             }
                         }
                     }
@@ -389,39 +397,35 @@ rsx! {
 
                     DemoBox {
                         title: "可关闭的消息".to_string(),
-                        description: "通过 closable 属性控制消息是否可关闭。".to_string(),
-                        code: r#"use helixui::components::{Message, MessageType};
+                        description: "通过 closable 属性控制消息是否可关闭。点击按钮查看不同类型的消息。".to_string(),
+                        code: r#"use helixui::components::{Button, ButtonType, show_message, MessageType};
 
 rsx! {
-    Message {
-        visible: true,
-        message_type: MessageType::Info,
-        content: "可以关闭的消息".to_string(),
-        closable: true,
-    }
-    Message {
-        visible: true,
-        message_type: MessageType::Success,
-        content: "不可关闭的消息".to_string(),
-        closable: false,
+    div { class: "flex gap-3",
+        Button {
+            button_type: ButtonType::Info,
+            onclick: move |_| show_message("可以关闭的消息".to_string(), SimpleMessageType::Info),
+            "可关闭消息"
+        }
+        Button {
+            button_type: ButtonType::Success,
+            onclick: move |_| show_message(SimpleMessageType::Success, "不可关闭的消息".to_string()),
+            "不可关闭消息"
+        }
     }
 }"#.to_string(),
 
                         div {
-                            class: "flex flex-col gap-3",
-                            Message {
-                                visible: true,
-                                message_type: MessageType::Info,
-                                content: "可以关闭的消息（点击 X 按钮）".to_string(),
-                                closable: true,
-                                position: MessagePosition::TopLeft,
+                            class: "flex gap-3",
+                            Button {
+                                button_type: ButtonType::Info,
+                                onclick: move |_| show_message("可以关闭的消息（点击 X 按钮）", SimpleMessageType::Info),
+                                "可关闭消息"
                             }
-                            Message {
-                                visible: true,
-                                message_type: MessageType::Success,
-                                content: "不可关闭的消息".to_string(),
-                                closable: false,
-                                position: MessagePosition::TopLeft,
+                            Button {
+                                button_type: ButtonType::Success,
+                                onclick: move |_| show_message("不可关闭的消息", SimpleMessageType::Success),
+                                "不可关闭消息"
                             }
                         }
                     }
@@ -450,22 +454,22 @@ rsx! {
             class: "flex flex-wrap gap-3",
             Button {
                 button_type: ButtonType::Info,
-                onclick: move |_| show_message(MessageType::Info, "这是一条全局信息消息".to_string()),
+                onclick: move |_| show_message(SimpleMessageType::Info, "这是一条全局信息消息".to_string()),
                 "信息消息"
             }
             Button {
                 button_type: ButtonType::Success,
-                onclick: move |_| show_message(MessageType::Success, "操作成功！".to_string()),
+                onclick: move |_| show_message(SimpleMessageType::Success, "操作成功！".to_string()),
                 "成功消息"
             }
             Button {
                 button_type: ButtonType::Warning,
-                onclick: move |_| show_message(MessageType::Warning, "这是一条警告消息".to_string()),
+                onclick: move |_| show_message(SimpleMessageType::Warning, "这是一条警告消息".to_string()),
                 "警告消息"
             }
             Button {
                 button_type: ButtonType::Error,
-                onclick: move |_| show_message(MessageType::Error, "操作失败，请重试".to_string()),
+                onclick: move |_| show_message(SimpleMessageType::Error, "操作失败，请重试".to_string()),
                 "错误消息"
             }
         }
@@ -480,22 +484,22 @@ rsx! {
                                 class: "flex flex-wrap gap-3",
                                 Button {
                                     button_type: ButtonType::Info,
-                                    onclick: move |_| { show_message("这是一条全局信息消息".to_string(), MessageType::Info); },
+                                    onclick: move |_| { show_message("这是一条全局信息消息", SimpleMessageType::Info); },
                                     "信息消息"
                                 }
                                 Button {
                                     button_type: ButtonType::Success,
-                                    onclick: move |_| { show_message("操作成功！".to_string(), MessageType::Success); },
+                                    onclick: move |_| { show_message("操作成功！", SimpleMessageType::Success); },
                                     "成功消息"
                                 }
                                 Button {
                                     button_type: ButtonType::Warning,
-                                    onclick: move |_| { show_message("这是一条警告消息".to_string(), MessageType::Warning); },
+                                    onclick: move |_| { show_message("这是一条警告消息", SimpleMessageType::Warning); },
                                     "警告消息"
                                 }
                                 Button {
                                     button_type: ButtonType::Error,
-                                    onclick: move |_| { show_message("操作失败，请重试".to_string(), MessageType::Error); },
+                                    onclick: move |_| { show_message("操作失败，请重试", SimpleMessageType::Error); },
                                     "错误消息"
                                 }
                             }
@@ -526,32 +530,32 @@ rsx! {
             class: "grid grid-cols-3 gap-3",
             Button {
                 button_type: ButtonType::Info,
-                onclick: move |_| show_message_with_position(MessageType::Info, "顶部消息".to_string(), MessagePosition::Top),
+                onclick: move |_| show_message_with_position(SimpleMessageType::Info, "顶部消息".to_string(), SimpleMessagePosition::TopCenter),
                 "顶部"
             }
             Button {
                 button_type: ButtonType::Info,
-                onclick: move |_| show_message_with_position(MessageType::Info, "底部消息".to_string(), MessagePosition::Bottom),
+                onclick: move |_| show_message_with_position(SimpleMessageType::Info, "底部消息".to_string(), SimpleMessagePosition::BottomCenter),
                 "底部"
             }
             Button {
                 button_type: ButtonType::Info,
-                onclick: move |_| show_message_with_position(MessageType::Info, "左上消息".to_string(), MessagePosition::TopLeft),
+                onclick: move |_| show_message_with_position(SimpleMessageType::Info, "左上消息".to_string(), SimpleMessagePosition::TopLeft),
                 "左上"
             }
             Button {
                 button_type: ButtonType::Info,
-                onclick: move |_| show_message_with_position(MessageType::Info, "右上消息".to_string(), MessagePosition::TopRight),
+                onclick: move |_| show_message_with_position(SimpleMessageType::Info, "右上消息".to_string(), SimpleMessagePosition::TopRight),
                 "右上"
             }
             Button {
                 button_type: ButtonType::Info,
-                onclick: move |_| show_message_with_position(MessageType::Info, "左下消息".to_string(), MessagePosition::BottomLeft),
+                onclick: move |_| show_message_with_position(SimpleMessageType::Info, "左下消息".to_string(), SimpleMessagePosition::BottomLeft),
                 "左下"
             }
             Button {
                 button_type: ButtonType::Info,
-                onclick: move |_| show_message_with_position(MessageType::Info, "右下消息".to_string(), MessagePosition::BottomRight),
+                onclick: move |_| show_message_with_position(SimpleMessageType::Info, "右下消息".to_string(), SimpleMessagePosition::BottomRight),
                 "右下"
             }
         }
@@ -566,32 +570,32 @@ rsx! {
                                 class: "grid grid-cols-3 gap-3",
                                 Button {
                                     button_type: ButtonType::Info,
-                                    onclick: move |_| { show_message_with_position("顶部消息".to_string(), MessageType::Info, MessagePosition::Top); },
+                                    onclick: move |_| { show_message_with_position("顶部消息", SimpleMessageType::Info, SimpleMessagePosition::TopCenter); },
                                     "顶部"
                                 }
                                 Button {
                                     button_type: ButtonType::Info,
-                                    onclick: move |_| { show_message_with_position("底部消息".to_string(), MessageType::Info, MessagePosition::Bottom); },
+                                    onclick: move |_| { show_message_with_position("底部消息", SimpleMessageType::Info, SimpleMessagePosition::BottomCenter); },
                                     "底部"
                                 }
                                 Button {
                                     button_type: ButtonType::Info,
-                                    onclick: move |_| { show_message_with_position("左上消息".to_string(), MessageType::Info, MessagePosition::TopLeft); },
+                                    onclick: move |_| { show_message_with_position("左上消息", SimpleMessageType::Info, SimpleMessagePosition::TopLeft); },
                                     "左上"
                                 }
                                 Button {
                                     button_type: ButtonType::Info,
-                                    onclick: move |_| { show_message_with_position("右上消息".to_string(), MessageType::Info, MessagePosition::TopRight); },
+                                    onclick: move |_| { show_message_with_position("右上消息", SimpleMessageType::Info, SimpleMessagePosition::TopRight); },
                                     "右上"
                                 }
                                 Button {
                                     button_type: ButtonType::Info,
-                                    onclick: move |_| { show_message_with_position("左下消息".to_string(), MessageType::Info, MessagePosition::BottomLeft); },
+                                    onclick: move |_| { show_message_with_position("左下消息", SimpleMessageType::Info, SimpleMessagePosition::BottomLeft); },
                                     "左下"
                                 }
                                 Button {
                                     button_type: ButtonType::Info,
-                                    onclick: move |_| { show_message_with_position("右下消息".to_string(), MessageType::Info, MessagePosition::BottomRight); },
+                                    onclick: move |_| { show_message_with_position("右下消息", SimpleMessageType::Info, SimpleMessagePosition::BottomRight); },
                                     "右下"
                                 }
                             }
@@ -622,22 +626,22 @@ rsx! {
             class: "flex flex-wrap gap-3",
             Button {
                 button_type: ButtonType::Success,
-                onclick: move |_| show_message_with_duration(MessageType::Success, "1秒后消失".to_string(), 1000),
+                onclick: move |_| show_message_with_duration(SimpleMessageType::Success, "1秒后消失".to_string(), 1000),
                 "1秒"
             }
             Button {
                 button_type: ButtonType::Warning,
-                onclick: move |_| show_message_with_duration(MessageType::Warning, "3秒后消失".to_string(), 3000),
+                onclick: move |_| show_message_with_duration(SimpleMessageType::Warning, "3秒后消失".to_string(), 3000),
                 "3秒"
             }
             Button {
                 button_type: ButtonType::Info,
-                onclick: move |_| show_message_with_duration(MessageType::Info, "5秒后消失".to_string(), 5000),
+                onclick: move |_| show_message_with_duration(SimpleMessageType::Info, "5秒后消失".to_string(), 5000),
                 "5秒"
             }
             Button {
                 button_type: ButtonType::Error,
-                onclick: move |_| show_message_with_duration(MessageType::Error, "不自动消失".to_string(), 0),
+                onclick: move |_| show_message_with_duration(SimpleMessageType::Error, "不自动消失".to_string(), 0),
                 "不消失"
             }
         }
@@ -652,22 +656,22 @@ rsx! {
                                 class: "flex flex-wrap gap-3",
                                 Button {
                                     button_type: ButtonType::Success,
-                                    onclick: move |_| { show_message_with_duration("1秒后消失".to_string(), MessageType::Success, 1000); },
+                                    onclick: move |_| { show_message_with_duration("1秒后消失", SimpleMessageType::Success, 1000); },
                                     "1秒"
                                 }
                                 Button {
                                     button_type: ButtonType::Warning,
-                                    onclick: move |_| { show_message_with_duration("3秒后消失".to_string(), MessageType::Warning, 3000); },
+                                    onclick: move |_| { show_message_with_duration("3秒后消失", SimpleMessageType::Warning, 3000); },
                                     "3秒"
                                 }
                                 Button {
                                     button_type: ButtonType::Info,
-                                    onclick: move |_| { show_message_with_duration("5秒后消失".to_string(), MessageType::Info, 5000); },
+                                    onclick: move |_| { show_message_with_duration("5秒后消失", SimpleMessageType::Info, 5000); },
                                     "5秒"
                                 }
                                 Button {
                                     button_type: ButtonType::Error,
-                                    onclick: move |_| { show_message_with_duration("不自动消失".to_string(), MessageType::Error, 0); },
+                                    onclick: move |_| { show_message_with_duration("不自动消失", SimpleMessageType::Error, 0); },
                                     "不消失"
                                 }
                             }

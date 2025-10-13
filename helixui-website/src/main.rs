@@ -2,7 +2,6 @@
 // need dioxus
 use dioxus::prelude::*;
 
-use helixui::components::{GlobalMessageContainer};
 use views::{
     AvatarPage, BadgePage, ButtonPage, CardPage, ComponentsIndex, DialogPage, DividerPage, Guide,
     Home, IconPage, Introduction, MessagePage, ModalPage, QuickStart, TopNavbar, Version,
@@ -87,9 +86,6 @@ fn App() -> Element {
 
         // The router component renders the route enum we defined above. It will handle synchronization of the URL and render
         // the layouts and components for the active route.
-                Router::<Route> {}
-
-                // 全局消息容器
-                GlobalMessageContainer {}
+        Router::<Route> {}
     }
 }

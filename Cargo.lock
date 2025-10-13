@@ -2004,6 +2004,8 @@ dependencies = [
  "dioxus",
  "gloo-timers",
  "js-sys",
+ "serde",
+ "serde_json",
  "wasm-bindgen",
  "web-sys",
 ]
