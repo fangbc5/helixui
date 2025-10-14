@@ -1,4 +1,4 @@
-use crate::components::{Icon, IconType};
+use crate::components::IconType;
 use dioxus::prelude::*;
 
 /// Button 组件的类型
@@ -11,8 +11,6 @@ pub enum ButtonType {
     Warning,
     Error,
     Tertiary,
-    PureText,  // 纯文字按钮（无背景色和边框）
-    PureIcon,  // 纯图标按钮（无背景色和边框）
 }
 
 impl ButtonType {
@@ -25,8 +23,7 @@ impl ButtonType {
             ButtonType::Warning => "bg-orange-500 text-white hover:bg-orange-600",
             ButtonType::Error => "bg-red-500 text-white hover:bg-red-600",
             ButtonType::Tertiary => "bg-transparent text-gray-700 hover:bg-gray-100",
-            ButtonType::PureText => "bg-transparent text-gray-700 hover:text-green-600",
-            ButtonType::PureIcon => "bg-transparent text-gray-500 hover:text-green-600",
+            // 对于带 icon 的按钮，颜色由 icon 自身继承，无需特殊类型
         }
     }
 }
@@ -38,14 +35,6 @@ pub enum ButtonSize {
     Small,
     Medium,
     Large,
-}
-
-/// Button 组件的变体
-#[derive(Clone, PartialEq)]
-pub enum ButtonVariant {
-    Text,     // 纯文字按钮
-    Icon,     // 纯图标按钮
-    IconText, // 图标+文字按钮
 }
 
 /// Button 组件的形状
@@ -115,103 +104,117 @@ impl ButtonShape {
     }
 }
 
+/// Button 组件属性
+#[derive(Props, Clone, PartialEq)]
+pub struct ButtonProps {
+    #[props(default = ButtonType::Default)]
+    pub button_type: ButtonType,
+    #[props(default = ButtonSize::Medium)]
+    pub size: ButtonSize,
+    #[props(default = false)]
+    pub disabled: bool,
+    #[props(default = false)]
+    pub secondary: bool,
+    #[props(default = false)]
+    pub dashed: bool,
+    /// 是否为描边/有背景样式。为 false 则为“纯 children”（无边框/无背景/无内边距）
+    #[props(default = true)]
+    pub outline: bool,
+    #[props(default = ButtonShape::Rounded)]
+    pub shape: ButtonShape,
+    #[props(default)]
+    pub onclick: Option<EventHandler<()>>,
+    #[props(default)]
+    pub class: Option<String>,
+    #[props(default)]
+    pub hover_color: Option<String>,
+    pub children: Element,
+}
+
 /// 按钮组件
 #[component]
-pub fn Button(
-    #[props(default = ButtonType::Default)] button_type: ButtonType,
-    #[props(default = ButtonSize::Medium)] size: ButtonSize,
-    #[props(default = false)] disabled: bool,
-    #[props(default = false)] secondary: bool,
-    #[props(default = false)] dashed: bool,
-    #[props(default = ButtonVariant::Text)] variant: ButtonVariant,
-    #[props(default = ButtonShape::Rounded)] shape: ButtonShape,
-    #[props(default)] icon: Option<IconType>,
-    #[props(default)] onclick: Option<EventHandler<()>>,
-    #[props(default)] class: Option<String>,
-    #[props(default)] hover_color: Option<String>,
-    children: Element,
-) -> Element {
-    let type_class = button_type.to_class();
-    let size_class = size.to_class();
-    let disabled_class = if disabled {
+pub fn Button(props: ButtonProps) -> Element {
+    let type_class = props.button_type.to_class();
+    let disabled_class = if props.disabled {
         "opacity-50 cursor-not-allowed"
     } else {
         "cursor-pointer"
     };
-    let secondary_class = if secondary {
-        match button_type {
+    // outline=false 时不应用任何背景/边框基类
+    let secondary_class = if !props.outline {
+        ""
+    } else if props.secondary {
+        match props.button_type {
             ButtonType::Primary => "bg-green-100 text-green-700 hover:bg-green-200",
             ButtonType::Info => "bg-blue-100 text-blue-700 hover:bg-blue-200",
             ButtonType::Success => "bg-emerald-100 text-emerald-700 hover:bg-emerald-200",
             ButtonType::Warning => "bg-orange-100 text-orange-700 hover:bg-orange-200",
             ButtonType::Error => "bg-red-100 text-red-700 hover:bg-red-200",
-            ButtonType::PureText => "bg-transparent text-gray-500 hover:text-green-600",
-            ButtonType::PureIcon => "bg-transparent text-gray-400 hover:text-green-600",
+            ButtonType::Tertiary => "bg-transparent text-gray-700 hover:bg-gray-100",
             _ => type_class,
         }
     } else {
         type_class
     };
 
-    // 处理虚线边框
-    let dashed_class = if dashed {
+    // 处理虚线边框（仅 outline 模式下生效）
+    let dashed_class = if props.outline && props.dashed {
         "border-2 border-dashed"
     } else {
         ""
     };
 
-    // 根据变体和形状确定样式类
-    let shape_class = shape.to_class();
-    let shape_size_class = shape.size_class(&size);
-
-    let base_class = match variant {
-        ButtonVariant::Text => {
-            let padding_class = if button_type == ButtonType::PureText {
-                "p-0" // 纯文字按钮无 padding
-            } else if shape == ButtonShape::Circle || shape == ButtonShape::Ellipse {
-                "" // 圆形和椭圆形使用固定尺寸，不需要 padding
-            } else {
-                size_class
-            };
-            format!(
-                "{} font-medium transition-colors duration-200 {} {} {} {} {}",
-                shape_class, secondary_class, dashed_class, padding_class, shape_size_class, disabled_class
-            )
-        }
-        ButtonVariant::Icon => {
-            let padding_class = if button_type == ButtonType::PureIcon {
-                "p-0" // 纯图标按钮无 padding
-            } else if shape == ButtonShape::Circle || shape == ButtonShape::Ellipse {
-                "" // 圆形和椭圆形使用固定尺寸，不需要 padding
-            } else {
-                size.icon_only_class()
-            };
-            format!(
-                "{} font-medium transition-colors duration-200 {} {} {} {} {} flex items-center justify-center",
-                shape_class, secondary_class, dashed_class, padding_class, shape_size_class, disabled_class
-            )
-        }
-        ButtonVariant::IconText => {
-            let padding_class = if shape == ButtonShape::Circle || shape == ButtonShape::Ellipse {
-                "" // 圆形和椭圆形使用固定尺寸，不需要 padding
-            } else {
-                size_class
-            };
-            format!(
-                "{} font-medium transition-colors duration-200 {} {} {} {} {} flex items-center gap-2",
-                shape_class, secondary_class, dashed_class, padding_class, shape_size_class, disabled_class
-            )
-        }
+    // 根据形状确定样式类（纯样式模式下忽略形状尺寸）
+    let shape_class = if props.outline {
+        props.shape.to_class()
+    } else {
+        ""
+    };
+    let shape_size_class = if props.outline {
+        props.shape.size_class(&props.size)
+    } else {
+        ""
     };
 
-    let final_class = if let Some(custom_class) = class {
-        format!("{} {}", base_class, custom_class)
+    // 统一布局：交由 children 决定内容
+    let layout_class = "inline-flex items-center justify-center gap-2";
+
+    // 圆形/椭圆形由尺寸类控制宽高；其余统一使用尺寸 padding。outline=false 时不添加 padding
+    let padding_class = if !props.outline {
+        ""
+    } else if props.shape == ButtonShape::Circle || props.shape == ButtonShape::Ellipse {
+        ""
     } else {
-        base_class
+        props.size.to_class()
+    };
+
+    // outline=false 时去掉背景/边框类，仅保留文本颜色由父级继承
+    let outline_override_class = if props.outline {
+        ""
+    } else {
+        // 纯 children：无背景/边框/阴影，并使用当前文本颜色统一控制 children
+        "bg-transparent border-0 shadow-none text-gray-700 dark:text-gray-300"
+    };
+
+    let base_class = format!(
+        "{} font-medium leading-none transition-colors duration-200 {} {} {} {} {} {}",
+        shape_class,
+        secondary_class,
+        dashed_class,
+        padding_class,
+        shape_size_class,
+        disabled_class,
+        outline_override_class
+    );
+
+    let final_class = if let Some(custom_class) = props.class.clone() {
+        format!("{} {} {}", base_class, layout_class, custom_class)
+    } else {
+        format!("{} {}", base_class, layout_class)
     };
 
     // 处理自定义 hover 颜色
-    let final_class_with_hover = if let Some(ref hover_color) = hover_color {
+    let final_class_with_hover = if let Some(ref hover_color) = props.hover_color {
         // 移除默认的 hover 颜色类，添加自定义的
         let base_class_without_hover = final_class
             .replace("hover:text-green-600", "")
@@ -220,20 +223,26 @@ pub fn Button(
             .replace("hover:text-gray-900", "")
             .replace("hover:text-gray-500", "")
             .replace("hover:text-gray-400", "");
-        
+
         // 添加自定义 hover 颜色 - 使用 style 属性而不是 Tailwind 类
         let hover_class = format!("hover:text-[{}]", hover_color);
         format!("{} {}", base_class_without_hover, hover_class)
+    } else if !props.outline {
+        // outline=false 且未指定 hover_color，亮色主题使用绿 600，暗色主题使用绿 400
+        format!(
+            "{} {}",
+            final_class, "hover:text-green-600 dark:hover:text-green-400"
+        )
     } else {
         final_class
     };
 
     // 处理自定义 hover 颜色的样式
-    let hover_style = if let Some(hover_color) = hover_color {
-        let full_color = if hover_color.starts_with('#') { 
-            hover_color.clone() 
-        } else { 
-            format!("#{}", hover_color) 
+    let hover_style = if let Some(hover_color) = props.hover_color.clone() {
+        let full_color = if hover_color.starts_with('#') {
+            hover_color.clone()
+        } else {
+            format!("#{}", hover_color)
         };
         format!("--hover-color: {};", full_color)
     } else {
@@ -244,32 +253,13 @@ pub fn Button(
         button {
             class: final_class_with_hover,
             style: hover_style,
-            disabled: disabled,
+            disabled: props.disabled,
             onclick: move |_| {
-                if let Some(handler) = &onclick {
+                if let Some(handler) = &props.onclick {
                     handler.call(());
                 }
             },
-            match variant {
-                ButtonVariant::Text => rsx! { {children} },
-                ButtonVariant::Icon => rsx! {
-                    if let Some(icon_type) = icon {
-                        Icon {
-                            icon: icon_type,
-                            class: size.icon_class().to_string(),
-                        }
-                    }
-                },
-                ButtonVariant::IconText => rsx! {
-                    if let Some(icon_type) = icon {
-                        Icon {
-                            icon: icon_type,
-                            class: size.icon_class().to_string(),
-                        }
-                    }
-                    {children}
-                },
-            }
+            {props.children}
         }
     }
 }
@@ -279,19 +269,19 @@ pub fn Button(
 pub struct ButtonGroupProps {
     /// 按钮列表
     pub buttons: Vec<ButtonGroupItemProps>,
-    
+
     /// 按钮组尺寸
     #[props(default = ButtonSize::Medium)]
     pub size: ButtonSize,
-    
+
     /// 按钮组形状
     #[props(default = ButtonShape::Rounded)]
     pub shape: ButtonShape,
-    
+
     /// 是否紧凑模式（按钮之间无间距）
     #[props(default = false)]
     pub compact: bool,
-    
+
     /// 自定义类名
     #[props(default)]
     pub class: Option<String>,
@@ -303,35 +293,31 @@ pub struct ButtonGroupItemProps {
     /// 按钮类型
     #[props(default = ButtonType::Default)]
     pub button_type: ButtonType,
-    
-    /// 按钮变体
-    #[props(default = ButtonVariant::Text)]
-    pub variant: ButtonVariant,
-    
+
     /// 是否禁用
     #[props(default = false)]
     pub disabled: bool,
-    
+
     /// 是否次要样式
     #[props(default = false)]
     pub secondary: bool,
-    
+
     /// 是否虚线边框
     #[props(default = false)]
     pub dashed: bool,
-    
+
     /// 图标
     #[props(default)]
     pub icon: Option<IconType>,
-    
+
     /// 点击事件
     #[props(default)]
     pub onclick: Option<EventHandler<()>>,
-    
+
     /// 自定义 hover 颜色
     #[props(default)]
     pub hover_color: Option<String>,
-    
+
     /// 按钮内容
     pub children: Element,
 }
@@ -340,7 +326,6 @@ impl Default for ButtonGroupItemProps {
     fn default() -> Self {
         Self {
             button_type: ButtonType::Default,
-            variant: ButtonVariant::Text,
             disabled: false,
             secondary: false,
             dashed: false,
@@ -357,18 +342,18 @@ impl Default for ButtonGroupItemProps {
 pub fn ButtonGroup(props: ButtonGroupProps) -> Element {
     let custom_class = props.class.as_deref().unwrap_or("");
     let gap_class = if props.compact { "" } else { "gap-1" };
-    
+
     let base_class = format!("inline-flex {}", gap_class);
     let final_class = if custom_class.is_empty() {
         base_class
     } else {
         format!("{} {}", base_class, custom_class)
     };
-    
+
     let buttons_len = props.buttons.len();
     let size = props.size.clone();
     let shape = props.shape.clone();
-    
+
     rsx! {
         div {
             class: final_class,
@@ -379,7 +364,6 @@ pub fn ButtonGroup(props: ButtonGroupProps) -> Element {
                     disabled: button.disabled,
                     secondary: button.secondary,
                     dashed: button.dashed,
-                    variant: button.variant.clone(),
                     shape: if props.compact {
                         // 紧凑模式下，第一个按钮左边圆角，最后一个按钮右边圆角
                         match index {
@@ -390,15 +374,15 @@ pub fn ButtonGroup(props: ButtonGroupProps) -> Element {
                     } else {
                         shape.clone()
                     },
-                    icon: button.icon,
+                    // children 内自行传入 Icon/Text
                     onclick: button.onclick.clone(),
                     hover_color: button.hover_color.clone(),
                     class: if props.compact {
                         // 紧凑模式下的特殊样式
                         match index {
                             0 => Some("rounded-l-md rounded-r-none".to_string()),
-                            _ if index == buttons_len - 1 => Some("rounded-r-md rounded-l-none".to_string()),
-                            _ => Some("rounded-none".to_string()),
+                            _ if index == buttons_len - 1 => Some("rounded-r-md rounded-l-none -ml-px".to_string()),
+                            _ => Some("rounded-none -ml-px".to_string()),
                         }
                     } else {
                         None

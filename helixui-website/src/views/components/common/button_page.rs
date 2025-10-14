@@ -3,8 +3,8 @@ use crate::views::layout::TocItem;
 use crate::views::DocPage;
 use dioxus::prelude::*;
 use helixui::components::{
-    Button, ButtonGroup, ButtonGroupItemProps, ButtonShape, ButtonSize, ButtonType, ButtonVariant,
-    DemoBox, IconType,
+    Button, ButtonGroup, ButtonGroupItemProps, ButtonShape, ButtonSize, ButtonType, DemoBox, Icon,
+    IconType,
 };
 
 /// Button 组件文档页面
@@ -102,7 +102,7 @@ pub fn ButtonPage() -> Element {
                 DemoBox {
                     title: "基础".to_string(),
                     description: "按钮的 type 分别为 default、tertiary、primary、info、success、warning、error、pureText 和 pureIcon。".to_string(),
-                    code: r#"use helixui::components::{Button, ButtonType, ButtonVariant, IconType};
+                    code: r#"use helixui::components::{Button, ButtonType, Icon, IconType};
 
 rsx! {
     Button { "Default" }
@@ -112,12 +112,6 @@ rsx! {
     Button { button_type: ButtonType::Success, "Success" }
     Button { button_type: ButtonType::Warning, "Warning" }
     Button { button_type: ButtonType::Error, "Error" }
-    Button { button_type: ButtonType::PureText, "PureText" }
-    Button { 
-        button_type: ButtonType::PureIcon,
-        variant: ButtonVariant::Icon,
-        icon: Some(IconType::Settings),
-    }
 }"#.to_string(),
 
                     div {
@@ -129,12 +123,6 @@ rsx! {
                         Button { button_type: ButtonType::Success, "Success" }
                         Button { button_type: ButtonType::Warning, "Warning" }
                         Button { button_type: ButtonType::Error, "Error" }
-                        Button { button_type: ButtonType::PureText, "PureText" }
-                        Button {
-                            button_type: ButtonType::PureIcon,
-                            variant: ButtonVariant::Icon,
-                            icon: Some(IconType::Settings),
-                        }
                     }
                 }
             }
@@ -154,8 +142,6 @@ rsx! {
                     code: r#"use helixui::components::{Button, ButtonType};
 
 rsx! {
-    Button { button_type: ButtonType::Default, "Default" }
-    Button { button_type: ButtonType::Tertiary, "Tertiary" }
     Button { button_type: ButtonType::Primary, secondary: true, "Primary" }
     Button { button_type: ButtonType::Info, secondary: true, "Info" }
     Button { button_type: ButtonType::Success, secondary: true, "Success" }
@@ -165,8 +151,6 @@ rsx! {
 
                     div {
                         class: "flex flex-wrap gap-3",
-                        Button { button_type: ButtonType::Default, "Default" }
-                        Button { button_type: ButtonType::Tertiary, "Tertiary" }
                         Button { button_type: ButtonType::Primary, secondary: true, "Primary" }
                         Button { button_type: ButtonType::Info, secondary: true, "Info" }
                         Button { button_type: ButtonType::Success, secondary: true, "Success" }
@@ -264,81 +248,35 @@ rsx! {
                         }
 
                         DemoBox {
-                            title: "纯图标按钮".to_string(),
-                            description: "只显示图标的按钮，适合工具栏和紧凑布局。".to_string(),
-                            code: r#"use helixui::components::{Button, ButtonType, ButtonVariant, IconType};
-
-        rsx! {
-            Button {
-                button_type: ButtonType::Default,
-                variant: ButtonVariant::Icon,
-                icon: Some(IconType::ChevronLeft),
-                "←"
-            }
-            Button {
-                button_type: ButtonType::Primary,
-                variant: ButtonVariant::Icon,
-                icon: Some(IconType::ChevronRight),
-                "→"
-            }
-            Button {
-                button_type: ButtonType::Info,
-                variant: ButtonVariant::Icon,
-                icon: Some(IconType::Settings),
-                "⚙"
-            }
-        }"#.to_string(),
-
-                            div {
-                                class: "flex flex-wrap gap-3",
-                                Button {
-                                    button_type: ButtonType::Default,
-                                    variant: ButtonVariant::Icon,
-                                    icon: Some(IconType::ChevronLeft),
-                                }
-                                Button {
-                                    button_type: ButtonType::Primary,
-                                    variant: ButtonVariant::Icon,
-                                    icon: Some(IconType::ChevronRight),
-                                }
-                                Button {
-                                    button_type: ButtonType::Info,
-                                    variant: ButtonVariant::Icon,
-                                    icon: Some(IconType::Settings),
-                                }
-                            }
-                        }
-
-                        DemoBox {
                             title: "不同尺寸的图标按钮".to_string(),
                             description: "图标按钮支持多种尺寸，图标会自动居中显示。".to_string(),
-                            code: r#"use helixui::components::{Button, ButtonSize, ButtonType, ButtonVariant, IconType};
+                            code: r#"use helixui::components::{Button, ButtonSize, ButtonType, Icon, IconType};
 
 rsx! {
     div { class: "flex items-center gap-3",
         Button {
             button_type: ButtonType::Primary,
             size: ButtonSize::Tiny,
-            variant: ButtonVariant::Icon,
-            icon: Some(IconType::Settings),
+            variant: ,
+            children: rsx! { Icon { icon: IconType::Settings } },
         }
         Button {
             button_type: ButtonType::Primary,
             size: ButtonSize::Small,
-            variant: ButtonVariant::Icon,
-            icon: Some(IconType::Settings),
+            variant: ,
+            children: rsx! { Icon { icon: IconType::Settings } },
         }
         Button {
             button_type: ButtonType::Primary,
             size: ButtonSize::Medium,
-            variant: ButtonVariant::Icon,
-            icon: Some(IconType::Settings),
+            variant: ,
+            children: rsx! { Icon { icon: IconType::Settings } },
         }
         Button {
             button_type: ButtonType::Primary,
             size: ButtonSize::Large,
-            variant: ButtonVariant::Icon,
-            icon: Some(IconType::Settings),
+            variant: ,
+            children: rsx! { Icon { icon: IconType::Settings } },
         }
     }
 }"#.to_string(),
@@ -348,26 +286,30 @@ rsx! {
                                     Button {
                                         button_type: ButtonType::Primary,
                                         size: ButtonSize::Tiny,
-                                        variant: ButtonVariant::Icon,
-                                        icon: Some(IconType::Settings),
+                                        children: rsx! {
+                                            Icon { icon: IconType::Settings }
+                                        }
                                     }
                                     Button {
                                         button_type: ButtonType::Primary,
                                         size: ButtonSize::Small,
-                                        variant: ButtonVariant::Icon,
-                                        icon: Some(IconType::Settings),
+                                        children: rsx! {
+                                            Icon { icon: IconType::Settings }
+                                        }
                                     }
                                     Button {
                                         button_type: ButtonType::Primary,
                                         size: ButtonSize::Medium,
-                                        variant: ButtonVariant::Icon,
-                                        icon: Some(IconType::Settings),
+                                        children: rsx! {
+                                            Icon { icon: IconType::Settings }
+                                        }
                                     }
                                     Button {
                                         button_type: ButtonType::Primary,
                                         size: ButtonSize::Large,
-                                        variant: ButtonVariant::Icon,
-                                        icon: Some(IconType::Settings),
+                                        children: rsx! {
+                                            Icon { icon: IconType::Settings }
+                                        }
                                     }
                                 }
                             }
@@ -376,37 +318,27 @@ rsx! {
                         DemoBox {
                             title: "图标+文字按钮".to_string(),
                             description: "同时显示图标和文字的按钮。".to_string(),
-                            code: r#"use helixui::components::{Button, ButtonType, ButtonVariant, IconType};
+                            code: r#"use helixui::components::{Button, ButtonType, Icon, IconType};
 
         rsx! {
             Button {
                 button_type: ButtonType::Primary,
-                variant: ButtonVariant::IconText,
-                icon: Some(IconType::Check),
+                variant: ,
+                children: rsx! { Icon { icon: IconType::Check } }
                 "确认"
             }
             Button {
                 button_type: ButtonType::Error,
-                variant: ButtonVariant::IconText,
-                icon: Some(IconType::Close),
+                variant: ,
+                children: rsx! { Icon { icon: IconType::Close } }
                 "取消"
             }
         }"#.to_string(),
 
                             div {
                                 class: "flex flex-wrap gap-3",
-                                Button {
-                                    button_type: ButtonType::Primary,
-                                    variant: ButtonVariant::IconText,
-                                    icon: Some(IconType::Check),
-                                    "确认"
-                                }
-                                Button {
-                                    button_type: ButtonType::Error,
-                                    variant: ButtonVariant::IconText,
-                                    icon: Some(IconType::Close),
-                                    "取消"
-                                }
+                                Button { button_type: ButtonType::Primary, Icon { icon: IconType::Check } "确认" }
+                                Button { button_type: ButtonType::Error, Icon { icon: IconType::Close } "取消" }
                             }
                         }
                     }
@@ -423,7 +355,7 @@ rsx! {
                         DemoBox {
                             title: "不同形状的按钮".to_string(),
                             description: "按钮支持多种形状：默认矩形、圆角矩形、圆形和椭圆形。".to_string(),
-                            code: r#"use helixui::components::{Button, ButtonShape, ButtonType, ButtonVariant, IconType};
+                            code: r#"use helixui::components::{Button, ButtonShape, ButtonType, Icon, IconType};
 
         rsx! {
             // 默认矩形
@@ -441,9 +373,8 @@ rsx! {
             // 圆形
             Button {
                 button_type: ButtonType::Primary,
-                variant: ButtonVariant::Icon,
                 shape: ButtonShape::Circle,
-                icon: Some(IconType::Settings),
+                children: rsx! { Icon { icon: IconType::Settings } }
             }
             // 椭圆形
             Button {
@@ -465,12 +396,11 @@ rsx! {
                                     shape: ButtonShape::Rounded,
                                     "圆角"
                                 }
-                                Button {
-                                    button_type: ButtonType::Primary,
-                                    variant: ButtonVariant::Icon,
-                                    shape: ButtonShape::Circle,
-                                    icon: Some(IconType::Settings),
-                                }
+            Button {
+                button_type: ButtonType::Primary,
+                shape: ButtonShape::Circle,
+                children: rsx! { Icon { icon: IconType::Settings } }
+            }
                                 Button {
                                     button_type: ButtonType::Primary,
                                     shape: ButtonShape::Ellipse,
@@ -482,26 +412,23 @@ rsx! {
                         DemoBox {
                             title: "圆形图标按钮".to_string(),
                             description: "圆形按钮特别适合图标按钮，提供紧凑的视觉体验。".to_string(),
-                            code: r#"use helixui::components::{Button, ButtonShape, ButtonType, ButtonVariant, IconType};
+                            code: r#"use helixui::components::{Button, ButtonShape, ButtonType, Icon, IconType};
 
         rsx! {
             Button {
                 button_type: ButtonType::Default,
-                variant: ButtonVariant::Icon,
                 shape: ButtonShape::Circle,
-                icon: Some(IconType::ChevronLeft),
+                children: rsx! { Icon { icon: IconType::ChevronLeft } }
             }
             Button {
                 button_type: ButtonType::Primary,
-                variant: ButtonVariant::Icon,
                 shape: ButtonShape::Circle,
-                icon: Some(IconType::ChevronRight),
+                children: rsx! { Icon { icon: IconType::ChevronRight } }
             }
             Button {
                 button_type: ButtonType::Info,
-                variant: ButtonVariant::Icon,
                 shape: ButtonShape::Circle,
-                icon: Some(IconType::Settings),
+                children: rsx! { Icon { icon: IconType::Settings } }
             }
         }"#.to_string(),
 
@@ -509,21 +436,24 @@ rsx! {
                                 class: "flex flex-wrap gap-3",
                                 Button {
                                     button_type: ButtonType::Default,
-                                    variant: ButtonVariant::Icon,
                                     shape: ButtonShape::Circle,
-                                    icon: Some(IconType::ChevronLeft),
+                                    children: rsx! {
+                                        Icon { icon: IconType::ChevronLeft }
+                                    }
                                 }
                                 Button {
                                     button_type: ButtonType::Primary,
-                                    variant: ButtonVariant::Icon,
                                     shape: ButtonShape::Circle,
-                                    icon: Some(IconType::ChevronRight),
+                                    children: rsx! {
+                                        Icon { icon: IconType::ChevronRight }
+                                    }
                                 }
                                 Button {
                                     button_type: ButtonType::Info,
-                                    variant: ButtonVariant::Icon,
                                     shape: ButtonShape::Circle,
-                                    icon: Some(IconType::Settings),
+                                    children: rsx! {
+                                        Icon { icon: IconType::Settings }
+                                    }
                                 }
                             }
                         }
@@ -640,15 +570,15 @@ rsx! {
 rsx! {
     div { class: "flex gap-4",
         Button {
-            button_type: ButtonType::PureText,
+            outline: false,
             "纯文字按钮"
         }
         Button {
-            button_type: ButtonType::PureText,
+            outline: false,
             "链接样式"
         }
         Button {
-            button_type: ButtonType::PureText,
+            outline: false,
             "取消操作"
         }
     }
@@ -657,15 +587,15 @@ rsx! {
                                 div {
                                     class: "flex flex-wrap gap-4",
                                     Button {
-                                        button_type: ButtonType::PureText,
+                                        outline: false,
                                         "纯文字按钮"
                                     }
                                     Button {
-                                        button_type: ButtonType::PureText,
+                                        outline: false,
                                         "链接样式"
                                     }
                                     Button {
-                                        button_type: ButtonType::PureText,
+                                        outline: false,
                                         "取消操作"
                                     }
                                 }
@@ -675,34 +605,34 @@ rsx! {
                         DemoBox {
                             title: "纯图标按钮".to_string(),
                             description: "纯图标按钮没有背景色和边框，只有图标，鼠标悬停时图标颜色变深，可点击区域限制在图标本身。".to_string(),
-                            code: r#"use helixui::components::{Button, ButtonType, ButtonVariant, IconType};
+                            code: r#"use helixui::components::{Button, ButtonType, Icon, IconType};
 
 rsx! {
     div { class: "flex gap-4",
         Button {
-            button_type: ButtonType::PureIcon,
-            variant: ButtonVariant::Icon,
+            button_type: ButtonType::Default,
+            variant: ,
             icon: Some(IconType::Settings),
         }
         Button {
-            button_type: ButtonType::PureIcon,
-            variant: ButtonVariant::Icon,
+            button_type: ButtonType::Default,
+            variant: ,
             icon: Some(IconType::User),
         }
         Button {
-            button_type: ButtonType::PureIcon,
-            variant: ButtonVariant::Icon,
+            button_type: ButtonType::Default,
+            variant: ,
             icon: Some(IconType::Close),
         }
         Button {
-            button_type: ButtonType::PureIcon,
-            variant: ButtonVariant::Icon,
-            icon: Some(IconType::ChevronLeft),
+            button_type: ButtonType::Default,
+            variant: ,
+            children: rsx! { Icon { icon: IconType::ChevronLeft } },
         }
         Button {
-            button_type: ButtonType::PureIcon,
-            variant: ButtonVariant::Icon,
-            icon: Some(IconType::ChevronRight),
+            button_type: ButtonType::Default,
+            variant: ,
+            children: rsx! { Icon { icon: IconType::ChevronRight } },
         }
     }
 }"#.to_string(),
@@ -710,29 +640,23 @@ rsx! {
                                 div {
                                     class: "flex flex-wrap gap-4",
                                     Button {
-                                        button_type: ButtonType::PureIcon,
-                                        variant: ButtonVariant::Icon,
-                                        icon: Some(IconType::Settings),
+                                        outline: false,
+                                        Icon { icon: IconType::Settings }
                                     }
                                     Button {
-                                        button_type: ButtonType::PureIcon,
-                                        variant: ButtonVariant::Icon,
-                                        icon: Some(IconType::User),
+                                        outline: false,
+                                        Icon { icon: IconType::User } }
+                                    Button {
+                                        outline: false,
+                                        Icon { icon: IconType::Close }
                                     }
                                     Button {
-                                        button_type: ButtonType::PureIcon,
-                                        variant: ButtonVariant::Icon,
-                                        icon: Some(IconType::Close),
+                                        outline: false,
+                                        Icon { icon: IconType::ChevronLeft }
                                     }
                                     Button {
-                                        button_type: ButtonType::PureIcon,
-                                        variant: ButtonVariant::Icon,
-                                        icon: Some(IconType::ChevronLeft),
-                                    }
-                                    Button {
-                                        button_type: ButtonType::PureIcon,
-                                        variant: ButtonVariant::Icon,
-                                        icon: Some(IconType::ChevronRight),
+                                        outline: false,
+                                        Icon { icon: IconType::ChevronRight }
                                     }
                                 }
                             }
@@ -741,51 +665,39 @@ rsx! {
                         DemoBox {
                             title: "纯按钮组合使用".to_string(),
                             description: "纯文字和纯图标按钮可以组合使用，创建简洁的工具栏，每个按钮的可点击区域都限制在文字和图标本身。".to_string(),
-                            code: r#"use helixui::components::{Button, ButtonType, ButtonVariant, IconType};
+                            code: r#"use helixui::components::{Button, ButtonType, Icon, IconType};
 
 rsx! {
     div { class: "flex items-center gap-2",
         Button {
-            button_type: ButtonType::PureIcon,
-            variant: ButtonVariant::Icon,
-            icon: Some(IconType::ChevronLeft),
+            outline: false,
+            Icon { icon: IconType::ChevronLeft },
         }
         Button {
-            button_type: ButtonType::PureText,
+            outline: false,
             "上一页"
         }
         Button {
-            button_type: ButtonType::PureText,
+            outline: false,
             "下一页"
         }
         Button {
-            button_type: ButtonType::PureIcon,
-            variant: ButtonVariant::Icon,
-            icon: Some(IconType::ChevronRight),
+            outline: false,
+            Icon { icon: IconType::ChevronRight },
         }
     }
 }"#.to_string(),
                             children: rsx! {
                                 div {
                                     class: "flex items-center gap-2",
+                                    Button { Icon { icon: IconType::ChevronLeft } }
                                     Button {
-                                        button_type: ButtonType::PureIcon,
-                                        variant: ButtonVariant::Icon,
-                                        icon: Some(IconType::ChevronLeft),
-                                    }
-                                    Button {
-                                        button_type: ButtonType::PureText,
                                         "上一页"
                                     }
                                     Button {
-                                        button_type: ButtonType::PureText,
                                         "下一页"
                                     }
-                                    Button {
-                                        button_type: ButtonType::PureIcon,
-                                        variant: ButtonVariant::Icon,
-                                        icon: Some(IconType::ChevronRight),
-                                    }
+                                    Button { Icon { icon: IconType::ChevronRight } }
                                 }
                             }
                         }
@@ -807,29 +719,29 @@ rsx! {
                         DemoBox {
                             title: "自定义 hover 颜色".to_string(),
                             description: "纯文字和纯图标按钮支持自定义 hover 颜色，使用 hover_color 属性指定颜色。".to_string(),
-                            code: r#"use helixui::components::{Button, ButtonType, ButtonVariant, IconType};
+                            code: r#"use helixui::components::{Button, ButtonType, Icon, IconType};
 
 rsx! {
     div { class: "flex gap-4",
         Button {
-            button_type: ButtonType::PureText,
+            button_type: ButtonType::Default,
             hover_color: Some("ff6b6b".to_string()),
             "红色 hover"
         }
         Button {
-            button_type: ButtonType::PureText,
+            button_type: ButtonType::Default,
             hover_color: Some("4ecdc4".to_string()),
             "青色 hover"
         }
         Button {
-            button_type: ButtonType::PureIcon,
-            variant: ButtonVariant::Icon,
+            button_type: ButtonType::Default,
+            variant: ,
             icon: Some(IconType::Settings),
             hover_color: Some("ff6b6b".to_string()),
         }
         Button {
-            button_type: ButtonType::PureIcon,
-            variant: ButtonVariant::Icon,
+            button_type: ButtonType::Default,
+            variant: ,
             icon: Some(IconType::User),
             hover_color: Some("4ecdc4".to_string()),
         }
@@ -839,26 +751,20 @@ rsx! {
                                 div {
                                     class: "flex flex-wrap gap-4",
                                     Button {
-                                        button_type: ButtonType::PureText,
                                         hover_color: Some("ff6b6b".to_string()),
                                         "红色 hover"
                                     }
                                     Button {
-                                        button_type: ButtonType::PureText,
                                         hover_color: Some("4ecdc4".to_string()),
                                         "青色 hover"
                                     }
                                     Button {
-                                        button_type: ButtonType::PureIcon,
-                                        variant: ButtonVariant::Icon,
-                                        icon: Some(IconType::Settings),
                                         hover_color: Some("ff6b6b".to_string()),
+                                        children: rsx! { Icon { icon: IconType::Settings } }
                                     }
                                     Button {
-                                        button_type: ButtonType::PureIcon,
-                                        variant: ButtonVariant::Icon,
-                                        icon: Some(IconType::User),
                                         hover_color: Some("4ecdc4".to_string()),
+                                        children: rsx! { Icon { icon: IconType::User } }
                                     }
                                 }
                             }
@@ -881,7 +787,7 @@ rsx! {
                         DemoBox {
                             title: "普通按钮组".to_string(),
                             description: "普通模式的按钮组，按钮之间有间距。".to_string(),
-                            code: r#"use helixui::components::{ButtonGroup, ButtonGroupItemProps, ButtonType, ButtonVariant, IconType};
+                            code: r#"use helixui::components::{ButtonGroup, ButtonGroupItemProps, ButtonType, Icon, IconType};
 
 rsx! {
     ButtonGroup {
@@ -920,7 +826,7 @@ rsx! {
                         DemoBox {
                             title: "紧凑按钮组".to_string(),
                             description: "紧凑模式的按钮组，按钮之间无间距，两侧按钮为半圆边框。".to_string(),
-                            code: r#"use helixui::components::{ButtonGroup, ButtonGroupItemProps, ButtonType, ButtonVariant, IconType};
+                            code: r#"use helixui::components::{ButtonGroup, ButtonGroupItemProps, ButtonType, Icon, IconType};
 
 rsx! {
     ButtonGroup {
@@ -991,7 +897,7 @@ rsx! {
                         DemoBox {
                             title: "图标按钮组".to_string(),
                             description: "包含图标按钮的按钮组。".to_string(),
-                            code: r#"use helixui::components::{ButtonGroup, ButtonGroupItemProps, ButtonType, ButtonVariant, IconType};
+                            code: r#"use helixui::components::{ButtonGroup, ButtonGroupItemProps, ButtonType, Icon, IconType};
 
 rsx! {
     ButtonGroup {
@@ -999,16 +905,12 @@ rsx! {
         buttons: vec![
             ButtonGroupItemProps {
                 button_type: ButtonType::Default,
-                variant: ButtonVariant::Icon,
-                icon: Some(IconType::ChevronLeft),
-                children: rsx! {},
+                children: rsx! { Icon { icon: IconType::ChevronLeft } },
                 ..Default::default()
             },
             ButtonGroupItemProps {
                 button_type: ButtonType::Default,
-                variant: ButtonVariant::Icon,
-                icon: Some(IconType::ChevronRight),
-                children: rsx! {},
+                children: rsx! { Icon { icon: IconType::ChevronRight } },
                 ..Default::default()
             },
         ],
@@ -1020,16 +922,12 @@ rsx! {
                                     buttons: vec![
                                         ButtonGroupItemProps {
                                             button_type: ButtonType::Default,
-                                            variant: ButtonVariant::Icon,
-                                            icon: Some(IconType::ChevronLeft),
-                                            children: rsx! {},
+                                            children: rsx! { Icon { icon: IconType::ChevronLeft } },
                                             ..Default::default()
                                         },
                                         ButtonGroupItemProps {
                                             button_type: ButtonType::Default,
-                                            variant: ButtonVariant::Icon,
-                                            icon: Some(IconType::ChevronRight),
-                                            children: rsx! {},
+                                            children: rsx! { Icon { icon: IconType::ChevronRight } },
                                             ..Default::default()
                                         },
                                     ],
@@ -1103,17 +1001,10 @@ rsx! {
                             }
                             tr {
                                 class: "border-b border-gray-100 dark:border-gray-800",
-                                td { class: "p-3 text-gray-900 dark:text-white font-mono text-sm", "variant" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300 font-mono text-sm", "ButtonVariant" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300", "Text" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300", "按钮变体（Text/Icon/IconText）" }
-                            }
-                            tr {
-                                class: "border-b border-gray-100 dark:border-gray-800",
-                                td { class: "p-3 text-gray-900 dark:text-white font-mono text-sm", "icon" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300 font-mono text-sm", "Option<IconType>" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300", "None" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300", "按钮图标（仅 Icon 和 IconText 变体）" }
+                                td { class: "p-3 text-gray-900 dark:text-white font-mono text-sm", "children" }
+                                td { class: "p-3 text-gray-600 dark:text-gray-300 font-mono text-sm", "Element" }
+                                td { class: "p-3 text-gray-600 dark:text-gray-300", "-" }
+                                td { class: "p-3 text-gray-600 dark:text-gray-300", "按钮内容（支持 Icon/文本/任意 rsx）" }
                             }
                             tr {
                                 class: "border-b border-gray-100 dark:border-gray-800",
@@ -1223,13 +1114,7 @@ rsx! {
                                 td { class: "p-3 text-gray-600 dark:text-gray-300", "Default" }
                                 td { class: "p-3 text-gray-600 dark:text-gray-300", "按钮类型" }
                             }
-                            tr {
-                                class: "border-b border-gray-100 dark:border-gray-800",
-                                td { class: "p-3 text-gray-900 dark:text-white font-mono text-sm", "variant" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300 font-mono text-sm", "ButtonVariant" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300", "Text" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300", "按钮变体" }
-                            }
+
                             tr {
                                 class: "border-b border-gray-100 dark:border-gray-800",
                                 td { class: "p-3 text-gray-900 dark:text-white font-mono text-sm", "disabled" }

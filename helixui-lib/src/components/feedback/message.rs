@@ -1,5 +1,5 @@
 use crate::overlay::config::{SimpleMessagePosition, SimpleMessageType};
-use crate::{Button, ButtonShape, ButtonSize, ButtonType, ButtonVariant, Icon, IconSize, IconType};
+use crate::{Button, ButtonShape, ButtonSize, ButtonType, Icon, IconSize, IconType};
 use async_broadcast::broadcast;
 use dioxus::prelude::*;
 use std::collections::HashMap;
@@ -174,9 +174,8 @@ pub fn SimpleMessage(data: SimpleMessageData) -> Element {
                 div { class: "flex-1", {data.content} }
                 if data.closable {
                     Button {
-                        button_type: ButtonType::PureIcon,
+
                         size: ButtonSize::Small,
-                        variant: ButtonVariant::Text,
                         shape: ButtonShape::Circle,
                         class: Some("flex-shrink-0 ml-2 text-gray-400 hover:text-gray-600".to_string()),
                         onclick: move |_| {

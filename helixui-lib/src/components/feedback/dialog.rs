@@ -1,4 +1,4 @@
-use crate::{Button, ButtonShape, ButtonSize, ButtonType, ButtonVariant, Icon, IconType};
+use crate::{Button, ButtonShape, ButtonSize, ButtonType, Icon, IconType};
 use async_broadcast::broadcast;
 use dioxus::prelude::*;
 use std::collections::HashMap;
@@ -134,7 +134,7 @@ pub fn Dialog(props: DialogProps) -> Element {
                             h3 { class: "text-lg font-semibold text-gray-900 dark:text-white", "{title}" }
                         }
                         if props.closable {
-                            Button { button_type: ButtonType::PureText, size: ButtonSize::Small, variant: ButtonVariant::Text, shape: ButtonShape::Circle,
+                            Button { size: ButtonSize::Small, shape: ButtonShape::Circle,
                                 class: Some("text-gray-400 hover:text-gray-600 dark:hover:text-gray-300".to_string()),
                                 onclick: move |_| { if let Some(on_close) = &props.on_close { on_close.call(()); } },
                                 Icon { icon: IconType::Close, class: "w-4 h-4".to_string() }
@@ -147,16 +147,16 @@ pub fn Dialog(props: DialogProps) -> Element {
 
                 div { class: "flex justify-end space-x-2 p-4 border-t border-gray-200 dark:border-gray-700",
                     if props.dialog_type == DialogType::Confirm {
-                            Button { button_type: ButtonType::Default, size: ButtonSize::Small, variant: ButtonVariant::Text, class: Some("text-sm".to_string()),
+                            Button { button_type: ButtonType::Default, size: ButtonSize::Small, class: Some("text-sm".to_string()),
                             onclick: move |_| { if let Some(on_cancel) = &props.on_cancel { on_cancel.call(()); } },
                                 Icon { icon: IconType::Close, class: "w-4 h-4".to_string() }
                         }
-                        Button { button_type: ButtonType::Primary, size: ButtonSize::Small, variant: ButtonVariant::Text,
+                        Button { button_type: ButtonType::Primary, size: ButtonSize::Small,
                             onclick: move |_| { if let Some(on_confirm) = &props.on_confirm { on_confirm.call(()); } },
                             "确认"
                         }
                     } else {
-                        Button { button_type: ButtonType::Primary, size: ButtonSize::Small, variant: ButtonVariant::Text,
+                        Button { button_type: ButtonType::Primary, size: ButtonSize::Small,
                             onclick: move |_| { if let Some(on_close) = &props.on_close { on_close.call(()); } },
                             Icon { icon: IconType::Close, class: "w-4 h-4".to_string() }
                         }
@@ -336,7 +336,7 @@ pub fn SimpleDialog(data: SimpleDialogData) -> Element {
                     if title.is_some() {
                         div { class: "flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700",
                             h3 { class: "text-lg font-semibold text-gray-900 dark:text-white", "{title.as_ref().unwrap_or(&String::new())}" }
-                            Button { button_type: ButtonType::PureText, size: ButtonSize::Small, variant: ButtonVariant::Text, shape: ButtonShape::Circle,
+                            Button { size: ButtonSize::Small, shape: ButtonShape::Circle,
                                 class: Some("text-gray-400 hover:text-gray-600 dark:hover:text-gray-300".to_string()),
                                 onclick: { let id = id.clone(); move |_| { close_dialog(&id); } },
                                 "×"
@@ -346,16 +346,16 @@ pub fn SimpleDialog(data: SimpleDialogData) -> Element {
                     div { class: "p-4", "{content}" }
                     div { class: "flex justify-end space-x-2 p-4 border-t border-gray-200 dark:border-gray-700",
                         if dialog_type == DialogType::Confirm {
-                            Button { button_type: ButtonType::Default, size: ButtonSize::Small, variant: ButtonVariant::Text, class: Some("text-sm".to_string()),
+                            Button { button_type: ButtonType::Default, size: ButtonSize::Small, class: Some("text-sm".to_string()),
                                 onclick: { let id = id.clone(); let on_cancel = on_cancel.clone(); move |_| { if let Some(on_cancel) = on_cancel { on_cancel(); } close_dialog(&id); } },
                                 "取消"
                             }
-                            Button { button_type: ButtonType::Primary, size: ButtonSize::Small, variant: ButtonVariant::Text,
+                            Button { button_type: ButtonType::Primary, size: ButtonSize::Small,
                                 onclick: { let id = id.clone(); let on_confirm = on_confirm.clone(); move |_| { if let Some(on_confirm) = on_confirm { on_confirm(); } close_dialog(&id); } },
                                 "确认"
                             }
                         } else {
-                            Button { button_type: ButtonType::Primary, size: ButtonSize::Small, variant: ButtonVariant::Text,
+                            Button { button_type: ButtonType::Primary, size: ButtonSize::Small,
                                 onclick: { let id = id.clone(); move |_| { close_dialog(&id); } },
                                 "确定"
                             }

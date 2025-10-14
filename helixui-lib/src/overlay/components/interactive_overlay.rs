@@ -1,6 +1,6 @@
 use crate::overlay::core::{AnimationManager, PlatformAdapter, ThemeManager};
 use crate::overlay::utils::{ErrorHandler, OverlayError, Result};
-use crate::{Button, ButtonShape, ButtonSize, ButtonType, ButtonVariant};
+use crate::{Button, ButtonShape, ButtonSize, ButtonType};
 use dioxus::prelude::*;
 
 /// 交互式 Overlay 基类
@@ -80,7 +80,6 @@ pub fn InteractiveOverlay(props: InteractiveOverlayProps) -> Element {
                     Button {
                         button_type: ButtonType::PureText,
                         size: ButtonSize::Small,
-                        variant: ButtonVariant::Text,
                         shape: ButtonShape::Circle,
                         class: Some("absolute top-2 right-2 text-gray-400 hover:text-gray-600".to_string()),
                         onclick: move |_| {

@@ -1,8 +1,6 @@
 use crate::views::layout::{PageToc, TocItem};
 use dioxus::prelude::*;
-use helixui::components::{
-    Button, ButtonShape, ButtonSize, ButtonType, ButtonVariant, IconType,
-};
+use helixui::components::{Button, ButtonShape, ButtonSize, ButtonType, Icon, IconType};
 
 /// Section 结构体，用于滚动高亮
 #[derive(PartialEq, Clone)]
@@ -46,6 +44,8 @@ pub fn DocPage(sidebar: Element, toc_items: Vec<TocItem>, children: Element) -> 
     let sections = use_signal(|| sections_data);
 
     let mut active_index = use_signal(|| 0usize);
+    // Desktop 等无法使用锚点时，用占位高度完成“跳转”
+    let mut jump_spacer_px = use_signal(|| 0.0f64);
 
     rsx! {
         div {
@@ -72,6 +72,8 @@ pub fn DocPage(sidebar: Element, toc_items: Vec<TocItem>, children: Element) -> 
                     },
                     div {
                         class: "max-w-4xl mx-auto px-8 py-8 space-y-12 [&_*]:scroll-mt-16",
+                        // 用一个可控的占位区在顶部，作为非 Web 平台的“滚动跳转”方案
+                        div { style: format!("height: {}px;", jump_spacer_px()), }
                         {children}
                     }
                 }
@@ -91,6 +93,18 @@ pub fn DocPage(sidebar: Element, toc_items: Vec<TocItem>, children: Element) -> 
                                 // 这里可以添加滚动到指定位置的逻辑
                                 // 由于我们移除了 web-sys 依赖，这里使用简化的处理
                                 active_index.set(idx);
+                                // 计算需要的占位高度（使用预估 offset_top，并考虑 Topbar 高度）
+                                if let Some(sec) = sections.read().get(idx) {
+                                    let topbar_px: f64 = 64.0; // 4rem
+                                    let mut target = (sec.offset_top - topbar_px).max(0.0);
+                                    // 将占位高度限制在内容总高度范围内，避免出现“无限向上滚动”的大空白
+                                    let total_height: f64 = sections.read().iter().map(|s| s.height).sum();
+                                    if total_height > 0.0 {
+                                        let max_spacer = (total_height - topbar_px).max(0.0);
+                                        if target > max_spacer { target = max_spacer; }
+                                    }
+                                    jump_spacer_px.set(target);
+                                }
                             }
                         }
                     }
@@ -107,12 +121,10 @@ pub fn DocPage(sidebar: Element, toc_items: Vec<TocItem>, children: Element) -> 
                         button_type: ButtonType::Default,
                         size: ButtonSize::Small,
                         shape: ButtonShape::Circle,
-                        variant: ButtonVariant::Icon,
-                        icon: Some(if *sidebar_collapsed.read() { IconType::ChevronRight } else { IconType::ChevronLeft }),
                         onclick: move |_| {
                             sidebar_collapsed.set(!sidebar_collapsed());
                         },
-                        // 无子内容
+                        if *sidebar_collapsed.read() { Icon { icon: IconType::ChevronRight } } else { Icon { icon: IconType::ChevronLeft } }
                     }
                 }
             }

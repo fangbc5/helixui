@@ -1,5 +1,5 @@
 use crate::overlay::components::InteractiveOverlay;
-use crate::{Button, ButtonShape, ButtonSize, ButtonType, ButtonVariant};
+use crate::{Button, ButtonShape, ButtonSize, ButtonType};
 use dioxus::prelude::*;
 
 /// 对话框 Overlay 组件
@@ -57,7 +57,6 @@ pub fn DialogOverlay(props: DialogOverlayProps) -> Element {
                         Button {
                             button_type: ButtonType::Default,
                             size: ButtonSize::Small,
-                            variant: ButtonVariant::Text,
                             class: Some("text-sm".to_string()),
                             onclick: move |_| {
                                 if let Some(callback) = props.on_cancel {
@@ -73,7 +72,6 @@ pub fn DialogOverlay(props: DialogOverlayProps) -> Element {
                         Button {
                             button_type: ButtonType::Primary,
                             size: ButtonSize::Small,
-                            variant: ButtonVariant::Text,
                             onclick: move |_| {
                                 if let Some(callback) = props.on_confirm {
                                     callback();

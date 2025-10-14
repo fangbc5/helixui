@@ -1,6 +1,6 @@
 use crate::overlay::core::{AnimationManager, PlatformAdapter, ThemeManager};
 use crate::overlay::utils::{ErrorHandler, OverlayError, Result};
-use crate::{Button, ButtonShape, ButtonSize, ButtonType, ButtonVariant};
+use crate::{Button, ButtonShape, ButtonSize, ButtonType};
 use dioxus::prelude::*;
 
 /// 轻提示 Overlay 基类
@@ -88,7 +88,6 @@ pub fn NoticeOverlay(props: NoticeOverlayProps) -> Element {
                     Button {
                         button_type: ButtonType::PureText,
                         size: ButtonSize::Small,
-                        variant: ButtonVariant::Text,
                         shape: ButtonShape::Circle,
                         class: Some("ml-2 text-gray-400 hover:text-gray-600".to_string()),
                         onclick: move |_| {

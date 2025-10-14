@@ -3,7 +3,7 @@ use crate::overlay::core::{
     ThemeManager,
 };
 use crate::overlay::utils::{ErrorHandler, OverlayError, Result};
-use crate::{Button, ButtonShape, ButtonSize, ButtonType, ButtonVariant};
+use crate::{Button, ButtonShape, ButtonSize, ButtonType};
 use dioxus::prelude::*;
 
 /// 消息类型
@@ -108,7 +108,6 @@ pub fn MessageOverlay(data: MessageData, on_close: Option<fn(String)>) -> Elemen
                 Button {
                     button_type: ButtonType::PureText,
                     size: ButtonSize::Small,
-                    variant: ButtonVariant::Text,
                     shape: ButtonShape::Circle,
                     class: Some("flex-shrink-0 ml-2 text-gray-400 hover:text-gray-600".to_string()),
                     onclick: move |_| {

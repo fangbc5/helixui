@@ -1,5 +1,5 @@
-use dioxus::prelude::*;
 use super::icon::{Icon, IconSize, IconType};
+use dioxus::prelude::*;
 
 /// 头像尺寸
 #[derive(Debug, Clone, PartialEq)]
@@ -131,6 +131,14 @@ pub fn Avatar(props: AvatarProps) -> Element {
         size_class, shape_class, custom_class
     );
 
+    // 图片尺寸
+    let icon_size = match props.size {
+        AvatarSize::Small => IconSize::Small,
+        AvatarSize::Medium => IconSize::Medium,
+        AvatarSize::Large => IconSize::Large,
+        AvatarSize::Custom(_) => IconSize::Medium,
+    };
+
     // 图片加载失败状态
     let mut image_error = use_signal(|| false);
 
@@ -157,12 +165,7 @@ pub fn Avatar(props: AvatarProps) -> Element {
                     // 图片加载失败时显示裂开图标
                     Icon {
                         icon: IconType::ImageBroken,
-                        size: match props.size {
-                            AvatarSize::Small => IconSize::Small,
-                            AvatarSize::Medium => IconSize::Medium,
-                            AvatarSize::Large => IconSize::Large,
-                            AvatarSize::Custom(_) => IconSize::Medium,
-                        },
+                        size: icon_size,
                         class: "text-gray-400".to_string(),
                     }
                 }
@@ -174,9 +177,10 @@ pub fn Avatar(props: AvatarProps) -> Element {
                 }
             } else {
                 // 默认头像
-                span {
-                    class: "text-center",
-                    "?"
+                Icon {
+                    icon: IconType::User,
+                    size: icon_size,
+                    class: "text-gray-400".to_string(),
                 }
             }
         }

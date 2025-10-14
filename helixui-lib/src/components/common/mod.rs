@@ -5,7 +5,10 @@ mod divider;
 mod icon;
 
 pub use avatar::{Avatar, AvatarGroup, AvatarGroupProps, AvatarProps, AvatarShape, AvatarSize};
-pub use button::{Button, ButtonGroup, ButtonGroupItemProps, ButtonGroupProps, ButtonShape, ButtonSize, ButtonType, ButtonVariant};
+pub use button::{
+    Button, ButtonGroup, ButtonGroupItemProps, ButtonGroupProps, ButtonShape, ButtonSize,
+    ButtonType,
+};
 pub use card::{
     Card, CardContent, CardFooter, CardGrid, CardGroup, CardHeader, CardProps, CardShadow, CardSize,
 };

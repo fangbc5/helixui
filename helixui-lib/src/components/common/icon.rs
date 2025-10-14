@@ -844,12 +844,8 @@ pub fn Icon(props: IconProps) -> Element {
     let spin_class = if props.spin { "animate-spin" } else { "" };
     let custom_class = &props.class;
 
-    // 如果没有自定义类，默认使用深色模式适配的颜色
-    let default_color_class = if custom_class.is_empty() {
-        "text-gray-700 dark:text-gray-300"
-    } else {
-        ""
-    };
+    // 默认让图标继承父级颜色，便于外层 hover 控制颜色
+    let default_color_class = if custom_class.is_empty() { "text-current" } else { "" };
 
     rsx! {
         svg {
