@@ -1,3 +1,4 @@
+use dioxus::events::Key;
 use dioxus::prelude::*;
 
 /// 目录项结构
@@ -34,10 +35,15 @@ fn TocItemComponent(props: TocItemProps) -> Element {
     };
 
     rsx! {
-        a {
-            href: format!("#{}", props.item.id),
+        div {
+            role: "link",
+            tabindex: 0,
+            aria_current: if props.is_active { Some("true") } else { None },
             class: format!("block px-2 py-1 text-sm transition-colors {} {}", active_class, padding_class),
             onclick: move |_| { props.onclick.call(()); },
+            onkeydown: move |e| {
+                if e.key() == Key::Enter { props.onclick.call(()); }
+            },
             {props.item.title}
         }
     }

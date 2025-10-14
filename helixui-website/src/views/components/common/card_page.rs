@@ -1,5 +1,6 @@
 use crate::views::layout::TocItem;
-use crate::views::layout::{ComponentsSidebar, DocPage};
+use crate::views::DocPage;
+use crate::views::layout::ComponentsSidebar;
 use dioxus::prelude::*;
 use helixui::components::{
     Button, ButtonType, Card, CardContent, CardFooter, CardGrid, CardGroup,

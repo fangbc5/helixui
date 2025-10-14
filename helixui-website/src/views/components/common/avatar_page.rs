@@ -1,6 +1,9 @@
-use crate::views::layout::{ComponentsSidebar, DocPage, TocItem};
+use crate::views::layout::{ComponentsSidebar, TocItem};
+use crate::views::DocPage;
 use dioxus::prelude::*;
-use helixui::components::{Avatar, AvatarGroup, AvatarProps, AvatarShape, AvatarSize, DemoBox, Icon, IconType};
+use helixui::components::{
+    Avatar, AvatarGroup, AvatarProps, AvatarShape, AvatarSize, DemoBox, Icon, IconType,
+};
 
 /// Avatar 组件演示页面
 #[component]
@@ -53,7 +56,6 @@ pub fn AvatarPage() -> Element {
         },
     ];
 
-
     rsx! {
         DocPage {
             sidebar: rsx! {
@@ -68,7 +70,7 @@ pub fn AvatarPage() -> Element {
                 }
                 p { class: "text-gray-600 dark:text-gray-300", "头像用来展示用户信息。" }
             }
-        
+
             // 基础用法
             section { id: "basic", class: "mb-12",
                 h2 { class: "text-2xl font-semibold text-gray-900 dark:text-white mb-4",

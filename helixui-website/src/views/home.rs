@@ -7,7 +7,7 @@ use helixui::components::DefaultFooter;
 pub fn Home() -> Element {
     rsx! {
         div {
-            class: "min-h-screen bg-gradient-to-b from-green-50 to-white dark:from-gray-900 dark:to-gray-950 pt-16 transition-colors",
+            class: "min-h-screen bg-gradient-to-b from-green-50 to-white dark:from-gray-900 dark:to-gray-950 transition-colors",
 
             // Hero 区域
             div {

@@ -1,4 +1,5 @@
-use crate::views::layout::{ComponentsSidebar, DocPage, TocItem};
+use crate::views::layout::{ComponentsSidebar, TocItem};
+use crate::views::DocPage;
 use dioxus::prelude::*;
 use helixui::components::{DemoBox, Divider, DividerHorizontal, DividerVertical};
 

@@ -52,29 +52,29 @@ pub fn deep_merge<T: Clone>(
     base
 }
 
-/// 防抖函数
+/// 防抖函数（简化版本，避免时间依赖）
 pub fn debounce<F>(mut callback: F, delay: u32) -> impl FnMut()
 where
     F: FnMut() + 'static,
 {
-    use std::time::Duration;
     use std::sync::{Arc, Mutex};
-    let state = Arc::new(Mutex::new(None::<std::time::Instant>));
+    use std::time::Duration;
+    let state = Arc::new(Mutex::new(0u64)); // 使用计数器而不是时间
     let delay = Duration::from_millis(delay as u64);
 
     move || {
         let state_cloned = state.clone();
         // 启动一个新的延迟任务，简单实现：每次触发都启动一个延迟并覆盖标记
         spawn(async move {
-            let fire_at = std::time::Instant::now() + delay;
-            {
+            let current_id = {
                 let mut guard = state_cloned.lock().unwrap();
-                *guard = Some(fire_at);
-            }
+                *guard += 1;
+                *guard
+            };
             futures_timer::Delay::new(delay).await;
             let should_fire = {
                 let guard = state_cloned.lock().unwrap();
-                guard.map(|t| t <= std::time::Instant::now()).unwrap_or(false)
+                *guard == current_id // 只有最新的调用才执行
             };
             if should_fire {
                 callback();

@@ -3,10 +3,10 @@ use dioxus::prelude::*;
 
 /// 组件索引页面 - 展示所有可用的组件
 #[component]
-pub fn ComponentsIndex() -> Element {
+pub fn ComponentsPage() -> Element {
     rsx! {
         div {
-            class: "min-h-screen bg-gradient-to-b from-green-50 to-white dark:from-gray-900 dark:to-gray-950 pt-16 transition-colors",
+            class: "min-h-screen bg-gradient-to-b from-green-50 to-white dark:from-gray-900 dark:to-gray-950 transition-colors",
 
             // 标题区域
             div {
@@ -78,21 +78,21 @@ pub fn ComponentsIndex() -> Element {
                                 name: "Input".to_string(),
                                 name_zh: "输入框".to_string(),
                                 description: "用于文本输入。".to_string(),
-                                route: crate::Route::ComponentsIndex {},
+                                route: crate::Route::ComponentsPage {},
                                 status: ComponentStatus::ComingSoon,
                             },
                             ComponentCard {
                                 name: "Select".to_string(),
                                 name_zh: "选择器".to_string(),
                                 description: "用于从多个选项中选择。".to_string(),
-                                route: crate::Route::ComponentsIndex {},
+                                route: crate::Route::ComponentsPage {},
                                 status: ComponentStatus::ComingSoon,
                             },
                             ComponentCard {
                                 name: "Checkbox".to_string(),
                                 name_zh: "复选框".to_string(),
                                 description: "用于多项选择。".to_string(),
-                                route: crate::Route::ComponentsIndex {},
+                                route: crate::Route::ComponentsPage {},
                                 status: ComponentStatus::ComingSoon,
                             },
                         ],
@@ -135,14 +135,14 @@ pub fn ComponentsIndex() -> Element {
                                 name: "Notification".to_string(),
                                 name_zh: "通知".to_string(),
                                 description: "显示通知提醒消息。".to_string(),
-                                route: crate::Route::ComponentsIndex {},
+                                route: crate::Route::ComponentsPage {},
                                 status: ComponentStatus::ComingSoon,
                             },
                             ComponentCard {
                                 name: "Alert".to_string(),
                                 name_zh: "警告".to_string(),
                                 description: "静态的信息提示。".to_string(),
-                                route: crate::Route::ComponentsIndex {},
+                                route: crate::Route::ComponentsPage {},
                                 status: ComponentStatus::ComingSoon,
                             },
                         ],
@@ -157,14 +157,14 @@ pub fn ComponentsIndex() -> Element {
                                 name: "Table".to_string(),
                                 name_zh: "表格".to_string(),
                                 description: "用于展示结构化数据。".to_string(),
-                                route: crate::Route::ComponentsIndex {},
+                                route: crate::Route::ComponentsPage {},
                                 status: ComponentStatus::ComingSoon,
                             },
                             ComponentCard {
                                 name: "Tag".to_string(),
                                 name_zh: "标签".to_string(),
                                 description: "用于标记和分类。".to_string(),
-                                route: crate::Route::ComponentsIndex {},
+                                route: crate::Route::ComponentsPage {},
                                 status: ComponentStatus::ComingSoon,
                             },
                         ],

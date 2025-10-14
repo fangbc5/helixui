@@ -1,9 +1,11 @@
-use helixui::components::{
-    Button, ButtonGroup, ButtonGroupItemProps, ButtonShape, ButtonSize, ButtonType, ButtonVariant, DemoBox, IconType,
-};
+use crate::views::layout::ComponentsSidebar;
 use crate::views::layout::TocItem;
-use crate::views::layout::{ComponentsSidebar, DocPage};
+use crate::views::DocPage;
 use dioxus::prelude::*;
+use helixui::components::{
+    Button, ButtonGroup, ButtonGroupItemProps, ButtonShape, ButtonSize, ButtonType, ButtonVariant,
+    DemoBox, IconType,
+};
 
 /// Button 组件文档页面
 #[component]
@@ -128,7 +130,7 @@ rsx! {
                         Button { button_type: ButtonType::Warning, "Warning" }
                         Button { button_type: ButtonType::Error, "Error" }
                         Button { button_type: ButtonType::PureText, "PureText" }
-                        Button { 
+                        Button {
                             button_type: ButtonType::PureIcon,
                             variant: ButtonVariant::Icon,
                             icon: Some(IconType::Settings),

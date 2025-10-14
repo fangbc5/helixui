@@ -1,5 +1,6 @@
 use crate::i18n;
-use crate::views::layout::{DocPage, DocsSidebar};
+use crate::views::DocPage;
+use crate::views::layout::DocsSidebar;
 use dioxus::prelude::*;
 
 /// 快速上手页面
@@ -58,7 +59,7 @@ pub fn QuickStart() -> Element {
                 div {
                     class: "grid grid-cols-1 md:grid-cols-2 gap-4",
                     Link {
-                        to: crate::Route::ComponentsIndex {},
+                        to: crate::Route::ComponentsPage {},
                         class: "p-6 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg hover:border-green-500 dark:hover:border-green-500 transition-colors",
                         h3 { class: "font-semibold text-gray-900 dark:text-white mb-2", "Browse Components" }
                         p { class: "text-sm text-gray-600 dark:text-gray-300", "View all available components" }

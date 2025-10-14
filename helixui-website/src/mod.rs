@@ -9,13 +9,15 @@
 //! a common wrapper around all child routes.
 
 mod components;
-mod components_index;
+mod components_page;
+mod doc_page;
 mod docs;
 mod home;
 mod layout;
 
 pub use components::{BadgePage, ButtonPage, DialogPage, IconPage, MessagePage};
-pub use components_index::ComponentsIndex;
+pub use components_page::ComponentsPage;
+pub use doc_page::DocPage;
 pub use docs::{Guide, Introduction, QuickStart, Version};
 pub use home::Home;
-pub use layout::{ComponentsSidebar, DocPage, DocsSidebar, TopNavbar};
+pub use layout::{ComponentsSidebar, DocsSidebar, TopNavbar};

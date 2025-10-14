@@ -1,4 +1,5 @@
-use crate::views::layout::{ComponentsSidebar, DocPage, TocItem};
+use crate::views::DocPage;
+use crate::views::layout::{ComponentsSidebar, TocItem};
 use dioxus::prelude::*;
 use helixui::components::{Button, ButtonType, DemoBox, Modal, ModalSize, ModalType};
 

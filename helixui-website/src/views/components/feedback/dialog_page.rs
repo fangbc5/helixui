@@ -1,5 +1,6 @@
 use crate::views::layout::TocItem;
-use crate::views::layout::{ComponentsSidebar, DocPage};
+use crate::views::DocPage;
+use crate::views::layout::ComponentsSidebar;
 use dioxus::prelude::*;
 use helixui::components::{
     show_confirm_dialog, show_error_dialog, show_info_dialog, show_success_dialog, Button, ButtonType, DemoBox,

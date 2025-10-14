@@ -3,7 +3,8 @@ use helixui::components::{
     Button, ButtonSize, ButtonType, DemoBox,
 };
 use crate::views::layout::TocItem;
-use crate::views::layout::{ComponentsSidebar, DocPage};
+use crate::views::DocPage;
+use crate::views::layout::ComponentsSidebar;
 use dioxus::prelude::*;
 
 /// Badge 页面组件

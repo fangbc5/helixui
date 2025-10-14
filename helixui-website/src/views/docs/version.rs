@@ -1,5 +1,6 @@
 use crate::i18n;
-use crate::views::layout::{DocPage, DocsSidebar};
+use crate::views::DocPage;
+use crate::views::layout::DocsSidebar;
 use dioxus::prelude::*;
 
 /// 版本页面

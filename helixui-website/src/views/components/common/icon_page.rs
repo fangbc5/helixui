@@ -1,6 +1,7 @@
 use helixui::components::{DemoBox, Icon, IconSize, IconType};
 use crate::views::layout::TocItem;
-use crate::views::layout::{ComponentsSidebar, DocPage};
+use crate::views::DocPage;
+use crate::views::layout::ComponentsSidebar;
 use dioxus::prelude::*;
 
 /// Icon 组件文档页面

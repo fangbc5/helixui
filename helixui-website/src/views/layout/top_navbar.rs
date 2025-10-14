@@ -12,23 +12,18 @@ pub fn TopNavbar() -> Element {
     // 根据主题状态，在 document 根元素添加或移除 dark 类
     use_effect(move || {
         let current_theme = *theme_state.read();
-        let is_dark = current_theme == theme::Theme::Dark;
-        #[cfg(feature = "web")]
-        {
-            let eval_js = if is_dark {
-                "document.documentElement.classList.add('dark')"
-            } else {
-                "document.documentElement.classList.remove('dark')"
-            };
-            let _ = dioxus::document::eval(eval_js);
-        }
+        let _is_dark = current_theme == theme::Theme::Dark;
+        // 主题切换功能暂时禁用，避免 js-sys 依赖问题
+        // TODO: 实现跨平台的主题切换功能
     });
 
     rsx! {
-        header {
-            class: "fixed top-0 left-0 right-0 h-16 bg-white dark:bg-gray-950 border-b border-gray-200 dark:border-gray-800 z-50 transition-colors",
-            nav {
-                class: "container mx-auto px-4 h-full flex items-center justify-between",
+        div {
+            // 固定导航栏
+            header {
+                class: "fixed top-0 left-0 right-0 h-16 bg-white dark:bg-gray-950 border-b border-gray-200 dark:border-gray-800 z-50 transition-colors",
+                nav {
+                    class: "container mx-auto px-4 h-full flex items-center justify-between",
 
                 // Logo
                 div {
@@ -44,7 +39,7 @@ pub fn TopNavbar() -> Element {
                         class: "flex items-center space-x-1",
                         NavLink { to: crate::Route::Home {}, label: i18n::t("nav.home") }
                         NavLink { to: crate::Route::Introduction {}, label: i18n::t("nav.docs") }
-                        NavLink { to: crate::Route::ComponentsIndex {}, label: i18n::t("nav.components") }
+                        NavLink { to: crate::Route::ComponentsPage {}, label: i18n::t("nav.components") }
                     }
                 }
 
@@ -88,7 +83,13 @@ pub fn TopNavbar() -> Element {
                 }
             }
         }
-        Outlet::<crate::Route> {}
+
+            // 内容容器，为固定导航栏留出空间
+            div {
+                class: "pt-16 min-h-screen",
+                Outlet::<crate::Route> {}
+            }
+        }
     }
 }
 

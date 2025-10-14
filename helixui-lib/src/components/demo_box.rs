@@ -98,16 +98,10 @@ pub fn DemoBox(
                 button {
                     class: "flex items-center gap-1 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors",
                     onclick: move |_| {
-                        let code_to_copy = code.clone();
+                        let _code_to_copy = code.clone();
                         spawn(async move {
-                            #[cfg(feature = "web")]
-                            {
-                                let js_code = format!(
-                                    r#"navigator.clipboard.writeText(`{}`)"#,
-                                    code_to_copy.replace('`', "\\`").replace('\\', "\\\\")
-                                );
-                                let _ = dioxus::document::eval(&js_code);
-                            }
+                            // 复制功能暂时禁用，避免 js-sys 依赖问题
+                            // TODO: 实现跨平台的复制功能
                             copied.set(true);
                             // 2秒后重置复制状态
                             use std::time::Duration;
