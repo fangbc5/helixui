@@ -192,8 +192,8 @@ pub fn Button(props: ButtonProps) -> Element {
     let outline_override_class = if props.outline {
         ""
     } else {
-        // 纯 children：无背景/边框/阴影，并使用当前文本颜色统一控制 children
-        "bg-transparent border-0 shadow-none text-gray-700 dark:text-gray-300"
+        // 纯 children：无背景/边框/阴影；让子 svg 继承文本颜色（提升优先级），并加 group 以支持 hover 影响 svg
+        "bg-transparent border-0 shadow-none text-gray-700 dark:text-gray-300 group [&_svg]:!text-inherit"
     };
 
     let base_class = format!(
@@ -226,12 +226,18 @@ pub fn Button(props: ButtonProps) -> Element {
 
         // 添加自定义 hover 颜色 - 使用 style 属性而不是 Tailwind 类
         let hover_class = format!("hover:text-[{}]", hover_color);
-        format!("{} {}", base_class_without_hover, hover_class)
+        let svg_hover_class = format!("group-hover:[&_svg]:!text-[{}]", hover_color);
+        format!(
+            "{} {} {}",
+            base_class_without_hover, hover_class, svg_hover_class
+        )
     } else if !props.outline {
         // outline=false 且未指定 hover_color，亮色主题使用绿 600，暗色主题使用绿 400
         format!(
-            "{} {}",
-            final_class, "hover:text-green-600 dark:hover:text-green-400"
+            "{} {} {}",
+            final_class,
+            "hover:text-green-600 dark:hover:text-green-400",
+            "group-hover:[&_svg]:!text-green-600 dark:group-hover:[&_svg]:!text-green-400"
         )
     } else {
         final_class

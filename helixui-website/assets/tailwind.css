@@ -2005,6 +2005,11 @@ video {
   color: currentColor;
 }
 
+.text-gray-300 {
+  --tw-text-opacity: 1;
+  color: rgb(209 213 219 / var(--tw-text-opacity, 1));
+}
+
 .opacity-0 {
   opacity: 0;
 }
@@ -2019,6 +2024,10 @@ video {
 
 .opacity-60 {
   opacity: 0.6;
+}
+
+.opacity-80 {
+  opacity: 0.8;
 }
 
 .shadow {
@@ -2494,6 +2503,10 @@ video {
   color: rgb(229 231 235 / var(--tw-text-opacity, 1));
 }
 
+.dark\:opacity-90:is(.dark *) {
+  opacity: 0.9;
+}
+
 .dark\:shadow-2xl:is(.dark *) {
   --tw-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
   --tw-shadow-colored: 0 25px 50px -12px var(--tw-shadow-color);
@@ -2596,4 +2609,40 @@ video {
 
 .\[\&_\*\]\:scroll-mt-16 * {
   scroll-margin-top: 4rem;
+}
+
+.\[\&_svg\]\:text-inherit svg {
+  color: inherit;
+}
+
+.\[\&_svg\]\:\!text-inherit svg {
+  color: inherit !important;
+}
+
+.group:hover .group-hover\:\[\&_svg\]\:text-\[\{\}\] svg {
+  color: {};
+}
+
+.group:hover .group-hover\:\[\&_svg\]\:text-green-600 svg {
+  --tw-text-opacity: 1;
+  color: rgb(22 163 74 / var(--tw-text-opacity, 1));
+}
+
+.group:hover .group-hover\:\[\&_svg\]\:\!text-\[\{\}\] svg {
+  color: {} !important;
+}
+
+.group:hover .group-hover\:\[\&_svg\]\:\!text-green-600 svg {
+  --tw-text-opacity: 1 !important;
+  color: rgb(22 163 74 / var(--tw-text-opacity, 1)) !important;
+}
+
+.group:hover .dark\:group-hover\:\[\&_svg\]\:text-green-400 svg:is(.dark *) {
+  --tw-text-opacity: 1;
+  color: rgb(74 222 128 / var(--tw-text-opacity, 1));
+}
+
+.group:hover .dark\:group-hover\:\[\&_svg\]\:\!text-green-400 svg:is(.dark *) {
+  --tw-text-opacity: 1 !important;
+  color: rgb(74 222 128 / var(--tw-text-opacity, 1)) !important;
 }
