@@ -1,10 +1,10 @@
+use crate::views::layout::ComponentsSidebar;
 use crate::views::layout::TocItem;
 use crate::views::DocPage;
-use crate::views::layout::ComponentsSidebar;
 use dioxus::prelude::*;
 use helixui::components::{
-    Button, ButtonType, Card, CardContent, CardFooter, CardGrid, CardGroup,
-    CardShadow, CardSize, DemoBox,
+    Button, ButtonType, Card, CardContent, CardFooter, CardGrid, CardGroup, CardShadow, CardSize,
+    DemoBox,
 };
 
 /// Card 组件文档页面

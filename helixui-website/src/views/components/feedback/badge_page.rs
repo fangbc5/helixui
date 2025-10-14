@@ -1,11 +1,11 @@
+use crate::views::layout::ComponentsSidebar;
+use crate::views::layout::TocItem;
+use crate::views::DocPage;
+use dioxus::prelude::*;
 use helixui::components::{
     feedback::{Badge, BadgeType},
     Button, ButtonSize, ButtonType, DemoBox,
 };
-use crate::views::layout::TocItem;
-use crate::views::DocPage;
-use crate::views::layout::ComponentsSidebar;
-use dioxus::prelude::*;
 
 /// Badge 页面组件
 #[component]

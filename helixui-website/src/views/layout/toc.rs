@@ -35,15 +35,10 @@ fn TocItemComponent(props: TocItemProps) -> Element {
     };
 
     rsx! {
-        div {
-            role: "link",
-            tabindex: 0,
-            aria_current: if props.is_active { Some("true") } else { None },
+        a {
+            href: format!("#{}", props.item.id),
             class: format!("block px-2 py-1 text-sm transition-colors {} {}", active_class, padding_class),
             onclick: move |_| { props.onclick.call(()); },
-            onkeydown: move |e| {
-                if e.key() == Key::Enter { props.onclick.call(()); }
-            },
             {props.item.title}
         }
     }

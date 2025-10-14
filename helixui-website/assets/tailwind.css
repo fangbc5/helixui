@@ -672,6 +672,10 @@ video {
   top: 1rem;
 }
 
+.top-16 {
+  top: 4rem;
+}
+
 .z-40 {
   z-index: 40;
 }
@@ -2554,4 +2558,8 @@ video {
   .lg\:grid-cols-8 {
     grid-template-columns: repeat(8, minmax(0, 1fr));
   }
+}
+
+.\[\&_\*\]\:scroll-mt-16 * {
+  scroll-margin-top: 4rem;
 }

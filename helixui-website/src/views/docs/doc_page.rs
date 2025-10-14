@@ -1,6 +1,8 @@
 use crate::views::layout::{PageToc, TocItem};
 use dioxus::prelude::*;
-use helixui::components::{Button, ButtonShape, ButtonSize, ButtonType, ButtonVariant};
+use helixui::components::{
+    Button, ButtonShape, ButtonSize, ButtonType, ButtonVariant, Icon, IconType,
+};
 
 /// Section 结构体，用于滚动高亮
 #[derive(PartialEq, Clone)]
@@ -44,35 +46,6 @@ pub fn DocPage(sidebar: Element, toc_items: Vec<TocItem>, children: Element) -> 
     let sections = use_signal(|| sections_data);
 
     let mut active_index = use_signal(|| 0usize);
-    let scroll_counter = use_signal(|| 0u64);
-
-    // 简化的滚动处理函数（不使用时间节流）
-    let mut on_scroll = {
-        let sections = sections.clone();
-        let mut active_index = active_index.clone();
-        let mut scroll_counter = scroll_counter.clone();
-        move |scroll_top: f64| {
-            // 简单的计数器节流
-            scroll_counter.set(scroll_counter() + 1);
-            if scroll_counter() % 3 != 0 {
-                return;
-            }
-
-            // 找出当前活跃 section
-            let mut idx = 0;
-            for (i, section) in sections.read().iter().enumerate() {
-                if scroll_top >= section.offset_top {
-                    idx = i;
-                } else {
-                    break;
-                }
-            }
-
-            if active_index() != idx {
-                active_index.set(idx);
-            }
-        }
-    };
 
     rsx! {
         div {
@@ -82,36 +55,24 @@ pub fn DocPage(sidebar: Element, toc_items: Vec<TocItem>, children: Element) -> 
             div {
                 class: "flex",
 
-                // 左侧边栏
+                // 左侧边栏（固定在视口，独立滚动）
                 if !*sidebar_collapsed.read() {
                     aside {
-                        class: "w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 h-[calc(100vh-4rem)] overflow-y-auto transition-colors z-40",
+                        class: "fixed left-0 top-16 w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 h-[calc(100vh-4rem)] overflow-y-auto transition-colors z-40",
                         {sidebar}
                     }
                 }
 
-                // 主内容区域
+                // 主内容区域（页面滚动，不再内部滚动）
                 main {
                     class: if *sidebar_collapsed.read() {
                         "flex-1 transition-all duration-300 ease-in-out mr-64"
                     } else {
-                        "flex-1 transition-all duration-300 ease-in-out mr-64"
+                        "flex-1 transition-all duration-300 ease-in-out ml-64 mr-64"
                     },
-
-                    // 滚动容器（仅此容器滚动，便于监听）
                     div {
-                        class: "h-[calc(100vh-4rem)] overflow-y-auto",
-                        onscroll: move |_e| {
-                            // 临时方案：使用简化的滚动位置计算
-                            // TODO: 需要根据实际的 Dioxus 0.6 API 调整
-                            let scroll_top = 0.0; // 临时值，实际应该从事件中获取
-                            on_scroll(scroll_top);
-                        },
-
-                        div {
-                            class: "max-w-4xl mx-auto px-8 py-8",
-                            {children}
-                        }
+                        class: "max-w-4xl mx-auto px-8 py-8 space-y-12 [&_*]:scroll-mt-16",
+                        {children}
                     }
                 }
 
@@ -147,10 +108,11 @@ pub fn DocPage(sidebar: Element, toc_items: Vec<TocItem>, children: Element) -> 
                         size: ButtonSize::Small,
                         shape: ButtonShape::Circle,
                         variant: ButtonVariant::Icon,
+                        icon: Some(if *sidebar_collapsed.read() { IconType::ChevronRight } else { IconType::ChevronLeft }),
                         onclick: move |_| {
                             sidebar_collapsed.set(!sidebar_collapsed());
                         },
-                        "☰"
+                        // 无子内容
                     }
                 }
             }

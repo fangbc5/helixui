@@ -9,16 +9,11 @@ pub fn TopNavbar() -> Element {
     let mut language = i18n::LANGUAGE.signal();
     let mut theme_state = theme::THEME.signal();
 
-    // 根据主题状态，在 document 根元素添加或移除 dark 类
-    use_effect(move || {
-        let current_theme = *theme_state.read();
-        let _is_dark = current_theme == theme::Theme::Dark;
-        // 主题切换功能暂时禁用，避免 js-sys 依赖问题
-        // TODO: 实现跨平台的主题切换功能
-    });
+    // 移除依赖 eval 的实现：直接在根容器上切换 "dark" 类，实现跨平台主题切换
 
     rsx! {
         div {
+            class: if *theme_state.read() == theme::Theme::Dark { "dark" } else { "" },
             // 固定导航栏
             header {
                 class: "fixed top-0 left-0 right-0 h-16 bg-white dark:bg-gray-950 border-b border-gray-200 dark:border-gray-800 z-50 transition-colors",
