@@ -57,19 +57,29 @@ pub fn debounce<F>(mut callback: F, delay: u32) -> impl FnMut()
 where
     F: FnMut() + 'static,
 {
-    let mut timeout_id: Option<u32> = None;
+    use std::time::Duration;
+    use std::sync::{Arc, Mutex};
+    let state = Arc::new(Mutex::new(None::<std::time::Instant>));
+    let delay = Duration::from_millis(delay as u64);
 
     move || {
-        if let Some(id) = timeout_id {
-            // 清除之前的定时器
-            gloo_timers::callback::Timeout::clear(id);
-        }
-
-        let new_id = gloo_timers::callback::Timeout::new(delay, move || {
-            callback();
+        let state_cloned = state.clone();
+        // 启动一个新的延迟任务，简单实现：每次触发都启动一个延迟并覆盖标记
+        spawn(async move {
+            let fire_at = std::time::Instant::now() + delay;
+            {
+                let mut guard = state_cloned.lock().unwrap();
+                *guard = Some(fire_at);
+            }
+            futures_timer::Delay::new(delay).await;
+            let should_fire = {
+                let guard = state_cloned.lock().unwrap();
+                guard.map(|t| t <= std::time::Instant::now()).unwrap_or(false)
+            };
+            if should_fire {
+                callback();
+            }
         });
-
-        timeout_id = Some(new_id);
     }
 }
 

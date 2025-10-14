@@ -43,7 +43,8 @@ pub fn NoticeOverlay(props: NoticeOverlayProps) -> Element {
             let on_close = props.on_close.clone();
 
             spawn(async move {
-                gloo_timers::future::TimeoutFuture::new(duration).await;
+                use std::time::Duration;
+                futures_timer::Delay::new(Duration::from_millis(duration as u64)).await;
 
                 if let Some(callback) = on_close {
                     callback();

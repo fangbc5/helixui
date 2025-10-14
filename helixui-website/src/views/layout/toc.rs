@@ -1,4 +1,3 @@
-use crate::views::layout::use_scroll_observer;
 use dioxus::prelude::*;
 
 /// 目录项结构
@@ -38,10 +37,7 @@ fn TocItemComponent(props: TocItemProps) -> Element {
         a {
             href: format!("#{}", props.item.id),
             class: format!("block px-2 py-1 text-sm transition-colors {} {}", active_class, padding_class),
-            onclick: move |e| {
-                e.prevent_default();
-                props.onclick.call(());
-            },
+            onclick: move |_| { props.onclick.call(()); },
             {props.item.title}
         }
     }
@@ -58,45 +54,28 @@ pub struct PageTocProps {
     /// 是否启用滚动监听（默认启用）
     #[props(default = true)]
     pub enable_scroll_highlight: bool,
+    /// 当用户点击目录项时回调，传递 item.id（用于父层同步滚动状态）
+    #[props(default)]
+    pub on_navigate: Option<EventHandler<String>>,
 }
 
 /// 右侧页面目录
 #[component]
 pub fn PageToc(props: PageTocProps) -> Element {
-    // 如果启用滚动监听，使用滚动监听 Hook
-    let scroll_active_id = if props.enable_scroll_highlight {
-        let item_ids = props.items.iter().map(|item| item.id.clone()).collect();
-        Some(use_scroll_observer(item_ids))
-    } else {
-        None
-    };
-
-    // 使用外部传入的 active_id 或滚动监听结果
+    // 基础版：不做自动滚动高亮，仅点击设置
+    let mut internal_active_id = use_signal(|| String::new());
     let active_id = if let Some(external_id) = &props.active_id {
         external_id.clone()
-    } else if let Some(scroll_id) = scroll_active_id {
-        scroll_id.read().clone()
     } else {
-        String::new()
+        internal_active_id.read().clone()
     };
 
     // 点击目录项时的滚动处理
-    let handle_toc_click = move |item_id: String| {
-        if let Some(window) = web_sys::window() {
-            if let Some(document) = window.document() {
-                if let Some(element) = document.get_element_by_id(&item_id) {
-                    // 获取元素位置
-                    let rect = element.get_bounding_client_rect();
-                    let current_scroll = window.scroll_y().unwrap_or(0.0);
-
-                    // 计算目标滚动位置，添加偏移量避免被顶部遮挡
-                    // 考虑顶部导航栏高度 (64px) + 额外间距 (32px) = 96px
-                    let target_scroll = current_scroll + rect.top() - 96.0;
-
-                    // 使用平滑滚动
-                    window.scroll_to_with_x_and_y(0.0, target_scroll);
-                }
-            }
+    // 点击目录项时，仅更新内部激活项，其余平台交给锚点默认行为处理
+    let mut handle_toc_click = move |item_id: String| {
+        internal_active_id.set(item_id);
+        if let Some(cb) = &props.on_navigate {
+            cb.call(internal_active_id.read().clone());
         }
     };
 
@@ -113,7 +92,7 @@ pub fn PageToc(props: PageTocProps) -> Element {
                     TocItemComponent {
                         item: item.clone(),
                         is_active: active_id == item.id,
-                        onclick: move |_| handle_toc_click(item.id.clone()),
+                        onclick: move |_| { handle_toc_click(item.id.clone()); },
                     }
                 }
             }

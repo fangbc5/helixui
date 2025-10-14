@@ -1,4 +1,5 @@
 use crate::{Button, ButtonShape, ButtonSize, ButtonType, ButtonVariant, Icon, IconType};
+use async_broadcast::broadcast;
 use dioxus::prelude::*;
 use std::collections::HashMap;
 use std::sync::{LazyLock, Mutex};
@@ -193,26 +194,38 @@ impl SimpleDialogManager {
         data.id = id.clone();
         data.visible = true;
         self.dialogs.insert(id.clone(), data);
+        notify_dialog_change();
         id
     }
     pub fn hide_dialog(&mut self, id: &str) {
         if let Some(d) = self.dialogs.get_mut(id) {
             d.visible = false;
         }
+        notify_dialog_change();
     }
     pub fn remove_dialog(&mut self, id: &str) {
         self.dialogs.remove(id);
+        notify_dialog_change();
     }
     pub fn get_dialogs(&self) -> Vec<SimpleDialogData> {
         self.dialogs.values().cloned().collect()
     }
     pub fn clear_all(&mut self) {
         self.dialogs.clear();
+        notify_dialog_change();
     }
 }
 
 static DIALOG_MANAGER: LazyLock<Mutex<SimpleDialogManager>> =
     LazyLock::new(|| Mutex::new(SimpleDialogManager::new()));
+
+// 跨平台广播：通知对话框容器刷新
+static DIALOG_BUS: LazyLock<(async_broadcast::Sender<()>, async_broadcast::Receiver<()>)> =
+    LazyLock::new(|| broadcast(64));
+
+fn notify_dialog_change() {
+    let _ = DIALOG_BUS.0.try_broadcast(());
+}
 
 pub fn show_info_dialog(title: String, content: String) {
     let data = SimpleDialogData {
@@ -363,13 +376,18 @@ pub fn GlobalDialogContainer() -> Element {
             Vec::new()
         }
     });
+    // 广播驱动更新
     use_effect(move || {
-        let interval = gloo_timers::callback::Interval::new(150, move || {
-            if let Ok(manager) = DIALOG_MANAGER.lock() {
-                dialogs.set(manager.get_dialogs());
+        let mut rx = DIALOG_BUS.0.new_receiver();
+        let mut dialogs_signal = dialogs.clone();
+        spawn(async move {
+            loop {
+                let _ = rx.recv().await;
+                if let Ok(manager) = DIALOG_MANAGER.lock() {
+                    dialogs_signal.set(manager.get_dialogs());
+                }
             }
         });
-        interval.forget();
     });
     rsx! {
         div { class: "fixed inset-0 pointer-events-none z-40",

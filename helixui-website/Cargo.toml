@@ -12,10 +12,6 @@ path = "src/main.rs"
 [dependencies]
 helixui = { path = "../helixui-lib" }
 dioxus.workspace = true
-gloo-timers.workspace = true
-web-sys.workspace = true
-wasm-bindgen.workspace = true
-js-sys.workspace = true
 
 [features]
 default = ["web"]

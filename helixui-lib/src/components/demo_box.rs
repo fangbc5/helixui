@@ -110,7 +110,8 @@ pub fn DemoBox(
                             }
                             copied.set(true);
                             // 2秒后重置复制状态
-                            gloo_timers::future::TimeoutFuture::new(2000).await;
+                            use std::time::Duration;
+                            futures_timer::Delay::new(Duration::from_millis(2000)).await;
                             copied.set(false);
                         });
                     },
@@ -143,7 +144,7 @@ pub fn DemoBox(
                     }
                 }
             }
-            
+
 
             // 代码展示区域（可折叠）
             if *show_code.read() {

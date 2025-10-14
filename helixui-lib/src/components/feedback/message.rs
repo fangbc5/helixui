@@ -1,7 +1,9 @@
 use crate::overlay::config::{SimpleMessagePosition, SimpleMessageType};
 use crate::{Button, ButtonShape, ButtonSize, ButtonType, ButtonVariant, Icon, IconSize, IconType};
+use async_broadcast::broadcast;
 use dioxus::prelude::*;
 use std::collections::HashMap;
+use std::sync::atomic::{AtomicU64, Ordering};
 use std::sync::{LazyLock, Mutex};
 
 /// Message 类型（基于新的 SimpleMessageType）
@@ -53,6 +55,7 @@ pub fn Message(props: MessageProps) -> Element {
         duration: props.duration,
         closable: props.closable,
         show_icon: true,
+        seq: NEXT_SEQ.fetch_add(1, Ordering::Relaxed),
     };
 
     rsx! {
@@ -82,6 +85,7 @@ pub struct SimpleMessageData {
     pub duration: u32,
     pub closable: bool,
     pub show_icon: bool,
+    pub seq: u64,
 }
 
 /// 简化的消息管理器（全局）
@@ -97,23 +101,39 @@ impl SimpleMessageManager {
     }
     pub fn add_message(&mut self, data: SimpleMessageData) {
         self.messages.insert(data.id.clone(), data);
+        notify_message_change();
     }
     pub fn remove_message(&mut self, id: &str) {
         self.messages.remove(id);
+        notify_message_change();
     }
     pub fn get_messages(&self) -> Vec<SimpleMessageData> {
         self.messages.values().cloned().collect()
     }
     pub fn clear_all(&mut self) {
         self.messages.clear();
+        notify_message_change();
     }
 }
 
 static GLOBAL_MESSAGE_MANAGER: LazyLock<Mutex<SimpleMessageManager>> =
     LazyLock::new(|| Mutex::new(SimpleMessageManager::new()));
 
+// 全局自增序列与计数器，用于稳定排序与避免 ID 碰撞
+static NEXT_SEQ: AtomicU64 = AtomicU64::new(1);
+static NEXT_COUNTER: AtomicU64 = AtomicU64::new(1);
+
+// 跨平台广播：用于通知容器更新列表
+static MESSAGE_BUS: LazyLock<(async_broadcast::Sender<()>, async_broadcast::Receiver<()>)> =
+    LazyLock::new(|| broadcast(64));
+
 fn get_global_message_manager() -> &'static Mutex<SimpleMessageManager> {
     &GLOBAL_MESSAGE_MANAGER
+}
+
+// 广播一条空事件，跨平台
+fn notify_message_change() {
+    let _ = MESSAGE_BUS.0.try_broadcast(());
 }
 
 #[component]
@@ -126,7 +146,8 @@ pub fn SimpleMessage(data: SimpleMessageData) -> Element {
             let duration = data_duration;
             let id = data_id.clone();
             spawn(async move {
-                gloo_timers::future::TimeoutFuture::new(duration).await;
+                use std::time::Duration;
+                futures_timer::Delay::new(Duration::from_millis(duration as u64)).await;
                 if let Ok(mut manager) = get_global_message_manager().lock() {
                     manager.remove_message(&id);
                 }
@@ -134,13 +155,18 @@ pub fn SimpleMessage(data: SimpleMessageData) -> Element {
         }
     });
 
-    let base_class = "fixed p-4 rounded-lg shadow-lg border max-w-sm";
-    let position_class = get_position_class(&data.position);
+    let base_class = "p-4 rounded-lg shadow-lg border max-w-sm pointer-events-auto";
     let type_class = get_type_class(&data.message_type);
-    let merged_class = format!("{} {} {}", base_class, position_class, type_class);
+    let merged_class = format!("{} {}", base_class, type_class);
+
+    let (role, aria_live) = match data.message_type {
+        SimpleMessageType::Error => ("alert", "assertive"),
+        SimpleMessageType::Warning => ("alert", "polite"),
+        _ => ("status", "polite"),
+    };
 
     rsx! {
-        div { class: merged_class, role: "alert", "aria-live": "polite",
+        div { class: merged_class, role: role, "aria-live": aria_live,
             div { class: "flex items-center",
                 if data.show_icon {
                     div { class: "flex-shrink-0 mr-2", {get_icon(&data.message_type)} }
@@ -166,6 +192,7 @@ pub fn SimpleMessage(data: SimpleMessageData) -> Element {
     }
 }
 
+#[allow(dead_code)]
 fn get_position_class(position: &SimpleMessagePosition) -> String {
     match position {
         SimpleMessagePosition::TopLeft => "top-4 left-4".to_string(),
@@ -179,6 +206,25 @@ fn get_position_class(position: &SimpleMessagePosition) -> String {
         SimpleMessagePosition::Center => {
             "top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2".to_string()
         }
+    }
+}
+
+fn get_container_class(position: &SimpleMessagePosition) -> String {
+    match position {
+        SimpleMessagePosition::TopLeft =>
+            "fixed z-50 top-4 left-4 flex flex-col items-start space-y-2 pointer-events-none".to_string(),
+        SimpleMessagePosition::TopCenter =>
+            "fixed z-50 top-4 left-1/2 transform -translate-x-1/2 flex flex-col items-center space-y-2 pointer-events-none".to_string(),
+        SimpleMessagePosition::TopRight =>
+            "fixed z-50 top-4 right-4 flex flex-col items-end space-y-2 pointer-events-none".to_string(),
+        SimpleMessagePosition::BottomLeft =>
+            "fixed z-50 bottom-4 left-4 flex flex-col items-start space-y-2 pointer-events-none".to_string(),
+        SimpleMessagePosition::BottomCenter =>
+            "fixed z-50 bottom-4 left-1/2 transform -translate-x-1/2 flex flex-col items-center space-y-2 pointer-events-none".to_string(),
+        SimpleMessagePosition::BottomRight =>
+            "fixed z-50 bottom-4 right-4 flex flex-col items-end space-y-2 pointer-events-none".to_string(),
+        SimpleMessagePosition::Center =>
+            "fixed z-50 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center space-y-2 pointer-events-none".to_string(),
     }
 }
 
@@ -206,39 +252,116 @@ fn get_icon(message_type: &SimpleMessageType) -> Element {
     }
 }
 
+// 原直插分支的图标路径已不再需要
+
 #[component]
 pub fn GlobalMessageContainer() -> Element {
     let mut messages = use_signal(|| Vec::<SimpleMessageData>::new());
+    // 首次同步一次
+    if let Ok(manager) = get_global_message_manager().lock() {
+        messages.set(manager.get_messages());
+    }
+    // 事件驱动更新（跨平台广播）
     use_effect(move || {
-        let interval = gloo_timers::callback::Interval::new(150, move || {
-            if let Ok(manager) = get_global_message_manager().lock() {
-                let new_messages = manager.get_messages();
-                messages.set(new_messages);
+        let mut rx = MESSAGE_BUS.0.new_receiver();
+        let mut messages_signal = messages.clone();
+        spawn(async move {
+            loop {
+                let _ = rx.recv().await;
+                if let Ok(manager) = get_global_message_manager().lock() {
+                    messages_signal.set(manager.get_messages());
+                }
             }
         });
-        interval.forget();
     });
+    // 按位置分组并按 seq 排序，分别渲染到对应容器
+    let all = messages.read();
+    let mut top_left: Vec<SimpleMessageData> = all
+        .iter()
+        .filter(|m| m.position == SimpleMessagePosition::TopLeft)
+        .cloned()
+        .collect();
+    let mut top_center: Vec<SimpleMessageData> = all
+        .iter()
+        .filter(|m| m.position == SimpleMessagePosition::TopCenter)
+        .cloned()
+        .collect();
+    let mut top_right: Vec<SimpleMessageData> = all
+        .iter()
+        .filter(|m| m.position == SimpleMessagePosition::TopRight)
+        .cloned()
+        .collect();
+    let mut bottom_left: Vec<SimpleMessageData> = all
+        .iter()
+        .filter(|m| m.position == SimpleMessagePosition::BottomLeft)
+        .cloned()
+        .collect();
+    let mut bottom_center: Vec<SimpleMessageData> = all
+        .iter()
+        .filter(|m| m.position == SimpleMessagePosition::BottomCenter)
+        .cloned()
+        .collect();
+    let mut bottom_right: Vec<SimpleMessageData> = all
+        .iter()
+        .filter(|m| m.position == SimpleMessagePosition::BottomRight)
+        .cloned()
+        .collect();
+    let mut center: Vec<SimpleMessageData> = all
+        .iter()
+        .filter(|m| m.position == SimpleMessagePosition::Center)
+        .cloned()
+        .collect();
+
+    let sort_by_seq = |v: &mut Vec<SimpleMessageData>| v.sort_by_key(|m| m.seq);
+    sort_by_seq(&mut top_left);
+    sort_by_seq(&mut top_center);
+    sort_by_seq(&mut top_right);
+    sort_by_seq(&mut bottom_left);
+    sort_by_seq(&mut bottom_center);
+    sort_by_seq(&mut bottom_right);
+    sort_by_seq(&mut center);
+
     rsx! {
-        div { class: "fixed inset-0 pointer-events-none z-50",
-            for message in messages.read().iter() { SimpleMessage { data: message.clone() } }
+        // 独立位置容器（避免重叠），每个容器自身 pointer-events-none，子项启用 pointer-events-auto
+        if !top_left.is_empty() {
+            div { class: get_container_class(&SimpleMessagePosition::TopLeft),
+                for message in top_left { SimpleMessage { data: message } }
+            }
+        }
+        if !top_center.is_empty() {
+            div { class: get_container_class(&SimpleMessagePosition::TopCenter),
+                for message in top_center { SimpleMessage { data: message } }
+            }
+        }
+        if !top_right.is_empty() {
+            div { class: get_container_class(&SimpleMessagePosition::TopRight),
+                for message in top_right { SimpleMessage { data: message } }
+            }
+        }
+        if !bottom_left.is_empty() {
+            div { class: get_container_class(&SimpleMessagePosition::BottomLeft),
+                for message in bottom_left { SimpleMessage { data: message } }
+            }
+        }
+        if !bottom_center.is_empty() {
+            div { class: get_container_class(&SimpleMessagePosition::BottomCenter),
+                for message in bottom_center { SimpleMessage { data: message } }
+            }
+        }
+        if !bottom_right.is_empty() {
+            div { class: get_container_class(&SimpleMessagePosition::BottomRight),
+                for message in bottom_right { SimpleMessage { data: message } }
+            }
+        }
+        if !center.is_empty() {
+            div { class: get_container_class(&SimpleMessagePosition::Center),
+                for message in center { SimpleMessage { data: message } }
+            }
         }
     }
 }
 
 pub fn show_message(content: &str, message_type: MessageType) {
-    #[cfg(target_arch = "wasm32")]
-    {
-        if web_render_message(
-            content,
-            &message_type,
-            &SimpleMessagePosition::TopRight,
-            2000,
-        )
-        .is_ok()
-        {
-            return;
-        }
-    }
     let data = SimpleMessageData {
         id: generate_id("message"),
         content: content.to_string(),
@@ -247,6 +370,7 @@ pub fn show_message(content: &str, message_type: MessageType) {
         duration: 2000,
         closable: true,
         show_icon: true,
+        seq: NEXT_SEQ.fetch_add(1, Ordering::Relaxed),
     };
     if let Ok(mut manager) = get_global_message_manager().lock() {
         manager.add_message(data);
@@ -254,19 +378,6 @@ pub fn show_message(content: &str, message_type: MessageType) {
 }
 
 pub fn show_message_with_duration(content: &str, message_type: MessageType, duration: u32) {
-    #[cfg(target_arch = "wasm32")]
-    {
-        if web_render_message(
-            content,
-            &message_type,
-            &SimpleMessagePosition::TopRight,
-            duration,
-        )
-        .is_ok()
-        {
-            return;
-        }
-    }
     let data = SimpleMessageData {
         id: generate_id("message"),
         content: content.to_string(),
@@ -275,6 +386,7 @@ pub fn show_message_with_duration(content: &str, message_type: MessageType, dura
         duration,
         closable: true,
         show_icon: true,
+        seq: NEXT_SEQ.fetch_add(1, Ordering::Relaxed),
     };
     if let Ok(mut manager) = get_global_message_manager().lock() {
         manager.add_message(data);
@@ -286,12 +398,6 @@ pub fn show_message_with_position(
     message_type: MessageType,
     position: MessagePosition,
 ) {
-    #[cfg(target_arch = "wasm32")]
-    {
-        if web_render_message(content, &message_type, &position, 2000).is_ok() {
-            return;
-        }
-    }
     let data = SimpleMessageData {
         id: generate_id("message"),
         content: content.to_string(),
@@ -300,15 +406,16 @@ pub fn show_message_with_position(
         duration: 2000,
         closable: true,
         show_icon: true,
+        seq: NEXT_SEQ.fetch_add(1, Ordering::Relaxed),
     };
     if let Ok(mut manager) = get_global_message_manager().lock() {
         manager.add_message(data);
     }
 }
 
-pub fn close_message(id: u32) {
+pub fn close_message(id: &str) {
     if let Ok(mut manager) = get_global_message_manager().lock() {
-        manager.remove_message(&id.to_string());
+        manager.remove_message(id);
     }
 }
 
@@ -324,89 +431,8 @@ fn generate_id(prefix: &str) -> String {
         .duration_since(UNIX_EPOCH)
         .unwrap()
         .as_millis();
-    format!("{}_{}", prefix, timestamp)
+    let counter = NEXT_COUNTER.fetch_add(1, Ordering::Relaxed);
+    format!("{}_{}_{}", prefix, timestamp, counter)
 }
 
-#[cfg(target_arch = "wasm32")]
-fn web_render_message(
-    content: &str,
-    message_type: &SimpleMessageType,
-    position: &SimpleMessagePosition,
-    duration: u32,
-) -> Result<(), ()> {
-    use wasm_bindgen::JsCast;
-    use web_sys::{window, Document, Element};
-    let win = window().ok_or(())?;
-    let doc: Document = win.document().ok_or(())?;
-    let root_id = "helixui-message-root";
-    let root_el: Element = if let Some(el) = doc.get_element_by_id(root_id) {
-        el
-    } else {
-        let el = doc.create_element("div").map_err(|_| ())?;
-        el.set_id(root_id);
-        el.set_attribute(
-            "style",
-            "position:fixed;inset:0;pointer-events:none;z-index:9999;",
-        )
-        .ok();
-        doc.body().ok_or(())?.append_child(&el).map_err(|_| ())?;
-        el
-    };
-    let msg = doc.create_element("div").map_err(|_| ())?;
-    let base = "pointer-events-auto p-4 rounded-lg shadow-lg border max-w-sm text-sm";
-    let type_class = match message_type {
-        SimpleMessageType::Success => "bg-green-50 border-green-200 text-green-800",
-        SimpleMessageType::Warning => "bg-yellow-50 border-yellow-200 text-yellow-800",
-        SimpleMessageType::Error => "bg-red-50 border-red-200 text-red-800",
-        SimpleMessageType::Info | SimpleMessageType::Loading => {
-            "bg-blue-50 border-blue-200 text-blue-800"
-        }
-    };
-    let pos_class = match position {
-        SimpleMessagePosition::TopLeft => "top:1rem;left:1rem;",
-        SimpleMessagePosition::TopCenter => "top:1rem;left:50%;transform:translateX(-50%);",
-        SimpleMessagePosition::TopRight => "top:1rem;right:1rem;",
-        SimpleMessagePosition::BottomLeft => "bottom:1rem;left:1rem;",
-        SimpleMessagePosition::BottomCenter => "bottom:1rem;left:50%;transform:translateX(-50%);",
-        SimpleMessagePosition::BottomRight => "bottom:1rem;right:1rem;",
-        SimpleMessagePosition::Center => "top:50%;left:50%;transform:translate(-50%,-50%);",
-    };
-    msg.set_attribute("style", &format!("position:fixed;{}", pos_class))
-        .ok();
-    msg.set_attribute("class", &format!("{} {}", base, type_class))
-        .ok();
-    msg.set_text_content(Some(content));
-
-    let close_btn = doc.create_element("button").map_err(|_| ())?;
-    close_btn
-        .set_attribute(
-            "class",
-            "ml-2 text-gray-400 hover:text-gray-600 float-right",
-        )
-        .ok();
-    close_btn.set_text_content(Some("×"));
-    {
-        let msg_clone = msg.clone();
-        let closure = wasm_bindgen::closure::Closure::wrap(Box::new(move || {
-            let _ = msg_clone.remove();
-        }) as Box<dyn FnMut()>);
-        close_btn
-            .add_event_listener_with_callback("click", closure.as_ref().unchecked_ref())
-            .ok();
-        closure.forget();
-    }
-    let _ = msg.append_child(&close_btn);
-    let _ = root_el.append_child(&msg);
-    if duration > 0 {
-        let msg_clone = msg.clone();
-        let cb = wasm_bindgen::closure::Closure::wrap(Box::new(move || {
-            let _ = msg_clone.remove();
-        }) as Box<dyn FnMut()>);
-        let _ = win.set_timeout_with_callback_and_timeout_and_arguments_0(
-            cb.as_ref().unchecked_ref(),
-            duration as i32,
-        );
-        cb.forget();
-    }
-    Ok(())
-}
+// 直插 DOM 渲染已移除，统一走全局容器组件渲染
