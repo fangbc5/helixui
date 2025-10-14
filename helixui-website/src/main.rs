@@ -4,7 +4,7 @@ use dioxus::prelude::*;
 use helixui::components::GlobalMessageContainer;
 
 use views::{
-    AvatarPage, BadgePage, ButtonPage, CardPage, ComponentsPage, DialogPage, DividerPage, DocPage,
+    AvatarPage, BadgePage, ButtonPage, CardPage, ComponentsPage, DialogPage, DividerPage,
     Guide, Home, IconPage, Introduction, MessagePage, ModalPage, QuickStart, TopNavbar, Version,
 };
 

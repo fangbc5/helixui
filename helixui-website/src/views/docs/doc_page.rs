@@ -1,7 +1,7 @@
 use crate::views::layout::{PageToc, TocItem};
 use dioxus::prelude::*;
 use helixui::components::{
-    Button, ButtonShape, ButtonSize, ButtonType, ButtonVariant, Icon, IconType,
+    Button, ButtonShape, ButtonSize, ButtonType, ButtonVariant, IconType,
 };
 
 /// Section 结构体，用于滚动高亮
