@@ -49,11 +49,11 @@ pub fn DocPage(sidebar: Element, toc_items: Vec<TocItem>, children: Element) -> 
 
     rsx! {
         div {
-            class: "min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors",
-            style: "scroll-behavior: smooth;",
+            class: "h-screen bg-gray-50 dark:bg-gray-900 transition-colors overflow-hidden",
+            style: "scroll-behavior: smooth; overscroll-behavior: none;",
 
             div {
-                class: "flex",
+                class: "flex h-full",
 
                 // 左侧边栏（固定在视口，独立滚动）
                 if !*sidebar_collapsed.read() {
@@ -66,14 +66,18 @@ pub fn DocPage(sidebar: Element, toc_items: Vec<TocItem>, children: Element) -> 
                 // 主内容区域（页面滚动，不再内部滚动）
                 main {
                     class: if *sidebar_collapsed.read() {
-                        "flex-1 transition-all duration-300 ease-in-out mr-64"
+                        "flex-1 transition-all duration-300 ease-in-out mr-64 h-full overflow-y-auto"
                     } else {
-                        "flex-1 transition-all duration-300 ease-in-out ml-64 mr-64"
+                        "flex-1 transition-all duration-300 ease-in-out ml-64 mr-64 h-full overflow-y-auto"
                     },
+                    style: "overscroll-behavior: contain;",
                     div {
-                        class: "max-w-4xl mx-auto px-8 py-8 space-y-12 [&_*]:scroll-mt-16",
-                        // 用一个可控的占位区在顶部，作为非 Web 平台的“滚动跳转”方案
-                        div { style: format!("height: {}px;", jump_spacer_px()), }
+                        class: "max-w-4xl mx-auto px-8 py-8 space-y-12 [&_*]:scroll-mt-16 min-h-full",
+                        // 用一个可控的占位区在顶部，作为非 Web 平台的"滚动跳转"方案
+                        div {
+                            style: format!("height: {}px;", jump_spacer_px()),
+                            class: "transition-all duration-300 ease-in-out"
+                        }
                         {children}
                     }
                 }
