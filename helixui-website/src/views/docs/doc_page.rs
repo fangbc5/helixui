@@ -44,47 +44,39 @@ pub fn DocPage(sidebar: Element, toc_items: Vec<TocItem>, children: Element) -> 
     let sections = use_signal(|| sections_data);
 
     let mut active_index = use_signal(|| 0usize);
-    // Desktop 等无法使用锚点时，用占位高度完成“跳转”
-    let mut jump_spacer_px = use_signal(|| 0.0f64);
 
     rsx! {
         div {
-            class: "h-screen bg-gray-50 dark:bg-gray-900 transition-colors overflow-hidden",
+            class: "min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors overscroll-none",
             style: "scroll-behavior: smooth; overscroll-behavior: none;",
 
             div {
-                class: "flex h-full",
+                class: "flex min-h-screen",
 
                 // 左侧边栏（固定在视口，独立滚动）
                 if !*sidebar_collapsed.read() {
                     aside {
-                        class: "fixed left-0 top-16 w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 h-[calc(100vh-4rem)] overflow-y-auto transition-colors z-40",
+                        class: "fixed left-0 top-16 w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 h-[calc(100vh-4rem)] overflow-y-auto overscroll-contain transition-colors z-40",
                         {sidebar}
                     }
                 }
 
-                // 主内容区域（页面滚动，不再内部滚动）
+                // 主内容区域（页面滚动）
                 main {
                     class: if *sidebar_collapsed.read() {
-                        "flex-1 transition-all duration-300 ease-in-out mr-64 h-full overflow-y-auto"
+                        "flex-1 transition-all duration-300 ease-in-out mr-64 overscroll-contain"
                     } else {
-                        "flex-1 transition-all duration-300 ease-in-out ml-64 mr-64 h-full overflow-y-auto"
+                        "flex-1 transition-all duration-300 ease-in-out ml-64 mr-64 overscroll-contain"
                     },
-                    style: "overscroll-behavior: contain;",
                     div {
-                        class: "max-w-4xl mx-auto px-8 py-8 space-y-12 [&_*]:scroll-mt-16 min-h-full",
-                        // 用一个可控的占位区在顶部，作为非 Web 平台的"滚动跳转"方案
-                        div {
-                            style: format!("height: {}px;", jump_spacer_px()),
-                            class: "transition-all duration-300 ease-in-out"
-                        }
+                        class: "max-w-4xl mx-auto px-8 py-8 space-y-12 [&_*]:scroll-mt-16",
                         {children}
                     }
                 }
 
                 // 右侧目录
                 aside {
-                    class: "w-64 bg-white dark:bg-gray-800 border-l border-gray-200 dark:border-gray-700 fixed right-0 h-[calc(100vh-4rem)] overflow-y-auto transition-colors",
+                    class: "w-64 bg-white dark:bg-gray-800 border-l border-gray-200 dark:border-gray-700 fixed right-0 h-[calc(100vh-4rem)] overflow-y-auto overscroll-contain transition-colors",
                     PageToc {
                         items: toc_items.clone(),
                         active_id: {
@@ -92,23 +84,9 @@ pub fn DocPage(sidebar: Element, toc_items: Vec<TocItem>, children: Element) -> 
                             sections.read().get(current_idx).map(|s| s.id.clone())
                         },
                         on_navigate: move |id: String| {
-                            // 点击目录时滚动到对应 section
+                            // 点击目录时更新激活状态
                             if let Some((idx, _)) = sections.read().iter().enumerate().find(|(_, s)| s.id == id) {
-                                // 这里可以添加滚动到指定位置的逻辑
-                                // 由于我们移除了 web-sys 依赖，这里使用简化的处理
                                 active_index.set(idx);
-                                // 计算需要的占位高度（使用预估 offset_top，并考虑 Topbar 高度）
-                                if let Some(sec) = sections.read().get(idx) {
-                                    let topbar_px: f64 = 64.0; // 4rem
-                                    let mut target = (sec.offset_top - topbar_px).max(0.0);
-                                    // 将占位高度限制在内容总高度范围内，避免出现“无限向上滚动”的大空白
-                                    let total_height: f64 = sections.read().iter().map(|s| s.height).sum();
-                                    if total_height > 0.0 {
-                                        let max_spacer = (total_height - topbar_px).max(0.0);
-                                        if target > max_spacer { target = max_spacer; }
-                                    }
-                                    jump_spacer_px.set(target);
-                                }
                             }
                         }
                     }

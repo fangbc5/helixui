@@ -1285,6 +1285,14 @@ video {
   overflow-y: auto;
 }
 
+.overscroll-contain {
+  overscroll-behavior: contain;
+}
+
+.overscroll-none {
+  overscroll-behavior: none;
+}
+
 .whitespace-nowrap {
   white-space: nowrap;
 }

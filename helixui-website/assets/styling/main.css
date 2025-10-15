@@ -1,8 +1,11 @@
+html,
 body {
-    background-color: #0f1116;
-    color: #ffffff;
+    /* 避免全局 20px 外边距与深色背景污染文档页，交给页面自身样式控制 */
+    margin: 0;
+    background: transparent;
+    color: inherit;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 20px;
+    overscroll-behavior: none;
 }
 
 #hero {
