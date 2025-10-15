@@ -2,7 +2,7 @@ use crate::views::layout::{ComponentsSidebar, TocItem};
 use crate::views::DocPage;
 use dioxus::prelude::*;
 use helixui::components::layout::{
-    AlignItems, Flex, FlexDirection, Justify, Space, SpaceDirection,
+    AlignItems, Flex, FlexDirection, Justify, Space, SpaceDirection, SpaceSize,
 };
 use helixui::components::DemoBox;
 
@@ -162,7 +162,7 @@ rsx! {
     }
 }"#.to_string(),
                         div {
-                            Space { direction: SpaceDirection::Horizontal, size: Some(12),
+                            Space { direction: SpaceDirection::Horizontal, size: Some(SpaceSize::Single(12)),
                                 div { class: "px-3 py-2 bg-gray-100 dark:bg-gray-800 rounded text-gray-700 dark:text-gray-300", "1" }
                                 div { class: "px-3 py-2 bg-gray-100 dark:bg-gray-800 rounded text-gray-700 dark:text-gray-300", "2" }
                                 div { class: "px-3 py-2 bg-gray-100 dark:bg-gray-800 rounded text-gray-700 dark:text-gray-300", "3" }

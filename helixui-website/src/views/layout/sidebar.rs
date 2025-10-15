@@ -182,6 +182,7 @@ pub fn ComponentsSidebar() -> Element {
             vec![
                 SidebarItem::link(i18n::t("component.flex"), crate::Route::FlexPage {}),
                 SidebarItem::link(i18n::t("component.layout"), crate::Route::LayoutPage {}),
+                SidebarItem::link(i18n::t("component.grid"), crate::Route::GridPage {}),
                 SidebarItem::link(i18n::t("component.space"), crate::Route::SpacePage {}),
             ],
         ),

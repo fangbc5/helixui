@@ -158,6 +158,8 @@ pub fn t(key: &str) -> String {
         (Language::EnUS, "component.flex") => "Flex",
         (Language::ZhCN, "component.layout") => "布局 Layout",
         (Language::EnUS, "component.layout") => "Layout",
+        (Language::ZhCN, "component.grid") => "栅格 Grid",
+        (Language::EnUS, "component.grid") => "Grid",
         (Language::ZhCN, "component.space") => "间距 Space",
         (Language::EnUS, "component.space") => "Space",
         (Language::ZhCN, "component.message") => "消息 Message",

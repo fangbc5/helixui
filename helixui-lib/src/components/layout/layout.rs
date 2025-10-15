@@ -64,6 +64,26 @@ pub struct LayoutProps {
     #[props(optional)]
     pub breakpoint: Option<Breakpoint>,
 
+    /// 反色主题（深色背景，浅色文字）
+    #[props(default = false)]
+    pub inverted: bool,
+
+    /// 是否显示边框
+    #[props(default = false)]
+    pub bordered: bool,
+
+    /// 是否包含 Sider（用于样式优化）；默认自动或由上层控制
+    #[props(optional)]
+    pub has_sider: Option<bool>,
+
+    /// 滚动策略：容器滚动或内容区滚动
+    #[props(default = LayoutScrollStrategy::Content)]
+    pub scroll_strategy: LayoutScrollStrategy,
+
+    /// 是否使用原生滚动条（false 时可由外部样式自定义）
+    #[props(default = true)]
+    pub native_scrollbar: bool,
+
     /// 自定义类名
     #[props(optional)]
     pub class: Option<String>,
@@ -73,6 +93,15 @@ pub struct LayoutProps {
     pub style: Option<String>,
 
     children: Element,
+}
+
+/// 布局滚动策略
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+pub enum LayoutScrollStrategy {
+    /// 外层 Layout 容器滚动
+    Layout,
+    /// 内容区（Content）滚动（默认）
+    Content,
 }
 
 /// Layout 容器组件
@@ -90,14 +119,38 @@ pub fn Layout(props: LayoutProps) -> Element {
         layout_style.push_str("width:100%;height:100vh;");
     }
 
+    // 滚动策略
+    if matches!(props.scroll_strategy, LayoutScrollStrategy::Layout) {
+        layout_style.push_str("overflow:auto;");
+    }
+
     // 添加自定义样式
     if !style.is_empty() {
         layout_style.push_str(&style);
     }
 
+    // 主题与样式类名
+    let mut class_list = vec!["hx-layout".to_string()];
+    if props.inverted {
+        class_list.push("hx-layout-inverted".to_string());
+    }
+    if props.bordered {
+        class_list.push("hx-layout-bordered".to_string());
+    }
+    if props.has_sider.unwrap_or(false) {
+        class_list.push("hx-layout-has-sider".to_string());
+    }
+    if !props.native_scrollbar {
+        class_list.push("hx-scrollbar-custom".to_string());
+    }
+    if !class.is_empty() {
+        class_list.push(class);
+    }
+    let final_class = class_list.join(" ");
+
     rsx! {
         div {
-            class: format!("hx-layout {}", class),
+            class: final_class,
             style: layout_style,
             {props.children}
         }

@@ -19,12 +19,33 @@ impl std::fmt::Display for SpaceDirection {
     }
 }
 
+/// Space 尺寸类型
+#[derive(Clone, PartialEq, Debug)]
+pub enum SpaceSize {
+    /// 单一数值（同时应用于水平和垂直）
+    Single(i32),
+    /// 分别指定水平和垂直间距 (horizontal, vertical)
+    Pair(i32, i32),
+}
+
+impl From<i32> for SpaceSize {
+    fn from(value: i32) -> Self {
+        SpaceSize::Single(value)
+    }
+}
+
+impl From<(i32, i32)> for SpaceSize {
+    fn from(value: (i32, i32)) -> Self {
+        SpaceSize::Pair(value.0, value.1)
+    }
+}
+
 #[derive(Props, PartialEq, Clone)]
 pub struct SpaceProps {
     #[props(default = SpaceDirection::Horizontal)]
     pub direction: SpaceDirection,
     #[props(optional)]
-    pub size: Option<i32>, // px 或者使用 spacing_token
+    pub size: Option<SpaceSize>, // 支持单一数值或 (h, v) 对
     #[props(optional)]
     pub spacing_token: Option<SpacingToken>,
     #[props(optional)]
@@ -47,20 +68,28 @@ pub fn Space(props: SpaceProps) -> Element {
     let theme = use_theme();
     let current_breakpoint = use_breakpoint();
 
-    // 使用工具函数计算间距
-    let gap = calc_gap(
-        props.size,
-        props.spacing_token,
-        props.responsive_size.as_ref(),
-        &theme,
-        &current_breakpoint,
-    );
+    // 计算间距
+    let (horizontal_gap, vertical_gap) = match &props.size {
+        Some(SpaceSize::Single(size)) => (*size, *size),
+        Some(SpaceSize::Pair(h, v)) => (*h, *v),
+        None => {
+            // 回退到旧的逻辑（兼容性）
+            let gap = calc_gap(
+                None,
+                props.spacing_token,
+                props.responsive_size.as_ref(),
+                &theme,
+                &current_breakpoint,
+            );
+            (gap, gap)
+        }
+    };
 
     // 优化的样式计算
     let flex_direction = props.direction.to_string();
     let gap_style = match props.direction {
-        SpaceDirection::Horizontal => format!("column-gap:{}px;", gap),
-        SpaceDirection::Vertical => format!("row-gap:{}px;", gap),
+        SpaceDirection::Horizontal => format!("column-gap:{}px;", horizontal_gap),
+        SpaceDirection::Vertical => format!("row-gap:{}px;", vertical_gap),
     };
 
     let wrap = if props.wrap { "wrap" } else { "nowrap" };
@@ -73,6 +102,8 @@ pub fn Space(props: SpaceProps) -> Element {
             div {
                 class: format!("hx-space hx-space-with-split {}", class),
                 style: format!("display:flex;flex-direction:{};flex-wrap:{};align-items:center;{}", flex_direction, wrap, style),
+                role: "group",
+                "aria-label": "Space container with splitter",
                 // 使用 CSS 变量来传递分隔符文本
                 "style": format!("--split-text: '{}'; display:flex;flex-direction:{};flex-wrap:{};align-items:center;{}", split_text, flex_direction, wrap, style),
                 {props.children}
@@ -83,6 +114,8 @@ pub fn Space(props: SpaceProps) -> Element {
             div {
                 class: format!("hx-space {}", class),
                 style: format!("display:flex;flex-direction:{};flex-wrap:{};{};{}", flex_direction, wrap, gap_style, style),
+                role: "group",
+                "aria-label": "Space container",
                 {props.children}
             }
         }

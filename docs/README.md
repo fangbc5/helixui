@@ -22,6 +22,9 @@ Welcome to the HelixUI documentation! This directory contains comprehensive desi
 - **Layout Components**: Design principles, API specifications, and implementation details for layout-related components
 - **Feedback Components**: Design principles, API specifications, and implementation details for user feedback components
 
+### 📝 Iteration Records
+- [当前迭代（2025-10）](iterations/iteration-2025-10.md) - 布局体系补齐（Grid + Layout/Sider 增强）
+
 ### 🎯 Component Categories
 - **Common Components**: Button, Avatar, Card, Divider, Icon
 - **Layout Components**: Flex, Space, Layout (Header/Sider/Content/Footer)
@@ -32,6 +35,8 @@ Welcome to the HelixUI documentation! This directory contains comprehensive desi
 ```
 docs/
 ├── README.md                    # This file
+├── iterations/                  # Iteration records
+│   └── iteration-2025-10.md     # Current iteration (2025-10)
 ├── images/                      # Screenshots and images
 ├── zh_CN/                       # Chinese documentation
 │   ├── layout-components.md     # 布局组件设计文档

@@ -82,6 +82,13 @@ pub fn ComponentsPage() -> Element {
                                 status: ComponentStatus::Available,
                             },
                             ComponentCard {
+                                name: "Grid".to_string(),
+                                name_zh: "栅格".to_string(),
+                                description: "基于 24 列的响应式栅格系统。".to_string(),
+                                route: crate::Route::GridPage {},
+                                status: ComponentStatus::Available,
+                            },
+                            ComponentCard {
                                 name: "Layout".to_string(),
                                 name_zh: "布局".to_string(),
                                 description: "页面布局组件，提供 Header、Sider、Content、Footer 等布局容器。".to_string(),

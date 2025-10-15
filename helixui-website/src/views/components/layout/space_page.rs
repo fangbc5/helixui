@@ -1,7 +1,7 @@
 use crate::views::layout::{ComponentsSidebar, TocItem};
 use crate::views::DocPage;
 use dioxus::prelude::*;
-use helixui::components::layout::{Breakpoint, ResponsiveSize, Space, SpaceDirection};
+use helixui::components::layout::{Breakpoint, ResponsiveSize, Space, SpaceDirection, SpaceSize};
 use helixui::components::DemoBox;
 use helixui::tokens::SpacingToken;
 
@@ -58,14 +58,14 @@ pub fn SpacePage() -> Element {
                         code: r#"use helixui::components::layout::{Space, SpaceDirection};
 
 rsx! {
-    Space { direction: SpaceDirection::Horizontal, size: Some(12),
+    Space { direction: SpaceDirection::Horizontal, size: Some(SpaceSize::Single(12)),
         div { "A" }
         div { "B" }
         div { "C" }
     }
 }"#.to_string(),
                         div { class: "border border-gray-200 dark:border-gray-700 rounded p-4",
-                            Space { direction: SpaceDirection::Horizontal, size: Some(12),
+                            Space { direction: SpaceDirection::Horizontal, size: Some(SpaceSize::Single(12)),
                                 div { class: "px-3 py-2 bg-gray-100 dark:bg-gray-800 rounded text-gray-700 dark:text-gray-300", "A" }
                                 div { class: "px-3 py-2 bg-gray-100 dark:bg-gray-800 rounded text-gray-700 dark:text-gray-300", "B" }
                                 div { class: "px-3 py-2 bg-gray-100 dark:bg-gray-800 rounded text-gray-700 dark:text-gray-300", "C" }
@@ -84,14 +84,14 @@ rsx! {
                         code: r#"use helixui::components::layout::{Space, SpaceDirection};
 
 rsx! {
-    Space { direction: SpaceDirection::Vertical, size: Some(8),
+    Space { direction: SpaceDirection::Vertical, size: Some(SpaceSize::Single(8)),
         div { "1" }
         div { "2" }
         div { "3" }
     }
 }"#.to_string(),
                         div { class: "border border-gray-200 dark:border-gray-700 rounded p-4",
-                            Space { direction: SpaceDirection::Vertical, size: Some(8),
+                            Space { direction: SpaceDirection::Vertical, size: Some(SpaceSize::Single(8)),
                                 div { class: "px-3 py-2 bg-gray-100 dark:bg-gray-800 rounded text-gray-700 dark:text-gray-300", "1" }
                                 div { class: "px-3 py-2 bg-gray-100 dark:bg-gray-800 rounded text-gray-700 dark:text-gray-300", "2" }
                                 div { class: "px-3 py-2 bg-gray-100 dark:bg-gray-800 rounded text-gray-700 dark:text-gray-300", "3" }
@@ -172,7 +172,7 @@ rsx! {
                         code: r#"use helixui::components::layout::{Space, SpaceDirection};
 
 rsx! {
-    Space { direction: SpaceDirection::Horizontal, wrap: true, size: Some(8),
+    Space { direction: SpaceDirection::Horizontal, wrap: true, size: Some(SpaceSize::Single(8)),
         for i in 0..8 {
             div { "Item {i}" }
         }
@@ -180,7 +180,7 @@ rsx! {
 }"#.to_string(),
                         div { class: "space-y-4",
                             div { class: "border border-gray-200 dark:border-gray-700 rounded p-4 max-w-xs",
-                                Space { direction: SpaceDirection::Horizontal, wrap: true, size: Some(8),
+                                Space { direction: SpaceDirection::Horizontal, wrap: true, size: Some(SpaceSize::Single(8)),
                                     for i in 0..8 {
                                         div { class: "px-3 py-2 bg-gray-100 dark:bg-gray-800 rounded text-gray-700 dark:text-gray-300 whitespace-nowrap", "Item {i}" }
                                     }

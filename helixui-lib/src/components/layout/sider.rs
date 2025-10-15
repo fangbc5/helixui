@@ -24,6 +24,35 @@ pub enum SiderTheme {
     Dark,
 }
 
+/// Sider 收起模式
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+pub enum SiderCollapseMode {
+    /// 改变宽度（默认）
+    Width,
+    /// 使用 transform 变换
+    Transform,
+}
+
+/// Sider 触发器显示方式
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+pub enum SiderShowTrigger {
+    /// 不显示触发器
+    None,
+    /// 显示为条状触发器
+    Bar,
+    /// 显示为箭头触发器
+    Arrow,
+}
+
+/// Sider 触发器位置
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+pub enum SiderTriggerPlacement {
+    /// 顶部
+    Top,
+    /// 底部
+    Bottom,
+}
+
 /// Sider 组件属性
 #[derive(Props, PartialEq, Clone)]
 pub struct SiderProps {
@@ -35,13 +64,33 @@ pub struct SiderProps {
     #[props(optional)]
     pub collapsed_width: Option<i32>,
 
-    /// 是否收起
+    /// 是否收起（受控）
     #[props(optional)]
     pub collapsed: Option<bool>,
+
+    /// 默认收起状态（非受控）
+    #[props(optional)]
+    pub default_collapsed: Option<bool>,
 
     /// 是否可收起
     #[props(optional)]
     pub collapsible: Option<bool>,
+
+    /// 收起模式
+    #[props(default = SiderCollapseMode::Width)]
+    pub collapse_mode: SiderCollapseMode,
+
+    /// 触发器显示方式
+    #[props(default = SiderShowTrigger::None)]
+    pub show_trigger: SiderShowTrigger,
+
+    /// 触发器位置
+    #[props(default = SiderTriggerPlacement::Bottom)]
+    pub trigger_placement: SiderTriggerPlacement,
+
+    /// 收起状态变化回调
+    #[props(optional)]
+    pub on_update_collapsed: Option<EventHandler<bool>>,
 
     /// 位置
     #[props(optional)]
@@ -75,16 +124,34 @@ pub struct SiderProps {
 pub fn Sider(props: SiderProps) -> Element {
     let width = props.width.unwrap_or(200);
     let collapsed_width = props.collapsed_width.unwrap_or(80);
-    let collapsed = props.collapsed.unwrap_or(false);
     let position = props.position.unwrap_or(SiderPosition::Left);
     let class = props.class.unwrap_or_default();
     let style = props.style.unwrap_or_default();
 
-    // 计算实际宽度
-    let actual_width = if collapsed { collapsed_width } else { width };
+    // 受控/非受控状态管理
+    let collapsed = props
+        .collapsed
+        .unwrap_or(props.default_collapsed.unwrap_or(false));
+
+    // 计算实际宽度和样式
+    let (actual_width, collapse_style) = match props.collapse_mode {
+        SiderCollapseMode::Width => {
+            let width = if collapsed { collapsed_width } else { width };
+            (width, String::new())
+        }
+        SiderCollapseMode::Transform => {
+            let width = width;
+            let transform = if collapsed {
+                format!("transform: translateX({}px);", -(width - collapsed_width))
+            } else {
+                "transform: translateX(0);".to_string()
+            };
+            (width, transform)
+        }
+    };
 
     // 构建样式
-    let mut sider_style = format!("width:{}px;height:100%;", actual_width);
+    let mut sider_style = format!("width:{}px;height:100%;{}", actual_width, collapse_style);
 
     // 添加位置样式
     match position {
@@ -96,22 +163,35 @@ pub fn Sider(props: SiderProps) -> Element {
         }
     }
 
+    // 构建类名
+    let mut class_list = vec!["hx-sider".to_string()];
+
     // 添加主题样式
     let theme_class = match props.theme {
         Some(SiderTheme::Dark) => "bg-gray-900 text-white",
         Some(SiderTheme::Light) => "bg-white text-gray-900 border-r border-gray-200",
         None => "bg-gray-900 text-white", // 默认使用 dark 主题
     };
+    class_list.push(theme_class.to_string());
 
-    // 添加响应式样式
-    let responsive_class = if props.responsive == Some(true) {
-        "hx-sider-responsive"
-    } else {
-        ""
-    };
+    if props.responsive == Some(true) {
+        class_list.push("hx-sider-responsive".to_string());
+    }
 
-    // 添加收起状态样式
-    let collapsed_class = if collapsed { "hx-sider-collapsed" } else { "" };
+    if collapsed {
+        class_list.push("hx-sider-collapsed".to_string());
+    }
+
+    match props.collapse_mode {
+        SiderCollapseMode::Width => class_list.push("hx-sider-collapse-width".to_string()),
+        SiderCollapseMode::Transform => class_list.push("hx-sider-collapse-transform".to_string()),
+    }
+
+    if !class.is_empty() {
+        class_list.push(class);
+    }
+
+    let final_class = class_list.join(" ");
 
     if !style.is_empty() {
         sider_style.push_str(&style);
@@ -119,11 +199,42 @@ pub fn Sider(props: SiderProps) -> Element {
 
     rsx! {
         aside {
-            class: format!("flex flex-col transition-all duration-200 overflow-hidden {} {} {} {}", theme_class, responsive_class, collapsed_class, class),
+            class: final_class,
             style: sider_style,
             "data-position": position.to_string(),
             "data-collapsed": collapsed.to_string(),
+            "data-collapse-mode": format!("{:?}", props.collapse_mode),
+            if props.trigger_placement == SiderTriggerPlacement::Top && props.show_trigger != SiderShowTrigger::None && props.collapsible == Some(true) {
+                div {
+                    class: format!("hx-sider-trigger hx-sider-trigger-top flex items-center justify-center cursor-pointer"),
+                    onclick: move |_| {
+                        if let Some(callback) = &props.on_update_collapsed {
+                            callback.call(!collapsed);
+                        }
+                    },
+                    if props.show_trigger == SiderShowTrigger::Arrow {
+                        if collapsed { "→" } else { "←" }
+                    } else {
+                        "⋮"
+                    }
+                }
+            }
             {props.children}
+            if props.trigger_placement == SiderTriggerPlacement::Bottom && props.show_trigger != SiderShowTrigger::None && props.collapsible == Some(true) {
+                div {
+                    class: format!("hx-sider-trigger hx-sider-trigger-bottom flex items-center justify-center cursor-pointer"),
+                    onclick: move |_| {
+                        if let Some(callback) = &props.on_update_collapsed {
+                            callback.call(!collapsed);
+                        }
+                    },
+                    if props.show_trigger == SiderShowTrigger::Arrow {
+                        if collapsed { "→" } else { "←" }
+                    } else {
+                        "⋮"
+                    }
+                }
+            }
         }
     }
 }
