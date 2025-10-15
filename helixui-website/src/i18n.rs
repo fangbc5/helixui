@@ -86,6 +86,8 @@ pub fn t(key: &str) -> String {
         (Language::EnUS, "sidebar.feedback") => "Feedback",
         (Language::ZhCN, "sidebar.data-input") => "数据输入",
         (Language::EnUS, "sidebar.data-input") => "Data Input",
+        (Language::ZhCN, "sidebar.layout") => "布局组件",
+        (Language::EnUS, "sidebar.layout") => "Layout",
         
         // 文档页面
         (Language::ZhCN, "docs.introduction") => "介绍",
@@ -152,6 +154,8 @@ pub fn t(key: &str) -> String {
         (Language::EnUS, "component.divider") => "Divider",
         (Language::ZhCN, "component.icon") => "图标 Icon",
         (Language::EnUS, "component.icon") => "Icon",
+        (Language::ZhCN, "component.flex") => "弹性布局 Flex",
+        (Language::EnUS, "component.flex") => "Flex",
         (Language::ZhCN, "component.message") => "消息 Message",
         (Language::EnUS, "component.message") => "Message",
         (Language::ZhCN, "component.dialog") => "对话框 Dialog",

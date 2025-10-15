@@ -69,6 +69,21 @@ pub fn ComponentsPage() -> Element {
                         ],
                     }
 
+                    // 布局组件
+                    ComponentCategory {
+                        title: "布局组件",
+                        description: "布局与排版组件",
+                        components: vec![
+                            ComponentCard {
+                                name: "Flex".to_string(),
+                                name_zh: "弹性布局".to_string(),
+                                description: "基于 CSS Flex 的一维布局容器。".to_string(),
+                                route: crate::Route::FlexPage {},
+                                status: ComponentStatus::Available,
+                            },
+                        ],
+                    }
+
                     // 数据输入
                     ComponentCategory {
                         title: "数据输入",

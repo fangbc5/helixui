@@ -178,6 +178,13 @@ pub fn ComponentsSidebar() -> Element {
             ],
         ),
         SidebarItem::category(
+            i18n::t("sidebar.layout"),
+            vec![SidebarItem::link(
+                i18n::t("component.flex"),
+                crate::Route::FlexPage {},
+            )],
+        ),
+        SidebarItem::category(
             i18n::t("sidebar.feedback"),
             vec![
                 SidebarItem::link(i18n::t("component.badge"), crate::Route::BadgePage {}),
