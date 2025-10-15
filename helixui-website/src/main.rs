@@ -5,7 +5,8 @@ use helixui::components::GlobalMessageContainer;
 
 use views::{
     AvatarPage, BadgePage, ButtonPage, CardPage, ComponentsPage, DialogPage, DividerPage, FlexPage,
-    Guide, Home, IconPage, Introduction, MessagePage, ModalPage, QuickStart, TopNavbar, Version,
+    Guide, Home, IconPage, Introduction, LayoutPage, MessagePage, ModalPage, QuickStart, SpacePage,
+    TopNavbar, Version,
 };
 
 /// i18n internationalization support
@@ -38,26 +39,30 @@ enum Route {
         #[route("/docs/version")]
         Version {},
         
-                #[route("/component/avatar")]
-                AvatarPage {},
-                #[route("/component/badge")]
-                BadgePage {},
-                #[route("/component/button")]
-                ButtonPage {},
-                #[route("/component/card")]
-                CardPage {},
-                #[route("/component/divider")]
-                DividerPage {},
-                #[route("/component/icon")]
-                IconPage {},
-                #[route("/component/flex")]
-                FlexPage {},
-                #[route("/component/modal")]
-                ModalPage {},
-                #[route("/component/message")]
-                MessagePage {},
-                #[route("/component/dialog")]
-                DialogPage {},
+        #[route("/component/avatar")]
+        AvatarPage {},
+        #[route("/component/badge")]
+        BadgePage {},
+        #[route("/component/button")]
+        ButtonPage {},
+        #[route("/component/card")]
+        CardPage {},
+        #[route("/component/divider")]
+        DividerPage {},
+        #[route("/component/icon")]
+        IconPage {},
+        #[route("/component/flex")]
+        FlexPage {},
+        #[route("/component/layout")]
+        LayoutPage {},
+        #[route("/component/space")]
+        SpacePage {},
+        #[route("/component/modal")]
+        ModalPage {},
+        #[route("/component/message")]
+        MessagePage {},
+        #[route("/component/dialog")]
+        DialogPage {},
 }
 
 // We can import assets in dioxus with the `asset!` macro. This macro takes a path to an asset relative to the crate root.

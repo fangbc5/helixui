@@ -12,6 +12,22 @@
 
 [📖 文档](https://github.com/fangbc5/helixui) • [🎮 在线演示](https://github.com/fangbc5/helixui) • [🐛 问题反馈](https://github.com/fangbc5/helixui/issues) • [💬 讨论](https://github.com/fangbc5/helixui/discussions)
 
+## 📚 文档目录
+
+### 🌍 多语言支持 / Multi-language Support
+
+#### 🇨🇳 中文文档 (Chinese Documentation)
+- [布局组件设计](docs/zh_CN/layout-components.md) - Flex、Space、Layout 等布局组件的设计文档
+- [反馈组件设计](docs/zh_CN/feedback-components.md) - Badge、Message、Dialog、Modal 等反馈组件的设计文档
+
+#### 🇺🇸 英文文档 (English Documentation)
+- [Layout Components Design](docs/en_US/layout-components.md) - Design documentation for Flex, Space, Layout and other layout components
+- [Feedback Components Design](docs/en_US/feedback-components.md) - Design documentation for Badge, Message, Dialog, Modal and other feedback components
+
+### 📖 使用指南 / Usage Guide
+- [快速开始](GUIDE.md) - 快速上手 HelixUI / Quick Start Guide
+- [组件文档](https://github.com/fangbc5/helixui) - 详细的组件使用文档 / Detailed component documentation
+
 </div>
 
 ## ✨ 特性
@@ -57,29 +73,15 @@ HelixUI 采用分层架构设计，组件按功能分为以下几类：
 - **Icon** - 图标组件
 
 #### 💬 反馈组件 (Feedback Components)
-采用分层架构设计，实现完美的组件复用：
-
-```
-Overlay（Portal + zIndex + 动画）
-├── PopupBase（可交互类浮层）
-│    ├── Dialog（对话框）
-│    │    └── Modal（模态框）
-│    └── Drawer / Popover / Tooltip（待实现）
-└── NoticeBase（轻提示类浮层）
-     ├── Message（消息）
-     └── Notification / Snackbar（待实现）
-```
-
-**架构优势：**
-- 🔄 **完美复用** - 每个组件都基于其父级组件构建，避免重复代码
-- 🛡️ **类型安全** - 使用类型别名确保类型一致性
-- 🔄 **向后兼容** - 保持原有 API 不变
-- 🌐 **跨平台** - 所有组件都支持 Web/Desktop/App
-- 📱 **响应式** - 自动适配不同屏幕尺寸
-- 🔧 **可扩展** - 易于添加新的子组件
-
-#### 🏷️ 其他组件
 - **Badge** - 徽章组件，用于状态标识
+- **Message** - 消息提示组件
+- **Dialog** - 对话框组件
+- **Modal** - 模态框组件
+
+#### 🏗️ 布局组件 (Layout Components)
+- **Flex** - 弹性布局组件
+- **Space** - 间距组件
+- **Layout** - 页面布局组件（Header/Sider/Content/Footer）
 
 ### 安装
 
@@ -142,14 +144,15 @@ fn App() -> Element {
 | **Badge** | 徽章组件，用于状态标识 | ✅ |
 | **Dialog** | 对话框组件 | ✅ |
 | **Message** | 消息提示组件 | ✅ |
+| **Modal** | 模态框组件 | ✅ |
 
 ### 🏗️ 布局组件 (Layout)
 
 | 组件 | 描述 | 状态 |
 |------|------|------|
-| **Navbar** | 导航栏组件 | ✅ |
-| **Footer** | 页脚组件 | ✅ |
-| **Logo** | Logo 组件 | ✅ |
+| **Flex** | 弹性布局组件 | ✅ |
+| **Space** | 间距组件 | ✅ |
+| **Layout** | 页面布局组件 | ✅ |
 
 ## 🎨 设计系统
 
@@ -215,7 +218,13 @@ helixui/
 │   │   └── main.rs
 │   └── Cargo.toml
 └── docs/                  # 文档资源
-    └── images/           # 截图和图片
+    ├── images/           # 截图和图片
+    ├── zh_CN/            # 中文文档
+    │   ├── layout-components.md      # 布局组件设计文档
+    │   └── feedback-components.md    # 反馈组件设计文档
+    └── en_US/            # 英文文档
+        ├── layout-components.md      # Layout Components Design
+        └── feedback-components.md    # Feedback Components Design
 ```
 
 ## 🤝 贡献

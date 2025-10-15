@@ -78,6 +78,28 @@ impl Default for ThemeTokens {
     }
 }
 
+/// 断点枚举
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
+pub enum Breakpoint {
+    Sm,
+    Md,
+    Lg,
+    Xl,
+    Xxl,
+}
+
+impl Breakpoint {
+    pub fn as_str(&self) -> &'static str {
+        match self {
+            Breakpoint::Sm => "sm",
+            Breakpoint::Md => "md",
+            Breakpoint::Lg => "lg",
+            Breakpoint::Xl => "xl",
+            Breakpoint::Xxl => "xxl",
+        }
+    }
+}
+
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum SpacingToken {
     Xs,
@@ -86,4 +108,23 @@ pub enum SpacingToken {
     Lg,
     Xl,
     Xxl,
+}
+
+impl SpacingToken {
+    pub fn to_px(&self) -> i32 {
+        match self {
+            SpacingToken::Xs => 4,
+            SpacingToken::Sm => 8,
+            SpacingToken::Md => 16,
+            SpacingToken::Lg => 24,
+            SpacingToken::Xl => 32,
+            SpacingToken::Xxl => 48,
+        }
+    }
+}
+
+impl Into<i32> for SpacingToken {
+    fn into(self) -> i32 {
+        self.to_px()
+    }
 }

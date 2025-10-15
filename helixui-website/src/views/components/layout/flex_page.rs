@@ -128,16 +128,18 @@ rsx! {
                         code: r#"use helixui::components::layout::{Flex, FlexDirection};
 
 rsx! {
-    Flex { direction: FlexDirection::Row, wrap: true, style: Some("gap: 8px;".to_string()),
+    Flex { direction: FlexDirection::Row, wrap: true, gap: Some(8),
         for i in 0..8 {
             div { "Item {i}" }
         }
     }
 }"#.to_string(),
-                        div {
-                            Flex { direction: FlexDirection::Row, wrap: true, style: Some("gap: 8px;".to_string()),
-                                for i in 0..8 {
-                                    div { class: "px-3 py-2 bg-gray-100 dark:bg-gray-800 rounded text-gray-700 dark:text-gray-300", "Item {i}" }
+                        div { class: "space-y-4",
+                            div { class: "border border-gray-200 dark:border-gray-700 rounded p-4 max-w-xs",
+                                Flex { direction: FlexDirection::Row, wrap: true, gap: Some(8),
+                                    for i in 0..8 {
+                                        div { class: "px-3 py-2 bg-gray-100 dark:bg-gray-800 rounded text-gray-700 dark:text-gray-300 whitespace-nowrap", "Item {i}" }
+                                    }
                                 }
                             }
                         }

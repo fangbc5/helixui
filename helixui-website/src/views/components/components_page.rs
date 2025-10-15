@@ -81,6 +81,20 @@ pub fn ComponentsPage() -> Element {
                                 route: crate::Route::FlexPage {},
                                 status: ComponentStatus::Available,
                             },
+                            ComponentCard {
+                                name: "Layout".to_string(),
+                                name_zh: "布局".to_string(),
+                                description: "页面布局组件，提供 Header、Sider、Content、Footer 等布局容器。".to_string(),
+                                route: crate::Route::LayoutPage {},
+                                status: ComponentStatus::Available,
+                            },
+                            ComponentCard {
+                                name: "Space".to_string(),
+                                name_zh: "间距".to_string(),
+                                description: "控制一组子元素间的间距、对齐与换行。".to_string(),
+                                route: crate::Route::SpacePage {},
+                                status: ComponentStatus::Available,
+                            },
                         ],
                     }
 
