@@ -102,6 +102,13 @@ pub fn ComponentsPage() -> Element {
                                 route: crate::Route::SpacePage {},
                                 status: ComponentStatus::Available,
                             },
+                            ComponentCard {
+                                name: "Split".to_string(),
+                                name_zh: "分隔符".to_string(),
+                                description: "用于在子元素之间添加分隔符的组件。".to_string(),
+                                route: crate::Route::SplitPage {},
+                                status: ComponentStatus::Available,
+                            },
                         ],
                     }
 

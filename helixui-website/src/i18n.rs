@@ -162,6 +162,8 @@ pub fn t(key: &str) -> String {
         (Language::EnUS, "component.grid") => "Grid",
         (Language::ZhCN, "component.space") => "间距 Space",
         (Language::EnUS, "component.space") => "Space",
+        (Language::ZhCN, "component.split") => "分隔页面 Split",
+        (Language::EnUS, "component.split") => "Split",
         (Language::ZhCN, "component.message") => "消息 Message",
         (Language::EnUS, "component.message") => "Message",
         (Language::ZhCN, "component.dialog") => "对话框 Dialog",

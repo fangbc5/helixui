@@ -6,7 +6,7 @@ use helixui::components::GlobalMessageContainer;
 use views::{
     AvatarPage, BadgePage, ButtonPage, CardPage, ComponentsPage, DialogPage, DividerPage, FlexPage,
     GridPage, Guide, Home, IconPage, Introduction, LayoutPage, MessagePage, ModalPage, QuickStart,
-    SpacePage, TopNavbar, Version,
+    SpacePage, SplitPage, TopNavbar, Version,
 };
 
 /// i18n internationalization support
@@ -59,6 +59,8 @@ enum Route {
         GridPage {},
         #[route("/component/space")]
         SpacePage {},
+        #[route("/component/split")]
+        SplitPage {},
         #[route("/component/modal")]
         ModalPage {},
         #[route("/component/message")]

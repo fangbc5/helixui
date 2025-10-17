@@ -6,4 +6,4 @@ pub mod layout;
 pub use common::{AvatarPage, ButtonPage, CardPage, DividerPage, IconPage};
 pub use components_page::ComponentsPage;
 pub use feedback::{BadgePage, DialogPage, MessagePage, ModalPage};
-pub use layout::{FlexPage, GridPage, LayoutPage, SpacePage};
+pub use layout::{FlexPage, GridPage, LayoutPage, SpacePage, SplitPage};

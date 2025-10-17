@@ -5,7 +5,7 @@ pub mod layout;
 
 pub use components::{
     AvatarPage, BadgePage, ButtonPage, CardPage, ComponentsPage, DialogPage, DividerPage, FlexPage,
-    GridPage, IconPage, LayoutPage, MessagePage, ModalPage, SpacePage,
+    GridPage, IconPage, LayoutPage, MessagePage, ModalPage, SpacePage, SplitPage,
 };
 pub use docs::{DocPage, Guide, Introduction, QuickStart, Version};
 pub use home::Home;

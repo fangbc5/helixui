@@ -1,7 +1,8 @@
+use super::flex::{Flex, FlexDirection};
 use super::hooks::use_breakpoint::use_breakpoint;
 use super::theme::use_theme;
-use super::tokens::SpacingToken;
-use super::utils::{calc_gap, ResponsiveSize};
+use super::tokens::{Breakpoint, SpacingToken, ThemeTokens};
+use super::utils::{calc_gap, gap_to_tailwind_class, ResponsiveSize};
 use dioxus::prelude::*;
 
 #[derive(Clone, Copy, PartialEq, Eq)]
@@ -10,14 +11,7 @@ pub enum SpaceDirection {
     Vertical,
 }
 
-impl std::fmt::Display for SpaceDirection {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self {
-            SpaceDirection::Horizontal => write!(f, "row"),
-            SpaceDirection::Vertical => write!(f, "column"),
-        }
-    }
-}
+// 移除未使用的 Display trait 实现
 
 /// Space 尺寸类型
 #[derive(Clone, PartialEq, Debug)]
@@ -63,60 +57,120 @@ pub struct SpaceProps {
 
 // ResponsiveSize 现在在 utils 中定义
 
-#[allow(non_snake_case)]
-pub fn Space(props: SpaceProps) -> Element {
-    let theme = use_theme();
-    let current_breakpoint = use_breakpoint();
-
-    // 计算间距
-    let (horizontal_gap, vertical_gap) = match &props.size {
-        Some(SpaceSize::Single(size)) => (*size, *size),
+/// 解析间距值，返回 (水平间距, 垂直间距)
+fn resolve_space_gap(
+    size: &Option<SpaceSize>,
+    spacing_token: Option<SpacingToken>,
+    responsive_size: Option<&ResponsiveSize>,
+    theme_tokens: &ThemeTokens,
+    breakpoint: &Breakpoint,
+) -> (i32, i32) {
+    match size {
+        Some(SpaceSize::Single(v)) => (*v, *v),
         Some(SpaceSize::Pair(h, v)) => (*h, *v),
         None => {
-            // 回退到旧的逻辑（兼容性）
+            // 优化：避免不必要的函数调用
             let gap = calc_gap(
                 None,
-                props.spacing_token,
-                props.responsive_size.as_ref(),
-                &theme,
-                &current_breakpoint,
+                spacing_token,
+                responsive_size,
+                theme_tokens,
+                breakpoint,
             );
             (gap, gap)
         }
+    }
+}
+
+#[allow(non_snake_case)]
+pub fn Space(props: SpaceProps) -> Element {
+    let theme = use_theme();
+    let current_breakpoint = Breakpoint::from_str(&use_breakpoint());
+
+    let (horizontal_gap, vertical_gap) = resolve_space_gap(
+        &props.size,
+        props.spacing_token,
+        props.responsive_size.as_ref(),
+        &theme.tokens,
+        &current_breakpoint,
+    );
+
+    let flex_direction = match props.direction {
+        SpaceDirection::Horizontal => FlexDirection::Row,
+        SpaceDirection::Vertical => FlexDirection::Column,
     };
 
-    // 优化的样式计算
-    let flex_direction = props.direction.to_string();
-    let gap_style = match props.direction {
-        SpaceDirection::Horizontal => format!("column-gap:{}px;", horizontal_gap),
-        SpaceDirection::Vertical => format!("row-gap:{}px;", vertical_gap),
+    // 优化：使用更简洁的类名构建
+    let gap_value = match props.direction {
+        SpaceDirection::Horizontal => horizontal_gap,
+        SpaceDirection::Vertical => vertical_gap,
     };
+    let gap_class = gap_to_tailwind_class(gap_value);
 
-    let wrap = if props.wrap { "wrap" } else { "nowrap" };
-    let class = props.class.unwrap_or_default();
-    let style = props.style.unwrap_or_default();
+    // 类名集合 - 使用更简洁的方式
+    let mut classes = vec!["hx-space"];
+    if let Some(custom_class) = &props.class {
+        classes.push(custom_class);
+    }
 
-    // 如果有分隔符，使用特殊渲染逻辑
+    // 只有在没有分隔符时才添加 gap 类
+    if props.split.is_none() && !gap_class.starts_with("gap-[") {
+        classes.push(&gap_class);
+    }
+
+    // 内联样式，仅用于非标准 gap
+    let mut style = props.style.unwrap_or_default();
+    if props.split.is_none() && gap_class.starts_with("gap-[") {
+        match props.direction {
+            SpaceDirection::Horizontal => {
+                style.push_str(&format!("column-gap:{}px;", horizontal_gap));
+            }
+            SpaceDirection::Vertical => {
+                style.push_str(&format!("row-gap:{}px;", vertical_gap));
+            }
+        }
+    }
+
+    // 分隔符实现：使用纯 Tailwind 类
     if let Some(split_text) = &props.split {
+        // 为分隔符添加特殊类名
+        classes.push("hx-space-with-split");
+
+        // 根据分隔符文本选择对应的 Tailwind 类
+        let split_class = match split_text.as_str() {
+            "|" => "before:content-['|'] before:mx-2 before:text-gray-400",
+            "/" => "before:content-['/'] before:mx-2 before:text-gray-400",
+            "-" => "before:content-['-'] before:mx-2 before:text-gray-400",
+            "•" => "before:content-['•'] before:mx-2 before:text-gray-400",
+            _ => "before:content-['|'] before:mx-2 before:text-gray-400", // 默认使用 |
+        };
+
         rsx! {
             div {
-                class: format!("hx-space hx-space-with-split {}", class),
-                style: format!("display:flex;flex-direction:{};flex-wrap:{};align-items:center;{}", flex_direction, wrap, style),
+                class: classes.join(" "),
+                style: if style.is_empty() { None } else { Some(style) },
                 role: "group",
                 "aria-label": "Space container with splitter",
-                // 使用 CSS 变量来传递分隔符文本
-                "style": format!("--split-text: '{}'; display:flex;flex-direction:{};flex-wrap:{};align-items:center;{}", split_text, flex_direction, wrap, style),
-                {props.children}
+                Flex {
+                    direction: flex_direction,
+                    wrap: props.wrap,
+                    class: format!("hx-space-split {}", split_class),
+                    {props.children}
+                }
             }
         }
     } else {
         rsx! {
             div {
-                class: format!("hx-space {}", class),
-                style: format!("display:flex;flex-direction:{};flex-wrap:{};{};{}", flex_direction, wrap, gap_style, style),
+                class: classes.join(" "),
+                style: if style.is_empty() { None } else { Some(style) },
                 role: "group",
                 "aria-label": "Space container",
-                {props.children}
+                Flex {
+                    direction: flex_direction,
+                    wrap: props.wrap,
+                    {props.children}
+                }
             }
         }
     }

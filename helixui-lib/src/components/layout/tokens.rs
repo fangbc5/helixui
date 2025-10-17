@@ -79,7 +79,7 @@ impl Default for ThemeTokens {
 }
 
 /// 断点枚举
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum Breakpoint {
     Sm,
     Md,
@@ -96,6 +96,28 @@ impl Breakpoint {
             Breakpoint::Lg => "lg",
             Breakpoint::Xl => "xl",
             Breakpoint::Xxl => "xxl",
+        }
+    }
+
+    /// 将断点转换为 Tailwind CSS 前缀
+    pub fn to_tailwind_prefix(&self) -> &'static str {
+        match self {
+            Breakpoint::Sm => "sm:",
+            Breakpoint::Md => "md:",
+            Breakpoint::Lg => "lg:",
+            Breakpoint::Xl => "xl:",
+            Breakpoint::Xxl => "2xl:",
+        }
+    }
+
+    pub fn from_str(name: &str) -> Self {
+        match name {
+            "sm" => Breakpoint::Sm,
+            "md" => Breakpoint::Md,
+            "lg" => Breakpoint::Lg,
+            "xl" => Breakpoint::Xl,
+            "xxl" => Breakpoint::Xxl,
+            _ => Breakpoint::Md,
         }
     }
 }

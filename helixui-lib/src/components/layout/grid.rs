@@ -1,6 +1,12 @@
 use super::tokens::Breakpoint;
+use super::utils::{
+    cols_to_tailwind_class, gap_to_tailwind_class, generate_grid_column_style,
+    generate_grid_row_style, generate_responsive_classes,
+};
 use dioxus::prelude::*;
+use std::collections::BTreeMap;
 
+/// Grid 容器属性
 #[derive(Props, PartialEq, Clone)]
 pub struct GridProps {
     #[props(default = 24)]
@@ -10,7 +16,7 @@ pub struct GridProps {
     #[props(optional)]
     pub y_gap: Option<i32>,
     #[props(optional)]
-    pub responsive_cols: Option<std::collections::HashMap<Breakpoint, u16>>, // 断点->列数
+    pub responsive_cols: Option<BTreeMap<Breakpoint, u16>>,
     #[props(optional)]
     pub class: Option<String>,
     #[props(optional)]
@@ -18,27 +24,59 @@ pub struct GridProps {
     children: Element,
 }
 
+/// Grid 容器组件
 #[allow(non_snake_case)]
 pub fn Grid(props: GridProps) -> Element {
-    let class = props.class.clone().unwrap_or_default();
-    let style = props.style.clone().unwrap_or_default();
-
     let x_gap = props.x_gap.unwrap_or(0);
     let y_gap = props.y_gap.unwrap_or(0);
 
-    // 基于 CSS Grid 的简化实现（列宽 = 1fr * span）
-    let style_inline = format!(
-        "display:grid;grid-template-columns:repeat({}, minmax(0, 1fr));column-gap:{}px;row-gap:{}px;{}",
-        props.cols, x_gap, y_gap, style
-    );
+    let mut classes = vec![
+        "hx-grid".to_string(),
+        "grid".to_string(),
+        generate_responsive_classes(
+            &cols_to_tailwind_class(props.cols),
+            &props.responsive_cols,
+            |c| cols_to_tailwind_class(*c),
+        ),
+        if x_gap == y_gap {
+            gap_to_tailwind_class(x_gap)
+        } else {
+            let mut gap_classes = vec![];
+            if x_gap > 0 {
+                gap_classes.push(format!("gap-x-[{}px]", x_gap));
+            }
+            if y_gap > 0 {
+                gap_classes.push(format!("gap-y-[{}px]", y_gap));
+            }
+            gap_classes.join(" ")
+        },
+    ];
+
+    if let Some(custom) = &props.class {
+        classes.push(custom.clone());
+    }
+
+    let mut styles = vec![];
+    if !matches!(props.cols, 1..=24) {
+        styles.push(format!(
+            "grid-template-columns:repeat({}, minmax(0, 1fr))",
+            props.cols
+        ));
+    }
+    if let Some(custom_style) = &props.style {
+        styles.push(custom_style.clone());
+    }
 
     rsx! {
-        div { class: format!("hx-grid {}", class), style: style_inline,
+        div {
+            class: classes.join(" "),
+            style: if styles.is_empty() { None } else { Some(styles.join(";")) },
             {props.children}
         }
     }
 }
 
+/// GridItem 属性
 #[derive(Props, PartialEq, Clone)]
 pub struct GridItemProps {
     #[props(optional)]
@@ -46,7 +84,13 @@ pub struct GridItemProps {
     #[props(optional)]
     pub offset: Option<u16>,
     #[props(optional)]
-    pub responsive: Option<std::collections::HashMap<Breakpoint, (u16, u16)>>, // 断点->(span, offset)
+    pub row: Option<u16>,
+    #[props(optional)]
+    pub row_span: Option<u16>,
+    #[props(optional)]
+    pub col: Option<u16>,
+    #[props(optional)]
+    pub responsive: Option<BTreeMap<Breakpoint, (u16, u16, Option<u16>, Option<u16>, Option<u16>)>>,
     #[props(optional)]
     pub class: Option<String>,
     #[props(optional)]
@@ -54,22 +98,37 @@ pub struct GridItemProps {
     children: Element,
 }
 
+/// GridItem 组件
 #[allow(non_snake_case)]
 pub fn GridItem(props: GridItemProps) -> Element {
-    let class = props.class.clone().unwrap_or_default();
-    let style = props.style.clone().unwrap_or_default();
+    let mut styles = vec![
+        generate_grid_column_style(props.col, props.span, props.offset),
+        generate_grid_row_style(props.row, props.row_span),
+    ];
 
-    let span = props.span.unwrap_or(1);
-    let offset = props.offset.unwrap_or(0);
+    if let Some(resp) = &props.responsive {
+        for (bp, (span, offset, row, row_span, col)) in resp {
+            let s = vec![
+                generate_grid_column_style(*col, Some(*span), Some(*offset)),
+                generate_grid_row_style(*row, *row_span),
+            ];
+            styles.push(format!("{}{}", bp.to_tailwind_prefix(), s.join("")))
+        }
+    }
 
-    // 简化：以行内样式输出 span/offset，对齐 Naive 的语义
-    let mut style_inline = format!("grid-column: {} / span {};", offset + 1, span);
-    if !style.is_empty() {
-        style_inline.push_str(&style);
+    if let Some(custom) = &props.style {
+        styles.push(custom.clone());
+    }
+
+    let mut classes = vec!["hx-grid-item".to_string()];
+    if let Some(custom) = &props.class {
+        classes.push(custom.clone());
     }
 
     rsx! {
-        div { class: format!("hx-grid-item {}", class), style: style_inline,
+        div {
+            class: classes.join(" "),
+            style: if styles.is_empty() { None } else { Some(styles.join(";")) },
             {props.children}
         }
     }

@@ -1,11 +1,14 @@
+use super::utils::gap_to_tailwind_class;
 use dioxus::prelude::*;
 
+/// Flex 布局方向
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub enum FlexDirection {
     Row,
     Column,
 }
 
+/// 主轴对齐方式
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub enum Justify {
     Start,
@@ -16,6 +19,7 @@ pub enum Justify {
     SpaceEvenly,
 }
 
+/// 交叉轴对齐方式
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub enum AlignItems {
     Start,
@@ -46,39 +50,74 @@ pub struct FlexProps {
 
 #[allow(non_snake_case)]
 pub fn Flex(props: FlexProps) -> Element {
-    let dir = match props.direction {
-        FlexDirection::Row => "row",
-        FlexDirection::Column => "column",
-    };
-    let wrap = if props.wrap { "wrap" } else { "nowrap" };
-    let class = props.class.unwrap_or_default();
-    let mut style = props.style.unwrap_or_default();
+    let mut classes = vec!["flex".to_string()];
+
+    // 布局方向
+    classes.push(
+        match props.direction {
+            FlexDirection::Row => "flex-row",
+            FlexDirection::Column => "flex-col",
+        }
+        .to_string(),
+    );
+
+    // 换行
+    classes.push(
+        if props.wrap {
+            "flex-wrap"
+        } else {
+            "flex-nowrap"
+        }
+        .to_string(),
+    );
+
+    // 主轴对齐
     if let Some(j) = props.justify {
-        let v = match j {
-            Justify::Start => "flex-start",
-            Justify::Center => "center",
-            Justify::End => "flex-end",
-            Justify::SpaceBetween => "space-between",
-            Justify::SpaceAround => "space-around",
-            Justify::SpaceEvenly => "space-evenly",
+        let jc = match j {
+            Justify::Start => "justify-start",
+            Justify::Center => "justify-center",
+            Justify::End => "justify-end",
+            Justify::SpaceBetween => "justify-between",
+            Justify::SpaceAround => "justify-around",
+            Justify::SpaceEvenly => "justify-evenly",
         };
-        style = format!("justify-content:{};{}", v, style);
+        classes.push(jc.to_string());
     }
+
+    // 交叉轴对齐
     if let Some(a) = props.align {
-        let v = match a {
-            AlignItems::Start => "flex-start",
-            AlignItems::Center => "center",
-            AlignItems::End => "flex-end",
-            AlignItems::Stretch => "stretch",
-            AlignItems::Baseline => "baseline",
+        let ac = match a {
+            AlignItems::Start => "items-start",
+            AlignItems::Center => "items-center",
+            AlignItems::End => "items-end",
+            AlignItems::Stretch => "items-stretch",
+            AlignItems::Baseline => "items-baseline",
         };
-        style = format!("align-items:{};{}", v, style);
+        classes.push(ac.to_string());
     }
+
+    // 间距
+    let mut style = props.style.unwrap_or_default();
     if let Some(g) = props.gap {
-        style = format!("gap:{}px;{}", g, style);
+        let gap_class = gap_to_tailwind_class(g);
+        if gap_class.starts_with("gap-[") {
+            // 自定义间距，使用内联样式
+            style = format!("gap:{}px;{}", g, style);
+        } else {
+            // 标准间距，使用类名
+            classes.push(gap_class);
+        }
     }
+
+    // 自定义类名
+    if let Some(c) = props.class {
+        classes.push(c);
+    }
+
     rsx! {
-        div { class: format!("hx-flex {}", class), style: format!("display:flex;flex-direction:{};flex-wrap:{};{}", dir, wrap, style),
+        div {
+            class: classes.join(" "),
+            style: if style.is_empty() { None } else { Some(style) },
             {props.children}
         }
     }
