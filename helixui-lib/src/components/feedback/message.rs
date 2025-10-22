@@ -231,57 +231,57 @@ pub fn Message(props: MessageProps) -> Element {
         on_show: None,
         on_hide: None,
         children: rsx! {
-            // Message 的具体渲染逻辑
-            div {
-                class: "p-4 rounded-lg shadow-lg border max-w-sm pointer-events-auto bg-white",
-                role: match props.message_type {
-                    MessageType::Error => "alert",
-                    MessageType::Warning => "alert",
-                    _ => "status",
-                },
-                "aria-live": match props.message_type {
-                    MessageType::Error => "assertive",
-                    MessageType::Warning => "polite",
-                    _ => "polite",
-                },
+                // Message 的具体渲染逻辑
+                div {
+                    class: "p-4 rounded-lg shadow-lg border max-w-sm pointer-events-auto bg-white",
+                    role: match props.message_type {
+                        MessageType::Error => "alert",
+                        MessageType::Warning => "alert",
+                        _ => "status",
+                    },
+                    "aria-live": match props.message_type {
+                        MessageType::Error => "assertive",
+                        MessageType::Warning => "polite",
+                        _ => "polite",
+                    },
 
-                // 图标和内容
-                if props.message_type != MessageType::Loading {
-                    div { class: "flex items-center",
-                        div { class: "flex-shrink-0 mr-3",
-                            {get_icon(&props.message_type)}
-                        }
-                        div { class: "flex-1 text-sm font-medium",
-                            {props.content}
-                        }
-                        if props.closable {
-                            div { class: "ml-3 flex-shrink-0",
-                                Button {
-                                    size: ButtonSize::Small,
-                                    shape: ButtonShape::Circle,
-                                    onclick: move |_| {
-                                        visible.set(false);
-                                    },
-                                    Icon {
-                                        icon: IconType::Close,
-                                        size: IconSize::Small
-                                    }
-                                }
+                    // 图标和内容
+                    if props.message_type != MessageType::Loading {
+                div { class: "flex items-center",
+                            div { class: "flex-shrink-0 mr-3",
+                                {get_icon(&props.message_type)}
                             }
-                        }
-                    }
-                } else {
-                    div { class: "flex items-center",
-                        div { class: "flex-shrink-0 mr-3",
-                            {get_icon(&props.message_type)}
-                        }
-                        div { class: "flex-1 text-sm font-medium",
-                            {props.content}
+                            div { class: "flex-1 text-sm font-medium",
+                                {props.content}
+                            }
+                            if props.closable {
+                                div { class: "ml-3 flex-shrink-0",
+                        Button {
+                            size: ButtonSize::Small,
+                            shape: ButtonShape::Circle,
+                            onclick: move |_| {
+                                            visible.set(false);
+                            },
+                                        Icon {
+                                            icon: IconType::Close,
+                                            size: IconSize::Small
                         }
                     }
                 }
             }
-        },
+        }
+                    } else {
+                        div { class: "flex items-center",
+                            div { class: "flex-shrink-0 mr-3",
+                                {get_icon(&props.message_type)}
+                            }
+                            div { class: "flex-1 text-sm font-medium",
+                                {props.content}
+                            }
+                        }
+                    }
+                }
+            },
     };
 
     rsx! {
@@ -381,69 +381,151 @@ pub fn MessageContainer() -> Element {
         if !top_left.is_empty() {
             div { class: get_container_class(&MessagePosition::TopLeft),
                 for message in top_left {
-                    div {
-                        class: "p-4 rounded-lg shadow-lg border max-w-sm pointer-events-auto bg-white mb-2",
-                        "{message.content}"
-                    }
+                    MessageItem { data: message }
                 }
             }
         }
         if !top_center.is_empty() {
             div { class: get_container_class(&MessagePosition::TopCenter),
                 for message in top_center {
-                    div {
-                        class: "p-4 rounded-lg shadow-lg border max-w-sm pointer-events-auto bg-white mb-2",
-                        "{message.content}"
-                    }
+                    MessageItem { data: message }
                 }
             }
         }
         if !top_right.is_empty() {
             div { class: get_container_class(&MessagePosition::TopRight),
                 for message in top_right {
-                    div {
-                        class: "p-4 rounded-lg shadow-lg border max-w-sm pointer-events-auto bg-white mb-2",
-                        "{message.content}"
-                    }
+                    MessageItem { data: message }
                 }
             }
         }
         if !bottom_left.is_empty() {
             div { class: get_container_class(&MessagePosition::BottomLeft),
                 for message in bottom_left {
-                    div {
-                        class: "p-4 rounded-lg shadow-lg border max-w-sm pointer-events-auto bg-white mb-2",
-                        "{message.content}"
-                    }
+                    MessageItem { data: message }
                 }
             }
         }
         if !bottom_center.is_empty() {
             div { class: get_container_class(&MessagePosition::BottomCenter),
                 for message in bottom_center {
-                    div {
-                        class: "p-4 rounded-lg shadow-lg border max-w-sm pointer-events-auto bg-white mb-2",
-                        "{message.content}"
-                    }
+                    MessageItem { data: message }
                 }
             }
         }
         if !bottom_right.is_empty() {
             div { class: get_container_class(&MessagePosition::BottomRight),
                 for message in bottom_right {
-                    div {
-                        class: "p-4 rounded-lg shadow-lg border max-w-sm pointer-events-auto bg-white mb-2",
-                        "{message.content}"
-                    }
+                    MessageItem { data: message }
                 }
             }
         }
         if !center.is_empty() {
             div { class: get_container_class(&MessagePosition::Center),
                 for message in center {
-                    div {
-                        class: "p-4 rounded-lg shadow-lg border max-w-sm pointer-events-auto bg-white mb-2",
-                        "{message.content}"
+                    MessageItem { data: message }
+                }
+            }
+        }
+    }
+}
+
+/// 单个消息项组件（带定时关闭功能）
+#[component]
+pub fn MessageItem(data: MessageData) -> Element {
+    let mut visible = use_signal(|| true);
+    let data_id = data.id.clone();
+    let data_duration = data.duration;
+
+    // 定时关闭逻辑
+    use_effect(move || {
+        if data_duration > 0 && *visible.read() {
+            let duration = data_duration;
+            let mut visible = visible.clone();
+            let data_id = data_id.clone();
+
+            use_future(move || {
+                let data_id = data_id.clone();
+                async move {
+                    async_std::task::sleep(std::time::Duration::from_millis(duration as u64)).await;
+                    visible.set(false);
+                    // 从全局管理器中移除消息
+                    if let Ok(mut manager) = get_global_message_manager().messages.lock() {
+                        manager.remove(&data_id);
+                    }
+                }
+            });
+        }
+    });
+
+    // 手动关闭处理
+    let data_id_for_close = data.id.clone();
+    let on_close = move |_| {
+        visible.set(false);
+        if let Ok(mut manager) = get_global_message_manager().messages.lock() {
+            manager.remove(&data_id_for_close);
+        }
+    };
+
+    if !*visible.read() {
+        return rsx! { div {} };
+    }
+
+    let type_class = match data.message_type {
+        MessageType::Success => "bg-green-50 border-green-200 text-green-800",
+        MessageType::Warning => "bg-yellow-50 border-yellow-200 text-yellow-800",
+        MessageType::Error => "bg-red-50 border-red-200 text-red-800",
+        MessageType::Info => "bg-blue-50 border-blue-200 text-blue-800",
+        MessageType::Loading => "bg-blue-50 border-blue-200 text-blue-800",
+    };
+
+    rsx! {
+        div {
+            class: format!("p-4 rounded-lg shadow-lg border max-w-sm pointer-events-auto mb-2 {}", type_class),
+            role: match data.message_type {
+                MessageType::Error => "alert",
+                MessageType::Warning => "alert",
+                _ => "status",
+            },
+            "aria-live": match data.message_type {
+                MessageType::Error => "assertive",
+                MessageType::Warning => "polite",
+                _ => "polite",
+            },
+
+            div {
+                class: "flex items-center justify-between",
+
+                // 图标和内容
+                div {
+                    class: "flex items-center",
+                    if data.show_icon {
+                        Icon {
+                            icon: match data.message_type {
+                                MessageType::Success => IconType::Check,
+                                MessageType::Warning => IconType::Info,
+                                MessageType::Error => IconType::Error,
+                                MessageType::Info => IconType::Info,
+                                MessageType::Loading => IconType::Loading,
+                            },
+                            size: IconSize::Small,
+                            class: "mr-2",
+                        }
+                    }
+
+                    span {
+                        class: "text-sm font-medium",
+                        "{data.content}"
+                    }
+                }
+
+                // 关闭按钮
+                if data.closable {
+                    button {
+                        class: "ml-2 text-gray-400 hover:text-gray-600 focus:outline-none",
+                        onclick: on_close,
+                        "aria-label": "关闭消息",
+                        "×"
                     }
                 }
             }
