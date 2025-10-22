@@ -58,9 +58,11 @@ rsx! {
     }
 }"#.to_string(),
                         div { class: "border border-gray-200 dark:border-gray-700 rounded p-4",
-                            Split { direction: SplitDirection::Row, initial_sizes: vec![300.0, 300.0],
-                                panel1: rsx! { div { class: "px-3 py-6 bg-gray-100 dark:bg-gray-800 rounded text-gray-700 dark:text-gray-300 text-center", "左侧面板" } },
-                                panel2: rsx! { div { class: "px-3 py-6 bg-gray-100 dark:bg-gray-800 rounded text-gray-700 dark:text-gray-300 text-center", "右侧面板" } },
+                            div { class: "w-full h-24",
+                                Split { direction: SplitDirection::Row, initial_sizes: vec![300.0, 300.0],
+                                    panel1: rsx! { div { class: "px-3 py-6 bg-gray-100 dark:bg-gray-800 rounded text-gray-700 dark:text-gray-300 text-center h-full flex items-center justify-center", "左侧面板" } },
+                                    panel2: rsx! { div { class: "px-3 py-6 bg-gray-100 dark:bg-gray-800 rounded text-gray-700 dark:text-gray-300 text-center h-full flex items-center justify-center", "右侧面板" } },
+                                }
                             }
                         }
                     }
@@ -72,19 +74,21 @@ rsx! {
                     p { class: "text-gray-600 dark:text-gray-300 mb-4 transition-colors", "垂直分割，上下两个面板按比例排列。" }
                     DemoBox {
                         title: "垂直分割".to_string(),
-                        description: "direction: Column, initial_sizes: [240, 360]".to_string(),
+                        description: "direction: Column, initial_sizes: [40, 56]".to_string(),
                         code: r#"use helixui::components::layout::{Split, SplitDirection};
 
 rsx! {
-    Split { direction: SplitDirection::Column, initial_sizes: vec![240.0, 360.0],
+    Split { direction: SplitDirection::Column, initial_sizes: vec![40.0, 56.0],
         panel1: rsx! { div { "上方面板" } },
         panel2: rsx! { div { "下方面板" } },
     }
 }"#.to_string(),
                         div { class: "border border-gray-200 dark:border-gray-700 rounded p-4",
-                            Split { direction: SplitDirection::Column, initial_sizes: vec![240.0, 360.0],
-                                panel1: rsx! { div { class: "px-3 py-6 bg-gray-100 dark:bg-gray-800 rounded text-gray-700 dark:text-gray-300 text-center", "上方面板" } },
-                                panel2: rsx! { div { class: "px-3 py-6 bg-gray-100 dark:bg-gray-800 rounded text-gray-700 dark:text-gray-300 text-center", "下方面板" } },
+                            div { class: "w-full h-24",
+                                Split { direction: SplitDirection::Column, initial_sizes: vec![40.0, 56.0],
+                                    panel1: rsx! { div { class: "px-3 py-6 bg-gray-100 dark:bg-gray-800 rounded text-gray-700 dark:text-gray-300 text-center h-full flex items-center justify-center", "上方面板" } },
+                                    panel2: rsx! { div { class: "px-3 py-6 bg-gray-100 dark:bg-gray-800 rounded text-gray-700 dark:text-gray-300 text-center h-full flex items-center justify-center", "下方面板" } },
+                                }
                             }
                         }
                     }
@@ -105,9 +109,11 @@ rsx! {
     }
 }"#.to_string(),
                         div { class: "border border-gray-200 dark:border-gray-700 rounded p-4",
-                            Split { direction: SplitDirection::Row, initial_sizes: vec![360.0, 240.0], min_sizes: vec![120.0, 120.0],
-                                panel1: rsx! { div { class: "px-3 py-6 bg-gray-100 dark:bg-gray-800 rounded text-gray-700 dark:text-gray-300 text-center", "左侧面板" } },
-                                panel2: rsx! { div { class: "px-3 py-6 bg-gray-100 dark:bg-gray-800 rounded text-gray-700 dark:text-gray-300 text-center", "右侧面板" } },
+                            div { class: "w-full h-24",
+                                Split { direction: SplitDirection::Row, initial_sizes: vec![360.0, 240.0], min_sizes: vec![120.0, 120.0],
+                                    panel1: rsx! { div { class: "px-3 py-6 bg-gray-100 dark:bg-gray-800 rounded text-gray-700 dark:text-gray-300 text-center h-full flex items-center justify-center", "左侧面板" } },
+                                    panel2: rsx! { div { class: "px-3 py-6 bg-gray-100 dark:bg-gray-800 rounded text-gray-700 dark:text-gray-300 text-center h-full flex items-center justify-center", "右侧面板" } },
+                                }
                             }
                         }
                     }
@@ -129,9 +135,11 @@ rsx! {
     }
 }"#.to_string(),
                         div { class: "border border-gray-200 dark:border-gray-700 rounded p-4",
-                            Split { direction: SplitDirection::Row, initial_sizes: vec![240.0, 560.0], disabled: true,
-                                panel1: rsx! { div { class: "px-3 py-6 bg-gray-100 dark:bg-gray-800 rounded text-gray-700 dark:text-gray-300 text-center", "左侧" } },
-                                panel2: rsx! { div { class: "px-3 py-6 bg-gray-100 dark:bg-gray-800 rounded text-gray-700 dark:text-gray-300 text-center", "右侧" } },
+                            div { class: "w-full h-24",
+                                Split { direction: SplitDirection::Row, initial_sizes: vec![300.0, 300.0], disabled: true,
+                                    panel1: rsx! { div { class: "bg-gray-50 dark:bg-gray-800/50 text-gray-500 dark:text-gray-400 text-center flex items-center justify-center text-sm font-medium", "左侧" } },
+                                    panel2: rsx! { div { class: "bg-gray-50 dark:bg-gray-800/50 text-gray-500 dark:text-gray-400 text-center flex items-center justify-center text-sm font-medium", "右侧" } },
+                                }
                             }
                         }
                     }
@@ -143,19 +151,21 @@ rsx! {
                     p { class: "text-gray-600 dark:text-gray-300 mb-4 transition-colors", "通过 initial_sizes 指定任意比例。" }
                     DemoBox {
                         title: "30% / 70%".to_string(),
-                        description: "initial_sizes: [240, 560]".to_string(),
+                        description: "initial_sizes: [300, 300]".to_string(),
                         code: r#"use helixui::components::layout::{Split, SplitDirection};
 
 rsx! {
-    Split { direction: SplitDirection::Row, initial_sizes: vec![240.0, 560.0],
+    Split { direction: SplitDirection::Row, initial_sizes: vec![300.0, 300.0],
         panel1: rsx! { div { "30%" } },
         panel2: rsx! { div { "70%" } },
     }
 }"#.to_string(),
                         div { class: "border border-gray-200 dark:border-gray-700 rounded p-4",
-                            Split { direction: SplitDirection::Row, initial_sizes: vec![240.0, 560.0],
-                                panel1: rsx! { div { class: "px-3 py-6 bg-gray-100 dark:bg-gray-800 rounded text-gray-700 dark:text-gray-300 text-center", "30%" } },
-                                panel2: rsx! { div { class: "px-3 py-6 bg-gray-100 dark:bg-gray-800 rounded text-gray-700 dark:text-gray-300 text-center", "70%" } },
+                            div { class: "w-full h-24",
+                                Split { direction: SplitDirection::Row, initial_sizes: vec![300.0, 300.0],
+                                    panel1: rsx! { div { class: "px-3 py-6 bg-gray-100 dark:bg-gray-800 rounded text-gray-700 dark:text-gray-300 text-center h-full flex items-center justify-center", "30%" } },
+                                    panel2: rsx! { div { class: "px-3 py-6 bg-gray-100 dark:bg-gray-800 rounded text-gray-700 dark:text-gray-300 text-center h-full flex items-center justify-center", "70%" } },
+                                }
                             }
                         }
                     }

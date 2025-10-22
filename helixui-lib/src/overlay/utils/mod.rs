@@ -6,5 +6,5 @@ pub mod error_handler;
 pub mod helpers;
 
 // 重新导出
-pub use error_handler::{ErrorHandler, OverlayError, Result};
+pub use error_handler::ErrorHandler;
 pub use helpers::*;

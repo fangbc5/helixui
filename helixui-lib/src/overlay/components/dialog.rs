@@ -1,5 +1,7 @@
-use crate::overlay::components::InteractiveOverlay;
-use crate::{Button, ButtonShape, ButtonSize, ButtonType};
+use crate::overlay::components::base::{BaseOverlay, BaseOverlayProps, OverlayPosition};
+use crate::overlay::core::animation_manager::FillMode;
+use crate::overlay::core::{AnimationConfig, AnimationType, EasingType, ThemeMode};
+use crate::{Button, ButtonSize, ButtonType};
 use dioxus::prelude::*;
 
 /// 对话框 Overlay 组件
@@ -15,21 +17,36 @@ pub struct DialogOverlayProps {
     pub children: Element,
 }
 
-/// 对话框 Overlay 组件
+/// 对话框 Overlay 组件（使用新的 BaseOverlay 架构）
 #[component]
 pub fn DialogOverlay(props: DialogOverlayProps) -> Element {
-    rsx! {
-        InteractiveOverlay {
-            visible: props.visible,
-            on_close: props.on_close,
-            mask_closable: true,
-            closable: true,
-            draggable: false,
-            resizable: false,
-            z_index: 4000,
-
+    // 创建 BaseOverlay 属性
+    let base_props = BaseOverlayProps {
+        visible: props.visible,
+        z_index: 4000,
+        position: OverlayPosition::Center,
+        animation: Some(AnimationConfig {
+            duration: 300,
+            delay: 0,
+            easing: EasingType::EaseOut,
+            enter: AnimationType::ScaleIn,
+            exit: AnimationType::ScaleOut,
+            fill_mode: FillMode::Forwards,
+            iteration_count: 1,
+        }),
+        theme_mode: Some(ThemeMode::Auto),
+        mask_closable: true,
+        closable: true,
+        draggable: false,
+        resizable: false,
+        on_close: props.on_close,
+        on_show: None,
+        on_hide: None,
+        children: rsx! {
+            // Dialog 的具体渲染逻辑
             div {
                 class: "bg-white rounded-lg shadow-xl max-w-md w-full mx-4",
+                onclick: move |e| e.stop_propagation(),
 
                 // 标题
                 if let Some(title) = &props.title {
@@ -37,7 +54,7 @@ pub fn DialogOverlay(props: DialogOverlayProps) -> Element {
                         class: "px-6 py-4 border-b border-gray-200",
                         h3 {
                             class: "text-lg font-medium text-gray-900",
-                            {title}
+                            {title.clone()}
                         }
                     }
                 }
@@ -63,7 +80,7 @@ pub fn DialogOverlay(props: DialogOverlayProps) -> Element {
                                     callback();
                                 }
                             },
-                            {cancel_text}
+                            {cancel_text.clone()}
                         }
                     }
 
@@ -77,11 +94,15 @@ pub fn DialogOverlay(props: DialogOverlayProps) -> Element {
                                     callback();
                                 }
                             },
-                            {confirm_text}
+                            {confirm_text.clone()}
                         }
                     }
                 }
             }
-        }
+        },
+    };
+
+    rsx! {
+        BaseOverlay { ..base_props }
     }
 }

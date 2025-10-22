@@ -1,8 +1,8 @@
 // The dioxus prelude contains a ton of common items used in dioxus apps. It's a good idea to import wherever you
 // need dioxus
 use dioxus::prelude::*;
-use helixui::components::GlobalMessageContainer;
 
+use helixui::components::MessageContainer;
 use views::{
     AvatarPage, BadgePage, ButtonPage, CardPage, ComponentsPage, DialogPage, DividerPage, FlexPage,
     GridPage, Guide, Home, IconPage, Introduction, LayoutPage, MessagePage, ModalPage, QuickStart,
@@ -99,7 +99,8 @@ fn App() -> Element {
         // The router component renders the route enum we defined above. It will handle synchronization of the URL and render
         // the layouts and components for the active route.
         Router::<Route> {}
-        // 全局消息容器（负责渲染 show_message* 推送的消息）
-        GlobalMessageContainer {}
+
+        // 全局消息容器
+        MessageContainer {}
     }
 }

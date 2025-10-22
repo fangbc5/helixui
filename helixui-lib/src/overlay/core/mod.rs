@@ -12,5 +12,5 @@ pub mod theme_manager;
 pub use animation_manager::{AnimationConfig, AnimationManager, AnimationType, EasingType};
 pub use event_system::{Event, EventBus, EventListener, EventType};
 pub use platform_adapter::{Platform, PlatformAdapter, PlatformCapabilities};
-pub use state_manager::{GlobalStateManager, OverlayState, OverlayType};
+pub use state_manager::{get_global_state_manager, GlobalStateManager, OverlayState, OverlayType};
 pub use theme_manager::{ThemeConfig, ThemeManager, ThemeMode};

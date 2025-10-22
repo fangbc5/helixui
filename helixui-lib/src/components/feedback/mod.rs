@@ -10,8 +10,8 @@ pub use dialog::{
     DialogType, GlobalDialogContainer,
 };
 pub use message::{
-    show_message, show_message_with_duration, show_message_with_position, GlobalMessageContainer,
-    Message, MessageData, MessagePosition, MessageType,
+    show_message, show_message_with_duration, show_message_with_position, Message,
+    MessageContainer, MessageData, MessagePosition, MessageType,
 };
 pub use modal::{
     GlobalModalContainer, ImperativeModal, Modal, ModalManager, ModalPosition, ModalProps,

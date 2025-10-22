@@ -1,8 +1,10 @@
 //! 通用的简化类型：消息类型与位置
 
+use serde::{Deserialize, Serialize};
+
 /// 简化的消息类型
-#[derive(Debug, Clone, PartialEq)]
-pub enum SimpleMessageType {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum MessageType {
     Success,
     Warning,
     Error,
@@ -11,8 +13,8 @@ pub enum SimpleMessageType {
 }
 
 /// 简化的消息位置
-#[derive(Debug, Clone, PartialEq)]
-pub enum SimpleMessagePosition {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum MessagePosition {
     TopLeft,
     TopCenter,
     TopRight,

@@ -34,7 +34,6 @@ impl std::error::Error for OverlayError {}
 pub type Result<T> = std::result::Result<T, OverlayError>;
 
 /// 错误处理器
-#[derive(Clone)]
 pub struct ErrorHandler {
     pub on_error: Option<Box<dyn Fn(OverlayError) -> Element + Send + Sync>>,
     pub fallback: Element,
@@ -111,8 +110,9 @@ pub fn ErrorBoundary(children: Element) -> Element {
 
     // 在实际应用中，这里会捕获渲染错误
     // 目前只是简单的占位符
-    if let Some(err) = error.read().as_ref() {
-        error_handler.read().handle_error(err.clone())
+    let current_error = error.read().clone();
+    if let Some(err) = current_error {
+        error_handler.read().handle_error(err)
     } else {
         children
     }

@@ -105,7 +105,7 @@ pub fn DemoBox(
                             copied.set(true);
                             // 2秒后重置复制状态
                             use std::time::Duration;
-                            futures_timer::Delay::new(Duration::from_millis(2000)).await;
+                            tokio::time::sleep(tokio::time::Duration::from_millis(2000)).await;
                             copied.set(false);
                         });
                     },

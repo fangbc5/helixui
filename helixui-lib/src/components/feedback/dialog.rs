@@ -1,5 +1,7 @@
+use crate::overlay::components::{BaseOverlay, BaseOverlayProps, OverlayPosition};
+use crate::overlay::core::animation_manager::FillMode;
+use crate::overlay::core::{AnimationConfig, AnimationType, EasingType, ThemeMode};
 use crate::{Button, ButtonShape, ButtonSize, ButtonType, Icon, IconType};
-use async_broadcast::broadcast;
 use dioxus::prelude::*;
 use std::collections::HashMap;
 use std::sync::{LazyLock, Mutex};
@@ -103,6 +105,7 @@ pub fn Dialog(props: DialogProps) -> Element {
     if !props.visible {
         return rsx! { div {} };
     }
+
     let type_class = match props.dialog_type {
         DialogType::Info => "border-blue-200 dark:border-blue-700",
         DialogType::Success => "border-green-200 dark:border-green-700",
@@ -111,21 +114,32 @@ pub fn Dialog(props: DialogProps) -> Element {
         DialogType::Confirm => "",
     };
 
-    rsx! {
-        // 遮罩层
-        if props.show_mask {
-            div { class: "fixed inset-0 bg-black bg-opacity-50 z-40",
-                onclick: move |_| {
-                    if props.mask_closable {
-                        if let Some(on_close) = &props.on_close { on_close.call(()); }
-                    }
-                }
-            }
-        }
-
-        // 对话框内容
-        div { class: "fixed inset-0 flex items-center justify-center z-50",
-            div { class: "bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full mx-4 border-2 {type_class}",
+    // 创建 BaseOverlay 属性
+    let base_props = BaseOverlayProps {
+        visible: props.visible,
+        z_index: 5000,
+        position: OverlayPosition::Center,
+        animation: Some(AnimationConfig {
+            duration: 300,
+            delay: 0,
+            easing: EasingType::EaseOut,
+            enter: AnimationType::ScaleIn,
+            exit: AnimationType::ScaleOut,
+            fill_mode: FillMode::Forwards,
+            iteration_count: 1,
+        }),
+        theme_mode: Some(ThemeMode::Auto),
+        mask_closable: props.mask_closable,
+        closable: props.closable,
+        draggable: false,
+        resizable: false,
+        on_close: None,
+        on_show: None,
+        on_hide: None,
+        children: rsx! {
+            // Dialog 的具体渲染逻辑
+            div {
+                class: "bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full mx-4 border-2 {type_class}",
                 onclick: move |e: MouseEvent| { e.stop_propagation(); },
 
                 if props.title.is_some() || props.closable {
@@ -134,9 +148,15 @@ pub fn Dialog(props: DialogProps) -> Element {
                             h3 { class: "text-lg font-semibold text-gray-900 dark:text-white", "{title}" }
                         }
                         if props.closable {
-                            Button { size: ButtonSize::Small, shape: ButtonShape::Circle,
+                            Button {
+                                size: ButtonSize::Small,
+                                shape: ButtonShape::Circle,
                                 class: Some("text-gray-400 hover:text-gray-600 dark:hover:text-gray-300".to_string()),
-                                onclick: move |_| { if let Some(on_close) = &props.on_close { on_close.call(()); } },
+                                onclick: move |_| {
+                                    if let Some(on_close) = &props.on_close {
+                                        on_close.call(());
+                                    }
+                                },
                                 Icon { icon: IconType::Close, class: "w-4 h-4".to_string() }
                             }
                         }
@@ -147,23 +167,46 @@ pub fn Dialog(props: DialogProps) -> Element {
 
                 div { class: "flex justify-end space-x-2 p-4 border-t border-gray-200 dark:border-gray-700",
                     if props.dialog_type == DialogType::Confirm {
-                            Button { button_type: ButtonType::Default, size: ButtonSize::Small, class: Some("text-sm".to_string()),
-                            onclick: move |_| { if let Some(on_cancel) = &props.on_cancel { on_cancel.call(()); } },
-                                Icon { icon: IconType::Close, class: "w-4 h-4".to_string() }
+                        Button {
+                            button_type: ButtonType::Default,
+                            size: ButtonSize::Small,
+                            class: Some("text-sm".to_string()),
+                            onclick: move |_| {
+                                if let Some(on_cancel) = &props.on_cancel {
+                                    on_cancel.call(());
+                                }
+                            },
+                            "取消"
                         }
-                        Button { button_type: ButtonType::Primary, size: ButtonSize::Small,
-                            onclick: move |_| { if let Some(on_confirm) = &props.on_confirm { on_confirm.call(()); } },
+                        Button {
+                            button_type: ButtonType::Primary,
+                            size: ButtonSize::Small,
+                            onclick: move |_| {
+                                if let Some(on_confirm) = &props.on_confirm {
+                                    on_confirm.call(());
+                                }
+                            },
                             "确认"
                         }
                     } else {
-                        Button { button_type: ButtonType::Primary, size: ButtonSize::Small,
-                            onclick: move |_| { if let Some(on_close) = &props.on_close { on_close.call(()); } },
-                            Icon { icon: IconType::Close, class: "w-4 h-4".to_string() }
+                        Button {
+                            button_type: ButtonType::Primary,
+                            size: ButtonSize::Small,
+                            onclick: move |_| {
+                                if let Some(on_close) = &props.on_close {
+                                    on_close.call(());
+                                }
+                            },
+                            "确定"
                         }
                     }
                 }
             }
-        }
+        },
+    };
+
+    rsx! {
+        BaseOverlay { ..base_props }
     }
 }
 
@@ -220,11 +263,12 @@ static DIALOG_MANAGER: LazyLock<Mutex<SimpleDialogManager>> =
     LazyLock::new(|| Mutex::new(SimpleDialogManager::new()));
 
 // 跨平台广播：通知对话框容器刷新
-static DIALOG_BUS: LazyLock<(async_broadcast::Sender<()>, async_broadcast::Receiver<()>)> =
-    LazyLock::new(|| broadcast(64));
+// static DIALOG_BUS: LazyLock<(async_broadcast::Sender<()>, async_broadcast::Receiver<()>)> =
+//     LazyLock::new(|| broadcast(64));
 
 fn notify_dialog_change() {
-    let _ = DIALOG_BUS.0.try_broadcast(());
+    // let _ = DIALOG_BUS.0.try_broadcast(());
+    // 暂时禁用广播机制，避免 Web 端兼容性问题
 }
 
 pub fn show_info_dialog(title: String, content: String) {
@@ -369,7 +413,7 @@ pub fn SimpleDialog(data: SimpleDialogData) -> Element {
 
 #[component]
 pub fn GlobalDialogContainer() -> Element {
-    let mut dialogs = use_signal(|| {
+    let dialogs = use_signal(|| {
         if let Ok(manager) = DIALOG_MANAGER.lock() {
             manager.get_dialogs()
         } else {
@@ -377,18 +421,19 @@ pub fn GlobalDialogContainer() -> Element {
         }
     });
     // 广播驱动更新
-    use_effect(move || {
-        let mut rx = DIALOG_BUS.0.new_receiver();
-        let mut dialogs_signal = dialogs.clone();
-        spawn(async move {
-            loop {
-                let _ = rx.recv().await;
-                if let Ok(manager) = DIALOG_MANAGER.lock() {
-                    dialogs_signal.set(manager.get_dialogs());
-                }
-            }
-        });
-    });
+    // 暂时禁用广播机制，避免 Web 端兼容性问题
+    // use_effect(move || {
+    //     let mut rx = DIALOG_BUS.0.new_receiver();
+    //     let mut dialogs_signal = dialogs.clone();
+    //     spawn(async move {
+    //         loop {
+    //             let _ = rx.recv().await;
+    //             if let Ok(manager) = DIALOG_MANAGER.lock() {
+    //                 dialogs_signal.set(manager.get_dialogs());
+    //             }
+    //         }
+    //     });
+    // });
     rsx! {
         div { class: "fixed inset-0 pointer-events-none z-40",
             for dialog in dialogs.read().iter() { SimpleDialog { data: dialog.clone() } }

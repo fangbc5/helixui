@@ -32,7 +32,7 @@ pub enum EasingType {
 }
 
 /// 动画配置
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct AnimationConfig {
     pub duration: u32,
     pub delay: u32,

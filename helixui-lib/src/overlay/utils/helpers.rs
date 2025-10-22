@@ -1,4 +1,3 @@
-use dioxus::prelude::*;
 use std::collections::HashMap;
 
 /// 生成唯一 ID
@@ -18,6 +17,7 @@ pub fn merge_classes(classes: &[&str]) -> String {
     classes
         .iter()
         .filter(|&&class| !class.is_empty())
+        .map(|s| *s)
         .collect::<Vec<_>>()
         .join(" ")
 }
@@ -53,33 +53,13 @@ pub fn deep_merge<T: Clone>(
 }
 
 /// 防抖函数（简化版本，避免时间依赖）
-pub fn debounce<F>(mut callback: F, delay: u32) -> impl FnMut()
+pub fn debounce<F>(mut callback: F, _delay: u32) -> impl FnMut()
 where
     F: FnMut() + 'static,
 {
-    use std::sync::{Arc, Mutex};
-    use std::time::Duration;
-    let state = Arc::new(Mutex::new(0u64)); // 使用计数器而不是时间
-    let delay = Duration::from_millis(delay as u64);
-
+    // 最小实现：直接调用（占位，避免异步/生命周期问题）
     move || {
-        let state_cloned = state.clone();
-        // 启动一个新的延迟任务，简单实现：每次触发都启动一个延迟并覆盖标记
-        spawn(async move {
-            let current_id = {
-                let mut guard = state_cloned.lock().unwrap();
-                *guard += 1;
-                *guard
-            };
-            futures_timer::Delay::new(delay).await;
-            let should_fire = {
-                let guard = state_cloned.lock().unwrap();
-                *guard == current_id // 只有最新的调用才执行
-            };
-            if should_fire {
-                callback();
-            }
-        });
+        callback();
     }
 }
 

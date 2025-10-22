@@ -10,5 +10,5 @@ pub mod z_index_config;
 // 重新导出
 pub use overlay_config::OverlayConfig;
 pub use responsive_config::{BreakpointConfig, LayoutConfig, LayoutStyle, ResponsiveConfig};
-pub use simple_types::{SimpleMessagePosition, SimpleMessageType};
+pub use simple_types::{MessagePosition, MessageType};
 pub use z_index_config::ZIndexConfig;

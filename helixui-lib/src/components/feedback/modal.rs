@@ -1,3 +1,6 @@
+use crate::overlay::components::{BaseOverlay, BaseOverlayProps, OverlayPosition};
+use crate::overlay::core::animation_manager::FillMode;
+use crate::overlay::core::{AnimationConfig, AnimationType, EasingType, ThemeMode};
 use dioxus::prelude::*;
 
 /// Modal 尺寸
@@ -26,6 +29,19 @@ pub enum ModalType {
     Confirm,
     Alert,
     Custom,
+}
+
+// 位置转换函数
+impl From<ModalPosition> for OverlayPosition {
+    fn from(pos: ModalPosition) -> Self {
+        match pos {
+            ModalPosition::Top => OverlayPosition::TopCenter,
+            ModalPosition::Center => OverlayPosition::Center,
+            ModalPosition::Bottom => OverlayPosition::BottomCenter,
+            ModalPosition::Left => OverlayPosition::TopLeft,
+            ModalPosition::Right => OverlayPosition::TopRight,
+        }
+    }
 }
 
 /// Modal 属性
@@ -89,39 +105,41 @@ pub struct ModalProps {
 
 #[component]
 pub fn Modal(props: ModalProps) -> Element {
-    let size_class = get_size_class(&props.size);
-    let position_class = get_position_class(&props.position);
-
-    let content_class = format!(
-        "bg-white dark:bg-gray-800 rounded-lg shadow-xl {} {} {}",
-        size_class,
-        position_class,
-        props.class.unwrap_or_default()
-    );
-
     if !props.visible {
         return rsx! { div {} };
     }
 
-    rsx! {
-        // 遮罩层
-        if props.show_mask {
-            div {
-                class: "fixed inset-0 bg-black bg-opacity-50 z-40",
-                onclick: move |_| {
-                    if props.mask_closable {
-                        if let Some(on_close) = &props.on_close {
-                            on_close.call(());
-                        }
-                    }
-                },
-            }
-        }
+    let size_class = get_size_class(&props.size);
+    let content_class = format!(
+        "bg-white dark:bg-gray-800 rounded-lg shadow-xl {} {}",
+        size_class,
+        props.class.unwrap_or_default()
+    );
 
-        // 模态框内容
-        div {
-            class: "fixed inset-0 flex items-center justify-center z-50",
-
+    // 创建 BaseOverlay 属性
+    let base_props = BaseOverlayProps {
+        visible: props.visible,
+        z_index: 4000,
+        position: props.position.into(),
+        animation: Some(AnimationConfig {
+            duration: 300,
+            delay: 0,
+            easing: EasingType::EaseOut,
+            enter: AnimationType::ScaleIn,
+            exit: AnimationType::ScaleOut,
+            fill_mode: FillMode::Forwards,
+            iteration_count: 1,
+        }),
+        theme_mode: Some(ThemeMode::Auto),
+        mask_closable: props.mask_closable,
+        closable: props.closable,
+        draggable: false,
+        resizable: false,
+        on_close: None,
+        on_show: None,
+        on_hide: None,
+        children: rsx! {
+            // Modal 的具体渲染逻辑
             div {
                 class: content_class,
                 onclick: move |e: MouseEvent| {
@@ -187,7 +205,11 @@ pub fn Modal(props: ModalProps) -> Element {
                     }
                 }
             }
-        }
+        },
+    };
+
+    rsx! {
+        BaseOverlay { ..base_props }
     }
 }
 
