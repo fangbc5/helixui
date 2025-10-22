@@ -10,7 +10,7 @@ pub use dialog::{
     DialogType, GlobalDialogContainer,
 };
 pub use message::{
-    show_message, show_message_with_duration, show_message_with_position, Message,
+    show_message, show_message_with_duration, show_message_with_position, Message, MessageBuilder,
     MessageContainer, MessageData, MessagePosition, MessageType,
 };
 pub use modal::{

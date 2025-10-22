@@ -138,12 +138,14 @@ impl MessageManager {
         }
     }
 
+    #[allow(dead_code)]
     pub fn remove_message(&self, id: &str) {
         if let Ok(mut messages) = self.messages.lock() {
             messages.remove(id);
         }
     }
 
+    #[allow(dead_code)]
     pub fn get_messages(&self) -> Vec<MessageData> {
         if let Ok(messages) = self.messages.lock() {
             messages.values().cloned().collect()
@@ -152,6 +154,7 @@ impl MessageManager {
         }
     }
 
+    #[allow(dead_code)]
     pub fn clear_all(&self) {
         if let Ok(mut messages) = self.messages.lock() {
             messages.clear();
@@ -289,11 +292,11 @@ pub fn Message(props: MessageProps) -> Element {
     }
 }
 
-/// 全局消息容器组件（使用 overlay 系统）
+/// 全局消息容器组件
 #[component]
 pub fn MessageContainer() -> Element {
     let mut messages = use_signal(|| Vec::<MessageData>::new());
-    let update_counter = use_signal(|| 0u32);
+    let mut update_counter = use_signal(|| 0u32);
 
     // 立即检查一次
     use_effect(move || {
@@ -307,13 +310,28 @@ pub fn MessageContainer() -> Element {
         }
     });
 
-    // 使用 Dioxus 的 use_future 进行跨平台定时更新
+    // 使用更高效的更新机制 - 基于全局更新触发器
+    use_effect(move || {
+        let _trigger = get_global_update_trigger().load(Ordering::Relaxed);
+        if let Ok(manager) = get_global_message_manager().messages.lock() {
+            let new_messages: Vec<MessageData> = manager.values().cloned().collect();
+            let current_messages = messages.read().clone();
+            if new_messages != current_messages {
+                messages.set(new_messages);
+                update_counter.set(update_counter() + 1);
+            }
+        }
+    });
+
+    // 监听全局更新触发器变化
     use_future(move || {
         let mut messages_signal = messages.clone();
         let mut update_counter_signal = update_counter.clone();
         async move {
             loop {
-                async_std::task::sleep(std::time::Duration::from_millis(500)).await;
+                // 等待一小段时间，然后检查触发器
+                async_std::task::sleep(std::time::Duration::from_millis(100)).await;
+                let _current_trigger = get_global_update_trigger().load(Ordering::Relaxed);
                 if let Ok(manager) = get_global_message_manager().messages.lock() {
                     let new_messages: Vec<MessageData> = manager.values().cloned().collect();
                     let current_messages = messages_signal.read().clone();
@@ -533,195 +551,8 @@ pub fn MessageItem(data: MessageData) -> Element {
     }
 }
 
-/// 使用 overlay 系统的消息组件
-#[component]
-pub fn OverlayMessage(data: MessageData) -> Element {
-    let mut visible = use_signal(|| true);
-
-    // 自动关闭逻辑
-    use_effect(move || {
-        if data.duration > 0 && *visible.read() {
-            let duration = data.duration;
-            let mut visible = visible.clone();
-            use_future(move || async move {
-                async_std::task::sleep(std::time::Duration::from_millis(duration as u64)).await;
-                visible.set(false);
-            });
-        }
-    });
-
-    // 创建 BaseOverlay 属性
-    let base_props = BaseOverlayProps {
-        visible: *visible.read(),
-        z_index: 1000,
-        position: data.position.into(),
-        animation: Some(AnimationConfig {
-            duration: 200,
-            delay: 0,
-            easing: EasingType::EaseOut,
-            enter: AnimationType::FadeIn,
-            exit: AnimationType::FadeOut,
-            fill_mode: FillMode::Forwards,
-            iteration_count: 1,
-        }),
-        theme_mode: Some(ThemeMode::Auto),
-        mask_closable: false,
-        closable: true,
-        draggable: false,
-        resizable: false,
-        on_close: None,
-        on_show: None,
-        on_hide: None,
-        children: rsx! {
-            // Message 的具体渲染逻辑
-            div {
-                class: "p-4 rounded-lg shadow-lg border max-w-sm pointer-events-auto bg-white",
-                role: match data.message_type {
-                    MessageType::Error => "alert",
-                    MessageType::Warning => "alert",
-                    _ => "status",
-                },
-                "aria-live": match data.message_type {
-                    MessageType::Error => "assertive",
-                    MessageType::Warning => "polite",
-                    _ => "polite",
-                },
-
-                // 图标和内容
-                if data.message_type != MessageType::Loading {
-                    div { class: "flex items-center",
-                        div { class: "flex-shrink-0 mr-3",
-                            {get_icon(&data.message_type)}
-                        }
-                        div { class: "flex-1 text-sm font-medium",
-                            {data.content}
-                        }
-                        if data.closable {
-                            div { class: "ml-3 flex-shrink-0",
-                                Button {
-                                    size: ButtonSize::Small,
-                                    shape: ButtonShape::Circle,
-                                    onclick: move |_| {
-                                        visible.set(false);
-                                        // 从全局管理器中移除
-                                        if let Ok(mut manager) = get_global_message_manager().messages.lock() {
-                                            manager.remove(&data.id);
-                                        }
-                                    },
-                                    Icon {
-                                        icon: IconType::Close,
-                                        size: IconSize::Small
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    div { class: "flex items-center",
-                        div { class: "flex-shrink-0 mr-3",
-                            {get_icon(&data.message_type)}
-                        }
-                        div { class: "flex-1 text-sm font-medium",
-                            {data.content}
-                        }
-                    }
-                }
-            }
-        },
-    };
-
-    rsx! {
-        BaseOverlay { ..base_props }
-    }
-}
-
-/// 简化的消息组件（用于全局容器）
-#[component]
-pub fn SimpleMessage(data: MessageData) -> Element {
-    let mut visible = use_signal(|| true);
-    let auto_close = use_signal(|| data.duration > 0);
-
-    // 自动关闭逻辑
-    let data_id = data.id.clone();
-    use_effect(move || {
-        if *auto_close.read() && *visible.read() {
-            let duration = data.duration;
-            let id = data_id.clone();
-            let mut visible = visible.clone();
-            use_future(move || {
-                let id = id.clone();
-                async move {
-                    async_std::task::sleep(std::time::Duration::from_millis(duration as u64)).await;
-                    visible.set(false);
-                    if let Ok(mut manager) = get_global_message_manager().messages.lock() {
-                        manager.remove(&id);
-                    }
-                }
-            });
-        }
-    });
-
-    let base_class = "p-4 rounded-lg shadow-lg border max-w-sm pointer-events-auto";
-    let type_class = get_type_class(&data.message_type);
-    let merged_class = format!("{} {}", base_class, type_class);
-
-    let (role, aria_live) = match data.message_type {
-        MessageType::Error => ("alert", "assertive"),
-        MessageType::Warning => ("alert", "polite"),
-        _ => ("status", "polite"),
-    };
-
-    rsx! {
-        if *visible.read() {
-            div {
-                class: merged_class,
-                role: role,
-                "aria-live": aria_live,
-
-                // 图标
-                if data.message_type != MessageType::Loading {
-                    div { class: "flex items-center",
-                        div { class: "flex-shrink-0 mr-3",
-                            {get_icon(&data.message_type)}
-                        }
-                        div { class: "flex-1 text-sm font-medium",
-                            {data.content}
-                        }
-                        if data.closable {
-                            div { class: "ml-3 flex-shrink-0",
-                                Button {
-                                    size: ButtonSize::Small,
-                                    shape: ButtonShape::Circle,
-                                    onclick: move |_| {
-                                        visible.set(false);
-                                        if let Ok(mut manager) = get_global_message_manager().messages.lock() {
-                                            manager.remove(&data.id);
-                                        }
-                                    },
-                                    Icon {
-                                        icon: IconType::Close,
-                                        size: IconSize::Small
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    div { class: "flex items-center",
-                        div { class: "flex-shrink-0 mr-3",
-                            {get_icon(&data.message_type)}
-                        }
-                        div { class: "flex-1 text-sm font-medium",
-                            {data.content}
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
 // 工具函数
+#[allow(dead_code)]
 fn get_position_class(position: &MessagePosition) -> String {
     match position {
         MessagePosition::TopLeft => "fixed z-50 top-4 left-4".to_string(),
@@ -752,6 +583,7 @@ fn get_container_class(position: &MessagePosition) -> String {
     }
 }
 
+#[allow(dead_code)]
 fn get_type_class(message_type: &MessageType) -> String {
     match message_type {
         MessageType::Success => "bg-green-50 border-green-200 text-green-800".to_string(),
@@ -764,8 +596,8 @@ fn get_type_class(message_type: &MessageType) -> String {
 
 fn get_icon(message_type: &MessageType) -> Element {
     let (icon, class, spin) = match message_type {
-        MessageType::Success => (IconType::Success, "text-green-500", false),
-        MessageType::Warning => (IconType::Warning, "text-yellow-500", false),
+        MessageType::Success => (IconType::Check, "text-green-500", false),
+        MessageType::Warning => (IconType::Info, "text-yellow-500", false),
         MessageType::Error => (IconType::Error, "text-red-500", false),
         MessageType::Info => (IconType::Info, "text-blue-500", false),
         MessageType::Loading => (IconType::Loading, "text-blue-500", true),
@@ -777,6 +609,108 @@ fn get_icon(message_type: &MessageType) -> Element {
             size: IconSize::Small,
             class: if spin { format!("{} animate-spin", class) } else { class.to_string() }
         }
+    }
+}
+
+/// 消息构建器
+pub struct MessageBuilder {
+    content: String,
+    message_type: MessageType,
+    position: MessagePosition,
+    duration: u32,
+    closable: bool,
+    show_icon: bool,
+}
+
+impl MessageBuilder {
+    /// 创建新的消息构建器
+    pub fn new(content: &str) -> Self {
+        Self {
+            content: content.to_string(),
+            message_type: MessageType::Info,
+            position: MessagePosition::TopRight,
+            duration: 2000,
+            closable: true,
+            show_icon: true,
+        }
+    }
+
+    /// 设置为成功消息
+    pub fn success(mut self) -> Self {
+        self.message_type = MessageType::Success;
+        self
+    }
+
+    /// 设置为错误消息
+    pub fn error(mut self) -> Self {
+        self.message_type = MessageType::Error;
+        self
+    }
+
+    /// 设置为警告消息
+    pub fn warning(mut self) -> Self {
+        self.message_type = MessageType::Warning;
+        self
+    }
+
+    /// 设置为信息消息
+    pub fn info(mut self) -> Self {
+        self.message_type = MessageType::Info;
+        self
+    }
+
+    /// 设置为加载消息
+    pub fn loading(mut self) -> Self {
+        self.message_type = MessageType::Loading;
+        self
+    }
+
+    /// 设置持续时间
+    pub fn with_duration(mut self, duration: u32) -> Self {
+        self.duration = duration;
+        self
+    }
+
+    /// 设置位置
+    pub fn with_position(mut self, position: MessagePosition) -> Self {
+        self.position = position;
+        self
+    }
+
+    /// 设置是否可关闭
+    pub fn closable(mut self, closable: bool) -> Self {
+        self.closable = closable;
+        self
+    }
+
+    /// 设置是否显示图标
+    pub fn show_icon(mut self, show: bool) -> Self {
+        self.show_icon = show;
+        self
+    }
+
+    /// 显示消息并返回消息 ID
+    pub fn show(self) -> String {
+        let data = MessageData {
+            id: generate_id("message"),
+            content: self.content,
+            message_type: self.message_type,
+            position: self.position,
+            duration: self.duration,
+            closable: self.closable,
+            show_icon: self.show_icon,
+            seq: NEXT_SEQ.fetch_add(1, Ordering::Relaxed),
+        };
+
+        println!(
+            "[DEBUG] MessageBuilder::show called with content: {}",
+            data.content
+        );
+        get_global_message_manager().add_message(data.clone());
+        get_global_update_trigger().fetch_add(1, Ordering::Relaxed);
+        println!("[DEBUG] Message added to global manager");
+
+        data.id
     }
 }
 
@@ -835,10 +769,12 @@ pub fn show_message_with_position(
     get_global_update_trigger().fetch_add(1, Ordering::Relaxed);
 }
 
+#[allow(dead_code)]
 pub fn close_message(id: &str) {
     get_global_message_manager().remove_message(id);
 }
 
+#[allow(dead_code)]
 pub fn close_all_messages() {
     get_global_message_manager().clear_all();
 }
