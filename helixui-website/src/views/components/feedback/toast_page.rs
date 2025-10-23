@@ -45,6 +45,11 @@ pub fn ToastPage() -> Element {
             title: "高级用法".to_string(),
             level: 1,
         },
+        TocItem {
+            id: "api".to_string(),
+            title: "API".to_string(),
+            level: 1,
+        },
     ];
 
     rsx! {

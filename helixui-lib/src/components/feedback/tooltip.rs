@@ -91,6 +91,7 @@ pub fn Tooltip(props: TooltipProps) -> Element {
 
     rsx! {
         div {
+            class: "tooltip relative inline-block group",
             "data-state": if open() { "open" } else { "closed" },
             "data-disabled": (props.disabled)(),
             ..props.attributes,
@@ -183,6 +184,7 @@ pub fn TooltipTrigger(props: TooltipTriggerProps) -> Element {
 
     rsx! {
         div {
+            class: "tooltip-trigger inline-block",
             id: props.id.clone(),
             tabindex: "0",
             // Mouse events
@@ -275,15 +277,56 @@ pub fn TooltipContent(props: TooltipContentProps) -> Element {
     // Only render if the tooltip is open
     let render = use_animated_open(id, ctx.open);
 
+    // 根据side和align计算定位样式和箭头样式
+    let (positioning_class, arrow_class) = match props.side {
+        ContentSide::Top => match props.align {
+            ContentAlign::Start => ("bottom-full left-0 mb-2", "after:top-full after:left-4 after:border-t-gray-800 after:border-t-4 after:border-x-transparent after:border-x-4 after:border-b-0"),
+            ContentAlign::Center => ("bottom-full left-1/2 mb-2 -translate-x-1/2", "after:top-full after:left-1/2 after:-translate-x-1/2 after:border-t-gray-800 after:border-t-4 after:border-x-transparent after:border-x-4 after:border-b-0"),
+            ContentAlign::End => ("bottom-full right-0 mb-2", "after:top-full after:right-4 after:border-t-gray-800 after:border-t-4 after:border-x-transparent after:border-x-4 after:border-b-0"),
+        },
+        ContentSide::Right => match props.align {
+            ContentAlign::Start => ("top-0 left-full ml-2", "after:top-4 after:left-0 after:-translate-x-1/2 after:border-r-gray-800 after:border-r-[6px] after:border-y-transparent after:border-y-[6px] after:border-l-0"),
+            ContentAlign::Center => ("top-1/2 left-full ml-2 -translate-y-1/2", "after:top-1/2 after:left-0 after:-translate-x-1/2 after:-translate-y-1/2 after:border-r-gray-800 after:border-r-[6px] after:border-y-transparent after:border-y-[6px] after:border-l-0"),
+            ContentAlign::End => ("bottom-0 left-full ml-2", "after:bottom-4 after:left-0 after:-translate-x-1/2 after:border-r-gray-800 after:border-r-[6px] after:border-y-transparent after:border-y-[6px] after:border-l-0"),
+        },
+        ContentSide::Bottom => match props.align {
+            ContentAlign::Start => ("top-full left-0 mt-2", "after:bottom-full after:left-4 after:border-b-gray-800 after:border-b-4 after:border-x-transparent after:border-x-4 after:border-t-0"),
+            ContentAlign::Center => ("top-full left-1/2 mt-2 -translate-x-1/2", "after:bottom-full after:left-1/2 after:-translate-x-1/2 after:border-b-gray-800 after:border-b-4 after:border-x-transparent after:border-x-4 after:border-t-0"),
+            ContentAlign::End => ("top-full right-0 mt-2", "after:bottom-full after:right-4 after:border-b-gray-800 after:border-b-4 after:border-x-transparent after:border-x-4 after:border-t-0"),
+        },
+        ContentSide::Left => match props.align {
+            ContentAlign::Start => ("top-0 right-full mr-2", "after:top-4 after:right-0 after:translate-x-1/2 after:border-l-gray-800 after:border-l-[6px] after:border-y-transparent after:border-y-[6px] after:border-r-0"),
+            ContentAlign::Center => ("top-1/2 right-full mr-2 -translate-y-1/2", "after:top-1/2 after:right-0 after:translate-x-1/2 after:-translate-y-1/2 after:border-l-gray-800 after:border-l-[6px] after:border-y-transparent after:border-y-[6px] after:border-r-0"),
+            ContentAlign::End => ("bottom-0 right-full mr-2", "after:bottom-4 after:right-0 after:translate-x-1/2 after:border-l-gray-800 after:border-l-[6px] after:border-y-transparent after:border-y-[6px] after:border-r-0"),
+        },
+    };
+
+    // 处理鼠标进入tooltip内容
+    let handle_mouse_enter = move |_: Event<MouseData>| {
+        if !(ctx.disabled)() {
+            ctx.set_open.call(true);
+        }
+    };
+
+    // 处理鼠标离开tooltip内容
+    let handle_mouse_leave = move |_: Event<MouseData>| {
+        if !(ctx.disabled)() {
+            ctx.set_open.call(false);
+        }
+    };
+
     // Create the tooltip content
     rsx! {
         if render() {
             div {
                 id,
                 role: "tooltip",
+                class: format!("absolute z-[1000] max-w-[250px] px-3 py-2 rounded-lg bg-gray-800 text-white text-sm leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-300 group-hover:delay-0 group-hover:duration-200 after:absolute after:content-[''] after:w-0 after:h-0 {} {}", positioning_class, arrow_class),
                 "data-state": if ctx.open.cloned() { "open" } else { "closed" },
                 "data-side": props.side.as_str(),
                 "data-align": props.align.as_str(),
+                onmouseenter: handle_mouse_enter,
+                onmouseleave: handle_mouse_leave,
                 ..props.attributes,
                 {props.children}
             }

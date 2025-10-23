@@ -23,6 +23,15 @@ module.exports = {
           900: '#14532d',
         },
       },
+      keyframes: {
+        'tooltip-fade-in': {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
+      },
+      animation: {
+        'tooltip-fade-in': 'tooltip-fade-in 0.2s ease-in-out',
+      },
     },
   },
   plugins: [

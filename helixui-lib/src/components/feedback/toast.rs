@@ -392,9 +392,9 @@ pub fn Toast(props: ToastProps) -> Element {
             class: format!(
                 "toast flex overflow-hidden min-h-16 w-72 box-border items-center justify-between px-4 py-3 border rounded-lg shadow-lg transition-all duration-200 ease-out {}",
                 match props.toast_type {
-                    ToastType::Success => "bg-green-50 text-green-800 border-green-200",
+                    ToastType::Success => "bg-emerald-50 text-emerald-800 border-emerald-200",
                     ToastType::Error => "bg-red-50 text-red-800 border-red-200",
-                    ToastType::Warning => "bg-yellow-50 text-yellow-800 border-yellow-200",
+                    ToastType::Warning => "bg-orange-50 text-orange-800 border-orange-200",
                     ToastType::Info => "bg-blue-50 text-blue-800 border-blue-200",
                 }
             ),
