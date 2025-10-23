@@ -1,4 +1,4 @@
-use dioxus::prelude::*;
+use dioxus::{core::ScopeState, prelude::*};
 
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub enum DragAxis {

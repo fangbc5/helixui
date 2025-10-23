@@ -164,12 +164,10 @@ pub fn t(key: &str) -> String {
         (Language::EnUS, "component.space") => "Space",
         (Language::ZhCN, "component.split") => "分隔页面 Split",
         (Language::EnUS, "component.split") => "Split",
-        (Language::ZhCN, "component.message") => "消息 Message",
-        (Language::EnUS, "component.message") => "Message",
-        (Language::ZhCN, "component.dialog") => "对话框 Dialog",
-        (Language::EnUS, "component.dialog") => "Dialog",
-        (Language::ZhCN, "component.modal") => "模态框 Modal",
-        (Language::EnUS, "component.modal") => "Modal",
+        (Language::ZhCN, "component.toast") => "提示框 Toast",
+        (Language::EnUS, "component.toast") => "Toast",
+        (Language::ZhCN, "component.tooltip") => "工具提示 Tooltip",
+        (Language::EnUS, "component.tooltip") => "Tooltip",
 
         // 默认
         _ => key,

@@ -27,7 +27,6 @@
 //! ```
 
 pub mod components;
-pub mod overlay;
 
 // Re-export commonly used components
 pub use components::*;

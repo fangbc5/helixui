@@ -11,7 +11,8 @@ path = "src/main.rs"
 
 [dependencies]
 helixui = { path = "../helixui-lib" }
-dioxus.workspace = true
+dioxus = { workspace = true, features = ["router"] }
+tracing = { workspace = true}
 
 [features]
 default = ["web"]

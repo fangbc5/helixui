@@ -154,24 +154,17 @@ pub fn ComponentsPage() -> Element {
                                 status: ComponentStatus::Available,
                             },
                             ComponentCard {
-                                name: "Message".to_string(),
-                                name_zh: "消息".to_string(),
+                                name: "Toast".to_string(),
+                                name_zh: "提示框".to_string(),
                                 description: "轻量级的全局提示反馈。".to_string(),
-                                route: crate::Route::MessagePage {},
+                                route: crate::Route::ToastPage {},
                                 status: ComponentStatus::Available,
                             },
                             ComponentCard {
-                                name: "Dialog".to_string(),
-                                name_zh: "对话框".to_string(),
-                                description: "模态对话框，在保留当前页面状态的情况下，告知用户并承载相关操作。".to_string(),
-                                route: crate::Route::DialogPage {},
-                                status: ComponentStatus::Available,
-                            },
-                            ComponentCard {
-                                name: "Modal".to_string(),
-                                name_zh: "模态框".to_string(),
-                                description: "模态对话框，用于显示重要信息或收集用户输入。".to_string(),
-                                route: crate::Route::ModalPage {},
+                                name: "Tooltip".to_string(),
+                                name_zh: "工具提示".to_string(),
+                                description: "鼠标悬停时显示的提示信息。".to_string(),
+                                route: crate::Route::TooltipPage {},
                                 status: ComponentStatus::Available,
                             },
                             ComponentCard {
@@ -275,7 +268,6 @@ fn ComponentCardItem(card: ComponentCard) -> Element {
             Link {
                 to: card.route.clone(),
                 class: "block p-6 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-green-500 dark:hover:border-green-500 hover:shadow-md transition-all",
-
                 div {
                     class: "flex items-start justify-between mb-3",
                     div {

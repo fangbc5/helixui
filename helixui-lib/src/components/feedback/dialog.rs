@@ -1,453 +1,393 @@
-use crate::overlay::components::{BaseOverlay, BaseOverlayProps, OverlayPosition};
-use crate::overlay::core::animation_manager::FillMode;
-use crate::overlay::core::{AnimationConfig, AnimationType, EasingType, ThemeMode};
-use crate::{Button, ButtonShape, ButtonSize, ButtonType, Icon, IconType};
+//! Defines the [`DialogRoot`] component and its sub-components.
+
+use dioxus::document;
 use dioxus::prelude::*;
-use std::collections::HashMap;
-use std::sync::{LazyLock, Mutex};
 
-/// Dialog 尺寸
-#[derive(Clone, Copy, PartialEq, Debug)]
-pub enum DialogSize {
-    /// 小型对话框
-    Small,
-    /// 中型对话框（默认）
-    Medium,
-    /// 大型对话框
-    Large,
-    /// 全屏对话框
-    Fullscreen,
+use crate::components::use_global_escape_listener;
+use crate::components::{
+    use_animated_open, use_controlled, use_id_or, use_unique_id, FOCUS_TRAP_JS,
+};
+
+#[derive(Clone, Copy)]
+struct DialogCtx {
+    #[allow(unused)]
+    open: Memo<bool>,
+    #[allow(unused)]
+    set_open: Callback<bool>,
+
+    // Whether the dialog is a modal and should capture focus.
+    #[allow(unused)]
+    is_modal: ReadSignal<bool>,
+    dialog_labelledby: Signal<String>,
+    dialog_describedby: Signal<String>,
 }
 
-/// Dialog 位置
-#[derive(Clone, Copy, PartialEq, Debug)]
-pub enum DialogPosition {
-    /// 顶部
-    Top,
-    /// 居中（默认）
-    Center,
-    /// 底部
-    Bottom,
-    /// 左侧
-    Left,
-    /// 右侧
-    Right,
-}
-
-/// Dialog 类型（基于新的 SimpleDialogType）
-#[derive(Clone, Debug, PartialEq)]
-pub enum DialogType {
-    Info,
-    Success,
-    Warning,
-    Error,
-    Confirm,
-}
-
-/// Dialog 属性
+/// The props for the [`DialogRoot`] component
 #[derive(Props, Clone, PartialEq)]
-pub struct DialogProps {
-    /// 是否显示对话框
-    #[props(default = false)]
-    pub visible: bool,
+pub struct DialogRootProps {
+    /// The ID of the dialog root element.
+    pub id: ReadSignal<Option<String>>,
 
-    /// 对话框标题
+    /// Whether the dialog is modal. If true, it will trap focus within the dialog when open.
+    #[props(default = ReadSignal::new(Signal::new(true)))]
+    pub is_modal: ReadSignal<bool>,
+
+    /// The controlled `open` state of the dialog.
+    pub open: ReadSignal<Option<bool>>,
+
+    /// The default `open` state of the dialog if it is not controlled.
     #[props(default)]
-    pub title: Option<String>,
+    pub default_open: bool,
 
-    /// 对话框内容
+    /// A callback that is called when the open state changes.
+    #[props(default)]
+    pub on_open_change: Callback<bool>,
+
+    /// Additional attributes to apply to the dialog root element.
+    #[props(extends = GlobalAttributes)]
+    pub attributes: Vec<Attribute>,
+
+    /// The children of the dialog root component.
     pub children: Element,
-
-    /// 对话框尺寸
-    #[props(default = DialogSize::Medium)]
-    pub size: DialogSize,
-
-    /// 对话框位置
-    #[props(default = DialogPosition::Center)]
-    pub position: DialogPosition,
-
-    /// 对话框类型
-    #[props(default = DialogType::Info)]
-    pub dialog_type: DialogType,
-
-    /// 是否显示遮罩层
-    #[props(default = true)]
-    pub show_mask: bool,
-
-    /// 遮罩层点击是否关闭
-    #[props(default = true)]
-    pub mask_closable: bool,
-
-    /// 是否显示关闭按钮
-    #[props(default = true)]
-    pub closable: bool,
-
-    /// 是否可拖拽
-    #[props(default = false)]
-    pub draggable: bool,
-
-    /// 关闭事件
-    pub on_close: Option<EventHandler<()>>,
-
-    /// 确认事件（仅 Confirm 类型）
-    pub on_confirm: Option<EventHandler<()>>,
-
-    /// 取消事件（仅 Confirm 类型）
-    pub on_cancel: Option<EventHandler<()>>,
-
-    /// 自定义样式类
-    pub class: Option<String>,
 }
 
+/// # DialogRoot
+///
+/// The entry point for the dialog. It manages the open state of the dialog and provides context to its children. You
+/// can use it to create a backdrop for the dialog if needed. The contents will only be rendered when the dialog is open.
+///
+/// ## Example
+///
+/// ```rust
+/// use dioxus::prelude::*;
+/// use dioxus_primitives::dialog::{DialogContent, DialogDescription, DialogRoot, DialogTitle};
+///
+/// #[component]
+/// fn Demo() -> Element {
+///     let mut open = use_signal(|| false);
+///
+///     rsx! {
+///         button {
+///             onclick: move |_| open.set(true),
+///             "Show Dialog"
+///         }
+///         DialogRoot {
+///             open: open(),
+///             on_open_change: move |v| open.set(v),
+///             DialogContent {
+///                 button {
+///                     aria_label: "Close",
+///                     tabindex: if open() { "0" } else { "-1" },
+///                     onclick: move |_| open.set(false),
+///                     "×"
+///                 }
+///                 DialogTitle {
+///                     "Item information"
+///                 }
+///                 DialogDescription {
+///                     "Here is some additional information about the item."
+///                 }
+///             }
+///         }
+///     }
+/// }
+/// ```
+///
+/// ## Styling
+///
+/// The [`DialogRoot`] component defines the following data attributes you can use to control styling:
+/// - `data-state`: Indicates if the dialog is open or closed. It can be either "open" or "closed".
 #[component]
-pub fn Dialog(props: DialogProps) -> Element {
-    // 直接渲染受控对话框（仅作为受控组件使用）
-    if !props.visible {
-        return rsx! { div {} };
-    }
+pub fn DialogRoot(props: DialogRootProps) -> Element {
+    let dialog_labelledby = use_unique_id();
+    let dialog_describedby = use_unique_id();
 
-    let type_class = match props.dialog_type {
-        DialogType::Info => "border-blue-200 dark:border-blue-700",
-        DialogType::Success => "border-green-200 dark:border-green-700",
-        DialogType::Warning => "border-yellow-200 dark:border-yellow-700",
-        DialogType::Error => "border-red-200 dark:border-red-700",
-        DialogType::Confirm => "",
-    };
+    let (open, set_open) = use_controlled(props.open, props.default_open, props.on_open_change);
 
-    // 创建 BaseOverlay 属性
-    let base_props = BaseOverlayProps {
-        visible: props.visible,
-        z_index: 5000,
-        position: OverlayPosition::Center,
-        animation: Some(AnimationConfig {
-            duration: 300,
-            delay: 0,
-            easing: EasingType::EaseOut,
-            enter: AnimationType::ScaleIn,
-            exit: AnimationType::ScaleOut,
-            fill_mode: FillMode::Forwards,
-            iteration_count: 1,
-        }),
-        theme_mode: Some(ThemeMode::Auto),
-        mask_closable: props.mask_closable,
-        closable: props.closable,
-        draggable: false,
-        resizable: false,
-        on_close: None,
-        on_show: None,
-        on_hide: None,
-        children: rsx! {
-            // Dialog 的具体渲染逻辑
-            div {
-                class: "bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full mx-4 border-2 {type_class}",
-                onclick: move |e: MouseEvent| { e.stop_propagation(); },
-
-                if props.title.is_some() || props.closable {
-                    div { class: "flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700",
-                        if let Some(title) = &props.title {
-                            h3 { class: "text-lg font-semibold text-gray-900 dark:text-white", "{title}" }
-                        }
-                        if props.closable {
-                            Button {
-                                size: ButtonSize::Small,
-                                shape: ButtonShape::Circle,
-                                class: Some("text-gray-400 hover:text-gray-600 dark:hover:text-gray-300".to_string()),
-                                onclick: move |_| {
-                                    if let Some(on_close) = &props.on_close {
-                                        on_close.call(());
-                                    }
-                                },
-                                Icon { icon: IconType::Close, class: "w-4 h-4".to_string() }
-                            }
-                        }
-                    }
-                }
-
-                div { class: "p-4", {props.children} }
-
-                div { class: "flex justify-end space-x-2 p-4 border-t border-gray-200 dark:border-gray-700",
-                    if props.dialog_type == DialogType::Confirm {
-                        Button {
-                            button_type: ButtonType::Default,
-                            size: ButtonSize::Small,
-                            class: Some("text-sm".to_string()),
-                            onclick: move |_| {
-                                if let Some(on_cancel) = &props.on_cancel {
-                                    on_cancel.call(());
-                                }
-                            },
-                            "取消"
-                        }
-                        Button {
-                            button_type: ButtonType::Primary,
-                            size: ButtonSize::Small,
-                            onclick: move |_| {
-                                if let Some(on_confirm) = &props.on_confirm {
-                                    on_confirm.call(());
-                                }
-                            },
-                            "确认"
-                        }
-                    } else {
-                        Button {
-                            button_type: ButtonType::Primary,
-                            size: ButtonSize::Small,
-                            onclick: move |_| {
-                                if let Some(on_close) = &props.on_close {
-                                    on_close.call(());
-                                }
-                            },
-                            "确定"
-                        }
-                    }
-                }
-            }
-        },
-    };
-
-    rsx! {
-        BaseOverlay { ..base_props }
-    }
-}
-
-/// 内置命令式简化 Dialog 系统（保持 API 与原始 simple_overlay 一致）
-#[derive(Clone, Debug, PartialEq)]
-pub struct SimpleDialogData {
-    pub id: String,
-    pub title: Option<String>,
-    pub content: String,
-    pub dialog_type: DialogType,
-    pub visible: bool,
-    pub on_confirm: Option<fn()>,
-    pub on_cancel: Option<fn()>,
-}
-
-pub struct SimpleDialogManager {
-    dialogs: HashMap<String, SimpleDialogData>,
-}
-
-impl SimpleDialogManager {
-    pub fn new() -> Self {
-        Self {
-            dialogs: HashMap::new(),
-        }
-    }
-    pub fn show_dialog(&mut self, mut data: SimpleDialogData) -> String {
-        let id = generate_id("dialog");
-        data.id = id.clone();
-        data.visible = true;
-        self.dialogs.insert(id.clone(), data);
-        notify_dialog_change();
-        id
-    }
-    pub fn hide_dialog(&mut self, id: &str) {
-        if let Some(d) = self.dialogs.get_mut(id) {
-            d.visible = false;
-        }
-        notify_dialog_change();
-    }
-    pub fn remove_dialog(&mut self, id: &str) {
-        self.dialogs.remove(id);
-        notify_dialog_change();
-    }
-    pub fn get_dialogs(&self) -> Vec<SimpleDialogData> {
-        self.dialogs.values().cloned().collect()
-    }
-    pub fn clear_all(&mut self) {
-        self.dialogs.clear();
-        notify_dialog_change();
-    }
-}
-
-static DIALOG_MANAGER: LazyLock<Mutex<SimpleDialogManager>> =
-    LazyLock::new(|| Mutex::new(SimpleDialogManager::new()));
-
-// 跨平台广播：通知对话框容器刷新
-// static DIALOG_BUS: LazyLock<(async_broadcast::Sender<()>, async_broadcast::Receiver<()>)> =
-//     LazyLock::new(|| broadcast(64));
-
-fn notify_dialog_change() {
-    // let _ = DIALOG_BUS.0.try_broadcast(());
-    // 暂时禁用广播机制，避免 Web 端兼容性问题
-}
-
-pub fn show_info_dialog(title: String, content: String) {
-    let data = SimpleDialogData {
-        id: String::new(),
-        title: Some(title),
-        content,
-        dialog_type: DialogType::Info,
-        visible: false,
-        on_confirm: None,
-        on_cancel: None,
-    };
-    if let Ok(mut m) = DIALOG_MANAGER.lock() {
-        m.show_dialog(data);
-    }
-}
-pub fn show_success_dialog(title: String, content: String) {
-    let data = SimpleDialogData {
-        id: String::new(),
-        title: Some(title),
-        content,
-        dialog_type: DialogType::Success,
-        visible: false,
-        on_confirm: None,
-        on_cancel: None,
-    };
-    if let Ok(mut m) = DIALOG_MANAGER.lock() {
-        m.show_dialog(data);
-    }
-}
-pub fn show_warning_dialog(title: String, content: String) {
-    let data = SimpleDialogData {
-        id: String::new(),
-        title: Some(title),
-        content,
-        dialog_type: DialogType::Warning,
-        visible: false,
-        on_confirm: None,
-        on_cancel: None,
-    };
-    if let Ok(mut m) = DIALOG_MANAGER.lock() {
-        m.show_dialog(data);
-    }
-}
-pub fn show_error_dialog(title: String, content: String) {
-    let data = SimpleDialogData {
-        id: String::new(),
-        title: Some(title),
-        content,
-        dialog_type: DialogType::Error,
-        visible: false,
-        on_confirm: None,
-        on_cancel: None,
-    };
-    if let Ok(mut m) = DIALOG_MANAGER.lock() {
-        m.show_dialog(data);
-    }
-}
-pub fn show_confirm_dialog(title: String, content: String, on_confirm: fn(), on_cancel: fn()) {
-    let data = SimpleDialogData {
-        id: String::new(),
-        title: Some(title),
-        content,
-        dialog_type: DialogType::Confirm,
-        visible: false,
-        on_confirm: Some(on_confirm),
-        on_cancel: Some(on_cancel),
-    };
-    if let Ok(mut m) = DIALOG_MANAGER.lock() {
-        m.show_dialog(data);
-    }
-}
-pub fn close_dialog(id: &str) {
-    if let Ok(mut m) = DIALOG_MANAGER.lock() {
-        m.hide_dialog(id);
-    }
-}
-pub fn close_all_dialogs() {
-    if let Ok(mut m) = DIALOG_MANAGER.lock() {
-        m.clear_all();
-    }
-}
-
-#[component]
-pub fn SimpleDialog(data: SimpleDialogData) -> Element {
-    let id = data.id.clone();
-    let title = data.title.clone();
-    let content = data.content.clone();
-    let dialog_type = data.dialog_type.clone();
-    let on_confirm = data.on_confirm;
-    let on_cancel = data.on_cancel;
-
-    let type_class = match dialog_type {
-        DialogType::Info => "border-blue-200 dark:border-blue-700",
-        DialogType::Success => "border-green-200 dark:border-green-700",
-        DialogType::Warning => "border-yellow-200 dark:border-yellow-700",
-        DialogType::Error => "border-red-200 dark:border-red-700",
-        DialogType::Confirm => "",
-    };
-
-    rsx! {
-        if data.visible {
-            div { class: "fixed inset-0 bg-black bg-opacity-50 z-40",
-                onclick: { let id = id.clone(); move |_| { close_dialog(&id); } },
-            }
-            div { class: "fixed inset-0 flex items-center justify-center z-50",
-                div { class: "bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full mx-4 border-2 {type_class}",
-                    onclick: move |e: MouseEvent| { e.stop_propagation(); },
-                    if title.is_some() {
-                        div { class: "flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700",
-                            h3 { class: "text-lg font-semibold text-gray-900 dark:text-white", "{title.as_ref().unwrap_or(&String::new())}" }
-                            Button { size: ButtonSize::Small, shape: ButtonShape::Circle,
-                                class: Some("text-gray-400 hover:text-gray-600 dark:hover:text-gray-300".to_string()),
-                                onclick: { let id = id.clone(); move |_| { close_dialog(&id); } },
-                                "×"
-                            }
-                        }
-                    }
-                    div { class: "p-4", "{content}" }
-                    div { class: "flex justify-end space-x-2 p-4 border-t border-gray-200 dark:border-gray-700",
-                        if dialog_type == DialogType::Confirm {
-                            Button { button_type: ButtonType::Default, size: ButtonSize::Small, class: Some("text-sm".to_string()),
-                                onclick: { let id = id.clone(); let on_cancel = on_cancel.clone(); move |_| { if let Some(on_cancel) = on_cancel { on_cancel(); } close_dialog(&id); } },
-                                "取消"
-                            }
-                            Button { button_type: ButtonType::Primary, size: ButtonSize::Small,
-                                onclick: { let id = id.clone(); let on_confirm = on_confirm.clone(); move |_| { if let Some(on_confirm) = on_confirm { on_confirm(); } close_dialog(&id); } },
-                                "确认"
-                            }
-                        } else {
-                            Button { button_type: ButtonType::Primary, size: ButtonSize::Small,
-                                onclick: { let id = id.clone(); move |_| { close_dialog(&id); } },
-                                "确定"
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-#[component]
-pub fn GlobalDialogContainer() -> Element {
-    let dialogs = use_signal(|| {
-        if let Ok(manager) = DIALOG_MANAGER.lock() {
-            manager.get_dialogs()
-        } else {
-            Vec::new()
-        }
+    use_context_provider(|| DialogCtx {
+        open,
+        set_open,
+        is_modal: props.is_modal,
+        dialog_labelledby,
+        dialog_describedby,
     });
-    // 广播驱动更新
-    // 暂时禁用广播机制，避免 Web 端兼容性问题
-    // use_effect(move || {
-    //     let mut rx = DIALOG_BUS.0.new_receiver();
-    //     let mut dialogs_signal = dialogs.clone();
-    //     spawn(async move {
-    //         loop {
-    //             let _ = rx.recv().await;
-    //             if let Ok(manager) = DIALOG_MANAGER.lock() {
-    //                 dialogs_signal.set(manager.get_dialogs());
-    //             }
-    //         }
-    //     });
-    // });
+
+    let unique_id = use_unique_id();
+    let id = use_id_or(unique_id, props.id);
+
+    let render = use_animated_open(id, open);
+
     rsx! {
-        div { class: "fixed inset-0 pointer-events-none z-40",
-            for dialog in dialogs.read().iter() { SimpleDialog { data: dialog.clone() } }
+        document::Script {
+            src: FOCUS_TRAP_JS,
+            defer: true
+        }
+        if render() {
+            div {
+                id,
+                class: "dialog-overlay",
+                aria_hidden: (!open()).then_some("true"),
+                onclick: move |_| {
+                    set_open.call(false);
+                },
+                "data-state": if open() { "open" } else { "closed" },
+                ..props.attributes,
+                {props.children}
+            }
         }
     }
 }
 
-fn generate_id(prefix: &str) -> String {
-    use std::time::{SystemTime, UNIX_EPOCH};
-    let timestamp = SystemTime::now()
-        .duration_since(UNIX_EPOCH)
-        .unwrap()
-        .as_millis();
-    format!("{}_{}", prefix, timestamp)
+/// The props for the [`DialogRoot`] component
+#[derive(Props, Clone, PartialEq)]
+pub struct DialogContentProps {
+    /// The ID of the dialog content element.
+    pub id: ReadSignal<Option<String>>,
+
+    /// The class to apply to the dialog content element.
+    #[props(default)]
+    pub class: Option<String>,
+
+    /// Additional attributes to apply to the dialog content element.
+    #[props(extends = GlobalAttributes)]
+    pub attributes: Vec<Attribute>,
+    /// The children of the dialog content.
+    pub children: Element,
 }
 
-// 便捷 API 保持不变（上面已实现）
+/// # DialogContent
+///
+/// The content of the dialog. Any interactive content in the dialog should be placed
+/// inside this component. It will trap focus within the dialog while it is open
+///
+/// This must be used inside an [`DialogRoot`] component.
+///
+/// ## Example
+///
+/// ```rust
+/// use dioxus::prelude::*;
+/// use dioxus_primitives::dialog::{DialogContent, DialogDescription, DialogRoot, DialogTitle};
+///
+/// #[component]
+/// fn Demo() -> Element {
+///     let mut open = use_signal(|| false);
+///
+///     rsx! {
+///         button {
+///             onclick: move |_| open.set(true),
+///             "Show Dialog"
+///         }
+///         DialogRoot {
+///             open: open(),
+///             on_open_change: move |v| open.set(v),
+///             DialogContent {
+///                 button {
+///                     aria_label: "Close",
+///                     tabindex: if open() { "0" } else { "-1" },
+///                     onclick: move |_| open.set(false),
+///                     "×"
+///                 }
+///                 DialogTitle {
+///                     "Item information"
+///                 }
+///                 DialogDescription {
+///                     "Here is some additional information about the item."
+///                 }
+///             }
+///         }
+///     }
+/// }
+/// ```
+///
+/// ## Styling
+///
+/// The [`DialogRoot`] component defines the following data attributes you can use to control styling:
+/// - `data-state`: Indicates if the dialog is open or closed. It can be either "open" or "closed".
+#[component]
+pub fn DialogContent(props: DialogContentProps) -> Element {
+    let ctx: DialogCtx = use_context();
+    let open = ctx.open;
+    let is_modal = ctx.is_modal;
+    let set_open = ctx.set_open;
+
+    // Add a escape key listener to the document when the dialog is open. We can't
+    // just add this to the dialog itself because it might not be focused if the user
+    // is highlighting text or interacting with another element.
+    use_global_escape_listener(move || set_open.call(false));
+
+    let gen_id = use_unique_id();
+    let id = use_id_or(gen_id, props.id);
+    use_effect(move || {
+        let is_modal = is_modal();
+        if !is_modal {
+            // If the dialog is not modal, we don't need to trap focus.
+            return;
+        }
+
+        document::eval(&format!(
+            r#"let dialog = document.getElementById("{id}");
+            let is_open = {open};
+
+            if (is_open) {{
+                dialog.trap = window.createFocusTrap(dialog);
+            }}
+            if (!is_open && dialog.trap) {{
+                dialog.trap.remove();
+                dialog.trap = null;
+            }}"#
+        ));
+    });
+
+    rsx! {
+        div {
+            id,
+            role: "dialog",
+            aria_modal: "true",
+            aria_labelledby: ctx.dialog_labelledby,
+            aria_describedby: ctx.dialog_describedby,
+            class: props.class.clone().unwrap_or_else(|| "dialog".to_string()),
+            onclick: move |e| {
+                // Prevent the click event from propagating to the overlay.
+                e.stop_propagation();
+            },
+            ..props.attributes,
+            {props.children}
+        }
+    }
+}
+
+/// The props for the [`DialogTitle`] component
+#[derive(Props, Clone, PartialEq)]
+pub struct DialogTitleProps {
+    /// The ID of the dialog title element.
+    pub id: ReadSignal<Option<String>>,
+    /// Additional attributes for the dialog title element.
+    #[props(extends = GlobalAttributes)]
+    pub attributes: Vec<Attribute>,
+    /// The children of the dialog title.
+    pub children: Element,
+}
+
+/// # DialogTitle
+///
+/// The title of the dialog. This will be used to label the dialog for accessibility purposes.
+///
+/// This must be used inside an [`DialogRoot`] component and should be placed inside an [`DialogContent`] component.
+///
+/// ## Example
+///
+/// ```rust
+/// use dioxus::prelude::*;
+/// use dioxus_primitives::dialog::{DialogContent, DialogDescription, DialogRoot, DialogTitle};
+///
+/// #[component]
+/// fn Demo() -> Element {
+///     let mut open = use_signal(|| false);
+///
+///     rsx! {
+///         button {
+///             onclick: move |_| open.set(true),
+///             "Show Dialog"
+///         }
+///         DialogRoot {
+///             open: open(),
+///             on_open_change: move |v| open.set(v),
+///             DialogContent {
+///                 button {
+///                     aria_label: "Close",
+///                     tabindex: if open() { "0" } else { "-1" },
+///                     onclick: move |_| open.set(false),
+///                     "×"
+///                 }
+///                 DialogTitle {
+///                     "Item information"
+///                 }
+///                 DialogDescription {
+///                     "Here is some additional information about the item."
+///                 }
+///             }
+///         }
+///     }
+/// }
+/// ```
+#[component]
+pub fn DialogTitle(props: DialogTitleProps) -> Element {
+    let ctx: DialogCtx = use_context();
+    let id = use_id_or(ctx.dialog_labelledby, props.id);
+
+    rsx! {
+        h2 {
+            id: id,
+            ..props.attributes,
+            {props.children}
+        }
+    }
+}
+
+/// The props for the [`DialogDescription`] component
+#[derive(Props, Clone, PartialEq)]
+pub struct DialogDescriptionProps {
+    /// The ID of the dialog description element.
+    pub id: ReadSignal<Option<String>>,
+    /// Additional attributes for the dialog description element.
+    #[props(extends = GlobalAttributes)]
+    pub attributes: Vec<Attribute>,
+    /// The children of the dialog description.
+    pub children: Element,
+}
+
+/// # DialogDescription
+///
+/// The description of the dialog. This will be used to describe the dialog for accessibility purposes.
+///
+/// This must be used inside an [`DialogRoot`] component and should be placed inside an [`DialogContent`] component.
+///
+/// ## Example
+///
+/// ```rust
+/// use dioxus::prelude::*;
+/// use dioxus_primitives::dialog::{DialogContent, DialogDescription, DialogRoot, DialogTitle};
+///
+/// #[component]
+/// fn Demo() -> Element {
+///     let mut open = use_signal(|| false);
+///
+///     rsx! {
+///         button {
+///             onclick: move |_| open.set(true),
+///             "Show Dialog"
+///         }
+///         DialogRoot {
+///             open: open(),
+///             on_open_change: move |v| open.set(v),
+///             DialogContent {
+///                 button {
+///                     aria_label: "Close",
+///                     tabindex: if open() { "0" } else { "-1" },
+///                     onclick: move |_| open.set(false),
+///                     "×"
+///                 }
+///                 DialogTitle {
+///                     "Item information"
+///                 }
+///                 DialogDescription {
+///                     "Here is some additional information about the item."
+///                 }
+///             }
+///         }
+///     }
+/// }
+/// ```
+#[component]
+pub fn DialogDescription(props: DialogDescriptionProps) -> Element {
+    let ctx: DialogCtx = use_context();
+    let id = use_id_or(ctx.dialog_describedby, props.id);
+
+    rsx! {
+        p {
+            id: id,
+            ..props.attributes,
+            {props.children}
+        }
+    }
+}

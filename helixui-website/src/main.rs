@@ -2,11 +2,10 @@
 // need dioxus
 use dioxus::prelude::*;
 
-use helixui::components::MessageContainer;
 use views::{
-    AvatarPage, BadgePage, ButtonPage, CardPage, ComponentsPage, DialogPage, DividerPage, FlexPage,
-    GridPage, Guide, Home, IconPage, Introduction, LayoutPage, MessagePage, ModalPage, QuickStart,
-    SpacePage, SplitPage, TopNavbar, Version,
+    AvatarPage, BadgePage, ButtonPage, CardPage, ComponentsPage, DividerPage, FlexPage, GridPage,
+    Guide, Home, IconPage, Introduction, LayoutPage, QuickStart, SpacePage, SplitPage, ToastPage,
+    TooltipPage, TopNavbar, Version,
 };
 
 /// i18n internationalization support
@@ -61,12 +60,10 @@ enum Route {
         SpacePage {},
         #[route("/component/split")]
         SplitPage {},
-        #[route("/component/modal")]
-        ModalPage {},
-        #[route("/component/message")]
-        MessagePage {},
-        #[route("/component/dialog")]
-        DialogPage {},
+        #[route("/component/toast")]
+        ToastPage {},
+        #[route("/component/tooltip")]
+        TooltipPage {},
 }
 
 // We can import assets in dioxus with the `asset!` macro. This macro takes a path to an asset relative to the crate root.
@@ -93,14 +90,10 @@ fn App() -> Element {
         // In addition to element and text (which we will see later), rsx can contain other components. In this case,
         // we are using the `document::Link` component to add a link to our favicon and main CSS file into the head of our app.
         document::Link { rel: "icon", href: FAVICON }
-        document::Link { rel: "stylesheet", href: MAIN_CSS }
-        document::Link { rel: "stylesheet", href: TAILWIND_CSS }
+        document::Stylesheet { href: MAIN_CSS }
+        document::Stylesheet { href: TAILWIND_CSS }
 
-        // The router component renders the route enum we defined above. It will handle synchronization of the URL and render
         // the layouts and components for the active route.
         Router::<Route> {}
-
-        // 全局消息容器
-        MessageContainer {}
     }
 }

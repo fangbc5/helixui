@@ -11,8 +11,8 @@ authors = ["fangbaichun <fangbaichun@beemwork.com>"]
 edition = "2021"
 
 [workspace.dependencies]
-dioxus = { version = "0.6.0", features = ["router"] }
-futures-timer = "3"
+dioxus = "0.7.0-rc.3"
+tracing = { version = "0.1", features = ["std"] }
 
 [profile]
 

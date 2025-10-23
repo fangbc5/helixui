@@ -25,5 +25,18 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    function({ addComponents }) {
+      addComponents({
+        '.toast-container': {
+          '&:hover .toast': {
+            'margin-top': '0 !important',
+            'opacity': '1 !important',
+            'transform': 'scale(1) !important',
+            'filter': 'brightness(1) !important',
+          },
+        },
+      })
+    }
+  ],
 };

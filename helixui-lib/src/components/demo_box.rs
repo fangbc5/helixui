@@ -1,4 +1,5 @@
 use dioxus::prelude::*;
+use dioxus_time::use_timeout;
 
 /// 演示框组件 - 用于展示组件示例和代码
 #[component]
@@ -99,15 +100,14 @@ pub fn DemoBox(
                     class: "flex items-center gap-1 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors",
                     onclick: move |_| {
                         let _code_to_copy = code.clone();
-                        spawn(async move {
-                            // 复制功能暂时禁用，避免 js-sys 依赖问题
-                            // TODO: 实现跨平台的复制功能
-                            copied.set(true);
-                            // 2秒后重置复制状态
-                            use std::time::Duration;
-                            tokio::time::sleep(tokio::time::Duration::from_millis(2000)).await;
+                        // 复制功能暂时禁用，避免 js-sys 依赖问题
+                        // TODO: 实现跨平台的复制功能
+                        copied.set(true);
+                        // 2秒后重置复制状态
+                        let timeout = use_timeout(std::time::Duration::from_millis(2000), move |()| {
                             copied.set(false);
                         });
+                        timeout.action(());
                     },
 
                     if *copied.read() {
