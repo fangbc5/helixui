@@ -161,6 +161,13 @@ pub fn ComponentsPage() -> Element {
                                 status: ComponentStatus::Available,
                             },
                             ComponentCard {
+                                name: "Dialog".to_string(),
+                                name_zh: "对话框".to_string(),
+                                description: "用于显示模态对话框和重要信息。".to_string(),
+                                route: crate::Route::DialogPage {},
+                                status: ComponentStatus::Available,
+                            },
+                            ComponentCard {
                                 name: "Toast".to_string(),
                                 name_zh: "提示框".to_string(),
                                 description: "轻量级的全局提示反馈。".to_string(),

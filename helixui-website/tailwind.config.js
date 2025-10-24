@@ -48,11 +48,43 @@ module.exports = {
             transform: 'scale(0.95) translateY(-2px)'
           },
         },
+        'dialog-overlay-show': {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
+        'dialog-overlay-hide': {
+          '0%': { opacity: '1' },
+          '100%': { opacity: '0' },
+        },
+        'dialog-content-show': {
+          '0%': {
+            opacity: '0',
+            transform: 'scale(0.95) translate(-50%, -50%)'
+          },
+          '100%': {
+            opacity: '1',
+            transform: 'scale(1) translate(-50%, -50%)'
+          },
+        },
+        'dialog-content-hide': {
+          '0%': {
+            opacity: '1',
+            transform: 'scale(1) translate(-50%, -50%)'
+          },
+          '100%': {
+            opacity: '0',
+            transform: 'scale(0.95) translate(-50%, -50%)'
+          },
+        },
       },
       animation: {
         'tooltip-fade-in': 'tooltip-fade-in 0.2s ease-in-out',
         'alert-animate-in': 'alert-animate-in 150ms ease-out forwards',
         'alert-animate-out': 'alert-animate-out 150ms ease-in forwards',
+        'dialog-overlay-show': 'dialog-overlay-show 150ms ease-out forwards',
+        'dialog-overlay-hide': 'dialog-overlay-hide 150ms ease-in forwards',
+        'dialog-content-show': 'dialog-content-show 150ms ease-out forwards',
+        'dialog-content-hide': 'dialog-content-hide 150ms ease-in forwards',
       },
     },
   },

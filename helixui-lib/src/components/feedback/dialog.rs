@@ -125,7 +125,7 @@ pub fn DialogRoot(props: DialogRootProps) -> Element {
         if render() {
             div {
                 id,
-                class: "dialog-overlay",
+                class: "fixed inset-0 z-[1000] bg-black/30 data-[state=closed]:animate-[dialog-overlay-hide_150ms_ease-in_forwards] data-[state=open]:animate-[dialog-overlay-show_150ms_ease-out_forwards]",
                 aria_hidden: (!open()).then_some("true"),
                 onclick: move |_| {
                     set_open.call(false);
@@ -245,7 +245,7 @@ pub fn DialogContent(props: DialogContentProps) -> Element {
             aria_modal: "true",
             aria_labelledby: ctx.dialog_labelledby,
             aria_describedby: ctx.dialog_describedby,
-            class: props.class.clone().unwrap_or_else(|| "dialog".to_string()),
+            class: props.class.clone().unwrap_or_else(|| "fixed z-[1001] top-1/2 left-1/2 flex w-full max-w-[calc(100%-2rem)] box-border flex-col p-6 border border-gray-300 dark:border-gray-600 rounded-lg m-0 bg-white dark:bg-gray-800 shadow-[0_2px_10px_rgba(0,0,0,0.18)] text-gray-900 dark:text-gray-100 font-sans gap-4 text-center transform -translate-x-1/2 -translate-y-1/2 sm:max-w-[32rem] sm:text-left data-[state=closed]:animate-[dialog-content-hide_150ms_ease-in_forwards] data-[state=open]:animate-[dialog-content-show_150ms_ease-out_forwards]".to_string()),
             onclick: move |e| {
                 // Prevent the click event from propagating to the overlay.
                 e.stop_propagation();
@@ -318,6 +318,7 @@ pub fn DialogTitle(props: DialogTitleProps) -> Element {
     rsx! {
         h2 {
             id: id,
+            class: "m-0 text-gray-900 dark:text-gray-100 text-xl font-bold",
             ..props.attributes,
             {props.children}
         }
@@ -386,6 +387,7 @@ pub fn DialogDescription(props: DialogDescriptionProps) -> Element {
     rsx! {
         p {
             id: id,
+            class: "m-0 text-gray-600 dark:text-gray-400 text-base",
             ..props.attributes,
             {props.children}
         }

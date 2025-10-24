@@ -144,6 +144,8 @@ pub fn t(key: &str) -> String {
         // 组件页面
         (Language::ZhCN, "component.alert") => "警告框 Alert",
         (Language::EnUS, "component.alert") => "Alert",
+        (Language::ZhCN, "component.dialog") => "对话框 Dialog",
+        (Language::EnUS, "component.dialog") => "Dialog",
         (Language::ZhCN, "component.avatar") => "头像 Avatar",
         (Language::EnUS, "component.avatar") => "Avatar",
         (Language::ZhCN, "component.badge") => "标记 Badge",

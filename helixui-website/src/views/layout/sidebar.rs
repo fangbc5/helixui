@@ -192,6 +192,7 @@ pub fn ComponentsSidebar() -> Element {
             vec![
                 SidebarItem::link(i18n::t("component.alert"), crate::Route::AlertPage {}),
                 SidebarItem::link(i18n::t("component.badge"), crate::Route::BadgePage {}),
+                SidebarItem::link(i18n::t("component.dialog"), crate::Route::DialogPage {}),
                 SidebarItem::link(i18n::t("component.toast"), crate::Route::ToastPage {}),
                 SidebarItem::link(i18n::t("component.tooltip"), crate::Route::TooltipPage {}),
             ],

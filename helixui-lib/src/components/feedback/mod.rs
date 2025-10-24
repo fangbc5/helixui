@@ -14,6 +14,7 @@ pub use alert_dialog::{
     AlertDialogDescription, AlertDialogRoot, AlertDialogTitle,
 };
 pub use badge::{Badge, BadgeType};
+pub use dialog::{DialogContent, DialogDescription, DialogRoot, DialogTitle};
 pub use toast::{
     consume_toast, use_toast, Toast, ToastOptions, ToastProps, ToastProvider, ToastProviderProps,
     ToastType, Toasts,
