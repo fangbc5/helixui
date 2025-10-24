@@ -3,9 +3,9 @@
 use dioxus::prelude::*;
 
 use views::{
-    AvatarPage, BadgePage, ButtonPage, CardPage, ComponentsPage, DividerPage, FlexPage, GridPage,
-    Guide, Home, IconPage, Introduction, LayoutPage, QuickStart, SpacePage, SplitPage, ToastPage,
-    TooltipPage, TopNavbar, Version,
+    AlertPage, AvatarPage, BadgePage, ButtonPage, CardPage, ComponentsPage, DividerPage, FlexPage,
+    GridPage, Guide, Home, IconPage, Introduction, LayoutPage, QuickStart, SpacePage, SplitPage,
+    ToastPage, TooltipPage, TopNavbar, Version,
 };
 
 /// i18n internationalization support
@@ -60,6 +60,8 @@ enum Route {
         SpacePage {},
         #[route("/component/split")]
         SplitPage {},
+        #[route("/component/alert")]
+        AlertPage {},
         #[route("/component/toast")]
         ToastPage {},
         #[route("/component/tooltip")]

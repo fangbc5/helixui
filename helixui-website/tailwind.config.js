@@ -28,9 +28,31 @@ module.exports = {
           '0%': { opacity: '0' },
           '100%': { opacity: '1' },
         },
+        'alert-animate-in': {
+          '0%': { 
+            opacity: '0',
+            transform: 'scale(0.95) translateY(-2px)'
+          },
+          '100%': { 
+            opacity: '1',
+            transform: 'scale(1) translateY(0)'
+          },
+        },
+        'alert-animate-out': {
+          '0%': { 
+            opacity: '1',
+            transform: 'scale(1) translateY(0)'
+          },
+          '100%': { 
+            opacity: '0',
+            transform: 'scale(0.95) translateY(-2px)'
+          },
+        },
       },
       animation: {
         'tooltip-fade-in': 'tooltip-fade-in 0.2s ease-in-out',
+        'alert-animate-in': 'alert-animate-in 150ms ease-out forwards',
+        'alert-animate-out': 'alert-animate-out 150ms ease-in forwards',
       },
     },
   },

@@ -106,7 +106,7 @@ pub fn AlertDialogRoot(props: AlertDialogRootProps) -> Element {
         if render_element() {
             div {
                 id,
-                class: "alert-dialog-overlay",
+                class: "fixed inset-0 z-[1000] bg-black/30 data-[state=closed]:animate-[alert-animate-out_150ms_ease-in_forwards] data-[state=open]:animate-[alert-animate-in_150ms_ease-out_forwards]",
                 "data-state": if open() { "open" } else { "closed" },
                 ..props.attributes,
                 {props.children}
@@ -208,7 +208,7 @@ pub fn AlertDialogContent(props: AlertDialogContentProps) -> Element {
             aria_modal: "true",
             aria_labelledby: ctx.labelledby.clone(),
             aria_describedby: ctx.describedby.clone(),
-            class: props.class.clone().unwrap_or_else(|| "alert-dialog".to_string()),
+            class: props.class.clone().unwrap_or_else(|| "fixed z-[1001] top-1/2 left-1/2 flex w-full max-w-[calc(100%-2rem)] box-border flex-col p-8 border border-gray-300 dark:border-gray-600 rounded-lg m-0 bg-white dark:bg-gray-800 shadow-[0_2px_10px_rgba(0,0,0,0.18)] text-gray-900 dark:text-gray-100 font-sans gap-4 text-center transform -translate-x-1/2 -translate-y-1/2 sm:max-w-[32rem] sm:text-left".to_string()),
             ..props.attributes,
             {props.children}
         }
@@ -268,7 +268,12 @@ pub struct AlertDialogTitleProps {
 pub fn AlertDialogTitle(props: AlertDialogTitleProps) -> Element {
     let ctx: AlertDialogCtx = use_context();
     rsx! {
-        h2 { id: ctx.labelledby.clone(), class: "alert-dialog-title", ..props.attributes, {props.children} }
+        h2 {
+            id: ctx.labelledby.clone(),
+            class: "m-0 text-gray-900 dark:text-gray-100 text-xl font-bold",
+            ..props.attributes,
+            {props.children}
+        }
     }
 }
 
@@ -325,7 +330,12 @@ pub struct AlertDialogDescriptionProps {
 pub fn AlertDialogDescription(props: AlertDialogDescriptionProps) -> Element {
     let ctx: AlertDialogCtx = use_context();
     rsx! {
-        p { id: ctx.describedby.clone(), class: "alert-dialog-description", ..props.attributes, {props.children} }
+        p {
+            id: ctx.describedby.clone(),
+            class: "m-0 text-gray-600 dark:text-gray-400 text-base",
+            ..props.attributes,
+            {props.children}
+        }
     }
 }
 
@@ -381,7 +391,11 @@ pub struct AlertDialogActionsProps {
 #[component]
 pub fn AlertDialogActions(props: AlertDialogActionsProps) -> Element {
     rsx! {
-        div { ..props.attributes, {props.children} }
+        div {
+            class: "flex flex-col-reverse gap-3 sm:flex-row sm:justify-end",
+            ..props.attributes,
+            {props.children}
+        }
     }
 }
 
@@ -454,6 +468,7 @@ pub fn AlertDialogAction(props: AlertDialogActionProps) -> Element {
             tabindex: if open() { "0" } else { "-1" },
             type: "button",
             onclick: on_click,
+            class: "px-[18px] py-2 border border-red-500 rounded-lg bg-red-500 text-white cursor-pointer text-base transition-colors duration-200 hover:bg-red-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2",
             ..props.attributes,
             {props.children}
         }
@@ -530,6 +545,7 @@ pub fn AlertDialogCancel(props: AlertDialogCancelProps) -> Element {
             tabindex: if open() { "0" } else { "-1" },
             type: "button",
             onclick: on_click,
+            class: "px-[18px] py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 cursor-pointer text-base transition-colors duration-200 hover:bg-gray-50 dark:hover:bg-gray-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2",
             ..props.attributes,
             {props.children}
         }

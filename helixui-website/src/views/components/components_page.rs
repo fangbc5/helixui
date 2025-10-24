@@ -147,6 +147,13 @@ pub fn ComponentsPage() -> Element {
                         description: "向用户反馈信息",
                         components: vec![
                             ComponentCard {
+                                name: "Alert".to_string(),
+                                name_zh: "警告框".to_string(),
+                                description: "用于显示重要的警告信息。".to_string(),
+                                route: crate::Route::AlertPage {},
+                                status: ComponentStatus::Available,
+                            },
+                            ComponentCard {
                                 name: "Badge".to_string(),
                                 name_zh: "标记".to_string(),
                                 description: "用于显示状态标记或数量信息。".to_string(),

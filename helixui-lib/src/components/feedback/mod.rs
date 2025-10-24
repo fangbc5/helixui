@@ -8,7 +8,11 @@ mod tooltip;
 mod dropdown_menu;
 mod focus;
 
-// Re-export toast components and functions
+// Re-export components
+pub use alert_dialog::{
+    AlertDialogAction, AlertDialogActions, AlertDialogCancel, AlertDialogContent,
+    AlertDialogDescription, AlertDialogRoot, AlertDialogTitle,
+};
 pub use badge::{Badge, BadgeType};
 pub use toast::{
     consume_toast, use_toast, Toast, ToastOptions, ToastProps, ToastProvider, ToastProviderProps,
