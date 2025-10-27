@@ -135,30 +135,60 @@ pub fn Checkbox(props: CheckboxProps) -> Element {
         disabled: props.disabled,
     });
 
+    let button_class = if (props.disabled)() {
+        "w-4 h-4 box-border p-0 border-none rounded bg-gray-100 dark:bg-gray-800 shadow-inner cursor-not-allowed opacity-50"
+    } else if checked() == CheckboxState::Checked {
+        "w-4 h-4 box-border p-0 border-none rounded bg-blue-500 dark:bg-blue-600 shadow-inner cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+    } else {
+        "w-4 h-4 box-border p-0 border-none rounded bg-gray-100 dark:bg-gray-800 shadow-[inset_0_0_0_1px_rgb(156_163_175)] dark:shadow-[inset_0_0_0_1px_rgb(75_85_99)] cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+    };
+
     rsx! {
-        button {
-            type: "button",
-            value: props.value,
-            role: "checkbox",
-            aria_checked: checked().to_aria_checked(),
-            aria_required: props.required,
-            disabled: props.disabled,
-            "data-state": checked().to_data_state(),
-            "data-disabled": props.disabled,
+        div {
+            class: "flex items-center gap-3",
+            button {
+                type: "button",
+                value: props.value,
+                role: "checkbox",
+                aria_checked: checked().to_aria_checked(),
+                aria_required: props.required,
+                disabled: props.disabled,
+                class: format!("relative flex items-center justify-center {button_class}"),
+                "data-state": checked().to_data_state(),
+                "data-disabled": if (props.disabled)() { "true" } else { "false" },
 
-            onclick: move |_| {
-                let new_checked = !checked();
-                set_checked.call(new_checked);
-            },
+                onclick: move |_| {
+                    if !(props.disabled)() {
+                        let new_checked = !checked();
+                        set_checked.call(new_checked);
+                    }
+                },
 
-            // Aria says only spacebar can change state of checkboxes.
-            onkeydown: move |e| {
-                if e.key() == Key::Enter {
-                    e.prevent_default();
+                // Aria says only spacebar can change state of checkboxes.
+                onkeydown: move |e| {
+                    if e.key() == Key::Enter {
+                        e.prevent_default();
+                    }
+                },
+
+                ..props.attributes,
+
+                if checked() == CheckboxState::Checked {
+                    svg {
+                        class: "w-3 h-3 stroke-current text-white",
+                        view_box: "0 0 24 24",
+                        fill: "none",
+                        stroke_linecap: "round",
+                        stroke_linejoin: "round",
+                        stroke_width: "3",
+                        path {
+                            d: "M5 13l4 4L19 7",
+                            stroke: "currentColor",
+                        }
+                    }
                 }
-            },
+            }
 
-            ..props.attributes,
             {props.children}
         }
         BubbleInput {

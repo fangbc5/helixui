@@ -78,7 +78,7 @@ pub fn Switch(props: SwitchProps) -> Element {
 
     rsx! {
         div {
-            class: "flex items-center gap-4",
+            class: "flex items-center gap-3",
             {props.children}
 
             button {
@@ -89,11 +89,11 @@ pub fn Switch(props: SwitchProps) -> Element {
                 aria_required: props.required,
                 disabled: props.disabled,
                 class: if (props.disabled)() {
-                    "relative w-8 h-[1.15rem] rounded-full bg-gray-300 dark:bg-gray-600 transition-all duration-150 cursor-not-allowed opacity-50 p-[1px]"
+                    "relative w-11 h-6 rounded-full transition-all duration-300 cursor-not-allowed opacity-50 shadow-inner"
                 } else if checked() {
-                    "relative w-8 h-[1.15rem] rounded-full bg-blue-600 dark:bg-blue-500 transition-all duration-150 cursor-pointer p-[1px]"
+                    "relative w-11 h-6 rounded-full bg-blue-500 dark:bg-blue-600 transition-all duration-300 cursor-pointer shadow-inner hover:bg-blue-600 dark:hover:bg-blue-500"
                 } else {
-                    "relative w-8 h-[1.15rem] rounded-full bg-gray-300 dark:bg-gray-600 transition-all duration-150 cursor-pointer p-[1px]"
+                    "relative w-11 h-6 rounded-full bg-gray-200 dark:bg-gray-700 transition-all duration-300 cursor-pointer shadow-inner hover:bg-gray-300 dark:hover:bg-gray-600"
                 },
                 "data-state": if checked() { "checked" } else { "unchecked" },
                 "data-disabled": if (props.disabled)() { "true" } else { "false" },
@@ -116,9 +116,9 @@ pub fn Switch(props: SwitchProps) -> Element {
 
                 span {
                     class: if checked() {
-                        "block w-[calc(1.15rem-2px)] h-[calc(1.15rem-2px)] rounded-full bg-white dark:bg-gray-300 transition-all duration-150 will-change-transform translate-x-[calc(2rem-1px-calc(1.15rem-2px))]"
+                        "block w-5 h-5 rounded-full bg-white shadow-md transition-all duration-300 will-change-transform translate-x-[calc(2.75rem-1.25rem-2px)] transform"
                     } else {
-                        "block w-[calc(1.15rem-2px)] h-[calc(1.15rem-2px)] rounded-full bg-white dark:bg-gray-300 transition-all duration-150 will-change-transform translate-x-[1px]"
+                        "block w-5 h-5 rounded-full bg-white shadow-md transition-all duration-300 will-change-transform translate-x-[2px] transform"
                     },
                 }
             }
