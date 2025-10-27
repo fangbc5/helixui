@@ -3,6 +3,7 @@ pub mod copyright;
 pub mod data_display;
 pub mod demo_box;
 pub mod feedback;
+pub mod focus;
 pub mod footer;
 pub mod form;
 pub mod layout;

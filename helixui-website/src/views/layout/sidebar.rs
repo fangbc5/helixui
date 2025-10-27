@@ -197,6 +197,37 @@ pub fn ComponentsSidebar() -> Element {
                 SidebarItem::link(i18n::t("component.tooltip"), crate::Route::TooltipPage {}),
             ],
         ),
+        SidebarItem::category(
+            i18n::t("sidebar.data-input"),
+            vec![
+                SidebarItem::link(i18n::t("component.input"), crate::Route::InputPage {}),
+                SidebarItem::link(
+                    i18n::t("component.textarea"),
+                    crate::Route::TextAreaPage {},
+                ),
+                SidebarItem::link(i18n::t("component.checkbox"), crate::Route::CheckboxPage {}),
+                SidebarItem::link(i18n::t("component.radio"), crate::Route::RadioPage {}),
+                SidebarItem::link(i18n::t("component.switch"), crate::Route::SwitchPage {}),
+                SidebarItem::link(i18n::t("component.select"), crate::Route::ComponentsPage {}),
+            ],
+        ),
+        SidebarItem::category(
+            i18n::t("sidebar.data-display"),
+            vec![
+                SidebarItem::link(i18n::t("component.table"), crate::Route::TablePage {}),
+                SidebarItem::link(i18n::t("component.list"), crate::Route::ComponentsPage {}),
+                SidebarItem::link(i18n::t("component.tag"), crate::Route::ComponentsPage {}),
+                SidebarItem::link(
+                    i18n::t("component.progress"),
+                    crate::Route::ComponentsPage {},
+                ),
+                SidebarItem::link(
+                    i18n::t("component.skeleton"),
+                    crate::Route::ComponentsPage {},
+                ),
+                SidebarItem::link(i18n::t("component.empty"), crate::Route::ComponentsPage {}),
+            ],
+        ),
     ];
 
     rsx! {

@@ -2,9 +2,7 @@
 
 use std::rc::Rc;
 
-use crate::components::feedback::focus::{
-    use_focus_controlled_item, use_focus_provider, FocusState,
-};
+use crate::components::focus::{use_focus_controlled_item, use_focus_provider, FocusState};
 use crate::components::{use_animated_open, use_controlled, use_id_or, use_unique_id};
 use dioxus::prelude::*;
 

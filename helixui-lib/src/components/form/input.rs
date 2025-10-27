@@ -1,85 +1,67 @@
 use dioxus::prelude::*;
 
-/// 输入框组件的属性
+/// Input 组件的属性
 #[derive(Props, Clone, PartialEq)]
 pub struct InputProps {
+    /// 输入框的类型
+    #[props(default = String::from("text"))]
+    pub input_type: String,
+
     /// 输入框的值
-    #[props(default)]
     pub value: Option<String>,
-    
+
     /// 占位符文本
     #[props(default)]
     pub placeholder: Option<String>,
-    
+
     /// 是否禁用
     #[props(default = false)]
     pub disabled: bool,
-    
+
     /// 是否只读
     #[props(default = false)]
     pub readonly: bool,
-    
-    /// 输入框类型
-    #[props(default = InputType::Text)]
-    pub input_type: InputType,
-    
-    /// 自定义类名
-    #[props(default)]
-    pub class: Option<String>,
-    
+
     /// 值变化时的回调
     #[props(default)]
     pub on_change: Option<EventHandler<String>>,
+
+    /// 额外的class名称
+    #[props(default)]
+    pub class: Option<String>,
 }
 
-/// 输入框类型
-#[derive(Clone, PartialEq)]
-pub enum InputType {
-    Text,
-    Password,
-    Email,
-    Number,
-    Tel,
-    Url,
-}
-
-impl InputType {
-    fn as_str(&self) -> &'static str {
-        match self {
-            InputType::Text => "text",
-            InputType::Password => "password",
-            InputType::Email => "email",
-            InputType::Number => "number",
-            InputType::Tel => "tel",
-            InputType::Url => "url",
-        }
-    }
-}
-
-/// 输入框组件
+/// Input 组件
 #[component]
 pub fn Input(props: InputProps) -> Element {
-    let base_class = "px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed";
-    
-    let final_class = if let Some(custom_class) = props.class {
-        format!("{} {}", base_class, custom_class)
-    } else {
-        base_class.to_string()
-    };
+    // 基础样式类
+    let base_classes = "relative flex box-border flex-row items-center justify-between px-3 py-2 gap-1 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 cursor-text transition-all duration-100 ease-out";
+
+    // 构建完整的class字符串
+    let mut classes = base_classes.to_string();
+    classes.push_str(" placeholder:text-gray-400 dark:placeholder:text-gray-500"); // placeholder颜色
+    classes.push_str(" disabled:cursor-not-allowed disabled:text-gray-400 dark:disabled:text-gray-600 disabled:bg-gray-100 dark:disabled:bg-gray-900"); // disabled状态
+    classes.push_str(" hover:border-gray-400 dark:hover:border-gray-500"); // hover状态
+    classes.push_str(" focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:outline-none"); // focus状态
+    classes.push_str(" read-only:bg-gray-50 dark:read-only:bg-gray-900"); // readonly状态
+
+    if !props.class.clone().unwrap_or_default().is_empty() {
+        classes.push_str(&format!(" {}", props.class.unwrap_or_default()));
+    }
 
     rsx! {
         input {
-            r#type: props.input_type.as_str(),
-            value: props.value.unwrap_or_default(),
-            placeholder: props.placeholder.unwrap_or_default(),
+            r#type: props.input_type,
+            value: props.value,
+            placeholder: props.placeholder,
             disabled: props.disabled,
             readonly: props.readonly,
-            class: final_class,
-            oninput: move |event| {
-                if let Some(handler) = &props.on_change {
-                    handler.call(event.value());
+            class: classes,
+            onchange: move |e| {
+                if let Some(ref handler) = props.on_change {
+                    handler.call(e.value());
                 }
-            }
+            },
         }
     }
 }

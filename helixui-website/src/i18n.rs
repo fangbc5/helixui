@@ -86,6 +86,8 @@ pub fn t(key: &str) -> String {
         (Language::EnUS, "sidebar.feedback") => "Feedback",
         (Language::ZhCN, "sidebar.data-input") => "数据输入",
         (Language::EnUS, "sidebar.data-input") => "Data Input",
+        (Language::ZhCN, "sidebar.data-display") => "数据展示",
+        (Language::EnUS, "sidebar.data-display") => "Data Display",
         (Language::ZhCN, "sidebar.layout") => "布局组件",
         (Language::EnUS, "sidebar.layout") => "Layout",
         
@@ -172,6 +174,34 @@ pub fn t(key: &str) -> String {
         (Language::EnUS, "component.toast") => "Toast",
         (Language::ZhCN, "component.tooltip") => "工具提示 Tooltip",
         (Language::EnUS, "component.tooltip") => "Tooltip",
+        
+        // 数据输入组件
+        (Language::ZhCN, "component.input") => "输入框 Input",
+        (Language::EnUS, "component.input") => "Input",
+        (Language::ZhCN, "component.textarea") => "文本域 TextArea",
+        (Language::EnUS, "component.textarea") => "TextArea",
+        (Language::ZhCN, "component.select") => "选择器 Select",
+        (Language::EnUS, "component.select") => "Select",
+        (Language::ZhCN, "component.checkbox") => "复选框 Checkbox",
+        (Language::EnUS, "component.checkbox") => "Checkbox",
+        (Language::ZhCN, "component.radio") => "单选框 Radio",
+        (Language::EnUS, "component.radio") => "Radio",
+        (Language::ZhCN, "component.switch") => "开关 Switch",
+        (Language::EnUS, "component.switch") => "Switch",
+        
+        // 数据展示组件
+        (Language::ZhCN, "component.table") => "表格 Table",
+        (Language::EnUS, "component.table") => "Table",
+        (Language::ZhCN, "component.list") => "列表 List",
+        (Language::EnUS, "component.list") => "List",
+        (Language::ZhCN, "component.tag") => "标签 Tag",
+        (Language::EnUS, "component.tag") => "Tag",
+        (Language::ZhCN, "component.progress") => "进度条 Progress",
+        (Language::EnUS, "component.progress") => "Progress",
+        (Language::ZhCN, "component.skeleton") => "骨架屏 Skeleton",
+        (Language::EnUS, "component.skeleton") => "Skeleton",
+        (Language::ZhCN, "component.empty") => "空状态 Empty",
+        (Language::EnUS, "component.empty") => "Empty",
 
         // 默认
         _ => key,

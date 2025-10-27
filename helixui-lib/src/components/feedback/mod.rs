@@ -6,7 +6,6 @@ mod toast;
 mod tooltip;
 
 mod dropdown_menu;
-mod focus;
 
 // Re-export components
 pub use alert_dialog::{

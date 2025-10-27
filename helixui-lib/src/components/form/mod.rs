@@ -3,11 +3,12 @@
 //! 包含各种表单输入组件，如输入框、选择器、日期选择器等
 
 // 导出表单组件
+pub mod checkbox;
 pub mod input;
+pub mod radio;
+pub mod switch;
+pub mod textarea;
 // pub mod select;
-// pub mod checkbox;
-// pub mod radio;
-// pub mod textarea;
 // pub mod date_picker;
 // pub mod time_picker;
 // pub mod file_upload;
@@ -15,11 +16,12 @@ pub mod input;
 // pub mod form;
 
 // 重新导出组件
+pub use checkbox::{Checkbox, CheckboxProps};
 pub use input::*;
+pub use radio::{RadioGroup, RadioGroupProps, RadioItem, RadioItemProps};
+pub use switch::*;
+pub use textarea::*;
 // pub use select::*;
-// pub use checkbox::*;
-// pub use radio::*;
-// pub use textarea::*;
 // pub use date_picker::*;
 // pub use time_picker::*;
 // pub use file_upload::*;
