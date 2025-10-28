@@ -1,8 +1,8 @@
-use helixui::components::{DemoBox, Icon, IconSize, IconType};
+use crate::views::layout::ComponentsSidebar;
 use crate::views::layout::TocItem;
 use crate::views::DocPage;
-use crate::views::layout::ComponentsSidebar;
 use dioxus::prelude::*;
+use helixui::components::{DemoBox, Icon, IconSize, IconType, Table};
 
 /// Icon 组件文档页面
 #[component]
@@ -907,56 +907,17 @@ rsx! {
                         "API"
                     }
 
-                    div {
-                        class: "overflow-x-auto",
-                        table {
-                            class: "w-full text-left border-collapse",
-                            thead {
-                                tr {
-                                    class: "border-b border-gray-200 dark:border-gray-700",
-                                    th { class: "p-3 text-gray-900 dark:text-white font-semibold", "属性" }
-                                    th { class: "p-3 text-gray-900 dark:text-white font-semibold", "说明" }
-                                    th { class: "p-3 text-gray-900 dark:text-white font-semibold", "类型" }
-                                    th { class: "p-3 text-gray-900 dark:text-white font-semibold", "默认值" }
-                                }
-                            }
-                            tbody {
-                                tr {
-                                    class: "border-b border-gray-100 dark:border-gray-800",
-                                    td { class: "p-3 text-gray-900 dark:text-white font-mono text-sm", "icon" }
-                                    td { class: "p-3 text-gray-600 dark:text-gray-300", "图标类型" }
-                                    td { class: "p-3 text-gray-600 dark:text-gray-300 font-mono text-sm", "IconType" }
-                                    td { class: "p-3 text-gray-600 dark:text-gray-300", "-" }
-                                }
-                                tr {
-                                    class: "border-b border-gray-100 dark:border-gray-800",
-                                    td { class: "p-3 text-gray-900 dark:text-white font-mono text-sm", "size" }
-                                    td { class: "p-3 text-gray-600 dark:text-gray-300", "图标尺寸" }
-                                    td { class: "p-3 text-gray-600 dark:text-gray-300 font-mono text-sm", "IconSize" }
-                                    td { class: "p-3 text-gray-600 dark:text-gray-300", "Medium" }
-                                }
-                                tr {
-                                    class: "border-b border-gray-100 dark:border-gray-800",
-                                    td { class: "p-3 text-gray-900 dark:text-white font-mono text-sm", "color" }
-                                    td { class: "p-3 text-gray-600 dark:text-gray-300", "图标颜色" }
-                                    td { class: "p-3 text-gray-600 dark:text-gray-300 font-mono text-sm", "String" }
-                                    td { class: "p-3 text-gray-600 dark:text-gray-300", "currentColor" }
-                                }
-                                tr {
-                                    class: "border-b border-gray-100 dark:border-gray-800",
-                                    td { class: "p-3 text-gray-900 dark:text-white font-mono text-sm", "class" }
-                                    td { class: "p-3 text-gray-600 dark:text-gray-300", "自定义类名" }
-                                    td { class: "p-3 text-gray-600 dark:text-gray-300 font-mono text-sm", "String" }
-                                    td { class: "p-3 text-gray-600 dark:text-gray-300", "\"\""  }
-                                }
-                                tr {
-                                    td { class: "p-3 text-gray-900 dark:text-white font-mono text-sm", "spin" }
-                                    td { class: "p-3 text-gray-600 dark:text-gray-300", "是否旋转" }
-                                    td { class: "p-3 text-gray-600 dark:text-gray-300 font-mono text-sm", "bool" }
-                                    td { class: "p-3 text-gray-600 dark:text-gray-300", "false" }
-                                }
-                            }
-                        }
+                    Table {
+                        headers: Some(vec!["属性".to_string(), "说明".to_string(), "类型".to_string(), "默认值".to_string()]),
+                        data: vec![
+                            vec!["icon".to_string(), "图标类型".to_string(), "IconType".to_string(), "-".to_string()],
+                            vec!["size".to_string(), "图标尺寸".to_string(), "IconSize".to_string(), "Medium".to_string()],
+                            vec!["color".to_string(), "图标颜色".to_string(), "String".to_string(), "currentColor".to_string()],
+                            vec!["class".to_string(), "自定义类名".to_string(), "String".to_string(), "".to_string()],
+                            vec!["spin".to_string(), "是否旋转".to_string(), "bool".to_string(), "false".to_string()],
+                        ],
+                        bordered: true,
+                        striped: true,
                     }
                 }
             }

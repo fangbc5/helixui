@@ -3,7 +3,7 @@ use crate::views::DocPage;
 use dioxus::prelude::*;
 use helixui::components::{
     Carousel, CarouselArrow, CarouselArrowDirection, CarouselContent, CarouselDirection,
-    CarouselDots, CarouselItem, CarouselSlide, DemoBox,
+    CarouselDots, CarouselItem, CarouselSlide, DemoBox, Switch, Table,
 };
 
 #[component]
@@ -85,7 +85,7 @@ pub fn CarouselPage() -> Element {
                 CarouselArrow { direction: CarouselArrowDirection::Prev }
                 CarouselArrow { direction: CarouselArrowDirection::Next }
                 CarouselDots {}
-            }
+            },
         }
     }"#.to_string(),
                     children: rsx! {
@@ -180,71 +180,27 @@ pub fn CarouselPage() -> Element {
 
                 h2 {
                     id: "api",
+                    class: "text-2xl font-bold text-gray-900 dark:text-white mb-4",
                     "API"
                 }
                 h3 {
+                    class: "text-xl font-semibold text-gray-900 dark:text-white mb-3",
                     "Carousel Props"
                 }
-                table {
-                    class: "api-table",
-                    thead {
-                        tr {
-                            th { "属性" }
-                            th { "说明" }
-                            th { "类型" }
-                            th { "默认值" }
-                        }
-                    }
-                    tbody {
-                        tr {
-                            td { "current_index" }
-                            td { "当前索引（受控）" }
-                            td { "ReadSignal<Option<usize>>" }
-                            td { "-" }
-                        }
-                        tr {
-                            td { "default_index" }
-                            td { "默认索引（非受控）" }
-                            td { "usize" }
-                            td { "0" }
-                        }
-                        tr {
-                            td { "on_index_change" }
-                            td { "索引变化回调" }
-                            td { "Callback<usize>" }
-                            td { "-" }
-                        }
-                        tr {
-                            td { "auto_play" }
-                            td { "是否自动播放" }
-                            td { "ReadSignal<bool>" }
-                            td { "false" }
-                        }
-                        tr {
-                            td { "duration" }
-                            td { "自动播放间隔（毫秒）" }
-                            td { "ReadSignal<u32>" }
-                            td { "3000" }
-                        }
-                        tr {
-                            td { "direction" }
-                            td { "轮播方向" }
-                            td { "ReadSignal<CarouselDirection>" }
-                            td { "Horizontal" }
-                        }
-                        tr {
-                            td { "show_arrows" }
-                            td { "是否显示箭头" }
-                            td { "ReadSignal<bool>" }
-                            td { "true" }
-                        }
-                        tr {
-                            td { "show_dots" }
-                            td { "是否显示指示点" }
-                            td { "ReadSignal<bool>" }
-                            td { "true" }
-                        }
-                    }
+                Table {
+                    headers: Some(vec!["属性".to_string(), "说明".to_string(), "类型".to_string(), "默认值".to_string()]),
+                    data: vec![
+                        vec!["current_index".to_string(), "当前索引（受控）".to_string(), "ReadSignal<Option<usize>>".to_string(), "-".to_string()],
+                        vec!["default_index".to_string(), "默认索引（非受控）".to_string(), "usize".to_string(), "0".to_string()],
+                        vec!["on_index_change".to_string(), "索引变化回调".to_string(), "Callback<usize>".to_string(), "-".to_string()],
+                        vec!["auto_play".to_string(), "是否自动播放".to_string(), "ReadSignal<bool>".to_string(), "false".to_string()],
+                        vec!["duration".to_string(), "自动播放间隔（毫秒）".to_string(), "ReadSignal<u32>".to_string(), "3000".to_string()],
+                        vec!["direction".to_string(), "轮播方向".to_string(), "ReadSignal<CarouselDirection>".to_string(), "Horizontal".to_string()],
+                        vec!["show_arrows".to_string(), "是否显示箭头".to_string(), "ReadSignal<bool>".to_string(), "true".to_string()],
+                        vec!["show_dots".to_string(), "是否显示指示点".to_string(), "ReadSignal<bool>".to_string(), "true".to_string()],
+                    ],
+                    bordered: true,
+                    striped: true,
                 }
             }
         }
@@ -345,40 +301,69 @@ fn ControlledCarouselDemo() -> Element {
 
 #[component]
 fn AutoplayCarouselDemo() -> Element {
+    let mut auto_play = use_signal(|| true);
+    let mut duration = use_signal(|| 3000u32);
+
     rsx! {
-        Carousel {
-            auto_play: ReadSignal::new(Signal::new(true)),
-            duration: ReadSignal::new(Signal::new(3000)),
-            CarouselContent {
-                count: Some(3),
-                CarouselSlide {
-                    CarouselItem {
-                        div {
-                            class: "h-full flex items-center justify-center bg-gradient-to-r from-blue-500 to-blue-600 text-white text-2xl font-bold",
-                            "Slide 1"
-                        }
-                    }
-                }
-                CarouselSlide {
-                    CarouselItem {
-                        div {
-                            class: "h-full flex items-center justify-center bg-gradient-to-r from-purple-500 to-purple-600 text-white text-2xl font-bold",
-                            "Slide 2"
-                        }
-                    }
-                }
-                CarouselSlide {
-                    CarouselItem {
-                        div {
-                            class: "h-full flex items-center justify-center bg-gradient-to-r from-green-500 to-green-600 text-white text-2xl font-bold",
-                            "Slide 3"
-                        }
-                    }
+        div {
+            class: "space-y-4",
+            div {
+                class: "flex items-center gap-4 mb-4",
+                span { class: "text-sm text-gray-700 dark:text-gray-300", "自动播放" }
+                Switch {
+                    checked: auto_play(),
+                    on_checked_change: move |v| auto_play.set(v),
                 }
             }
+            div {
+                class: "flex items-center gap-4 mb-4",
+                span { class: "text-sm text-gray-700 dark:text-gray-300", "间隔时间: " }
+                input {
+                    class: "px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-sm dark:bg-gray-800 dark:text-gray-200",
+                    r#type: "number",
+                    value: "{duration()}",
+                    oninput: move |e| {
+                        if let Ok(n) = e.value().parse::<u32>() {
+                            duration.set(n);
+                        }
+                    },
+                }
+                span { class: "text-sm text-gray-500", "毫秒" }
+            },
+            Carousel {
+                auto_play: ReadSignal::new(auto_play),
+                duration: ReadSignal::new(duration),
+                CarouselContent {
+                    count: Some(3),
+                    CarouselSlide {
+                        CarouselItem {
+                            div {
+                                class: "h-full flex items-center justify-center bg-gradient-to-r from-blue-500 to-blue-600 text-white text-2xl font-bold",
+                                "Slide 1"
+                            }
+                        }
+                    }
+                    CarouselSlide {
+                        CarouselItem {
+                            div {
+                                class: "h-full flex items-center justify-center bg-gradient-to-r from-purple-500 to-purple-600 text-white text-2xl font-bold",
+                                "Slide 2"
+                            }
+                        }
+                    }
+                    CarouselSlide {
+                        CarouselItem {
+                            div {
+                                class: "h-full flex items-center justify-center bg-gradient-to-r from-green-500 to-green-600 text-white text-2xl font-bold",
+                                "Slide 3"
+                            }
+                        }
+                    }
+                }
                 CarouselArrow { direction: CarouselArrowDirection::Prev }
                 CarouselArrow { direction: CarouselArrowDirection::Next }
             CarouselDots {}
+            }
         }
     }
 }

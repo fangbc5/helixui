@@ -2,7 +2,7 @@ use crate::views::layout::{ComponentsSidebar, TocItem};
 use crate::views::DocPage;
 use dioxus::prelude::*;
 use helixui::components::{
-    Avatar, AvatarGroup, AvatarProps, AvatarShape, AvatarSize, DemoBox, Icon, IconType,
+    Avatar, AvatarGroup, AvatarProps, AvatarShape, AvatarSize, DemoBox, Icon, IconType, Table,
 };
 
 /// Avatar 组件演示页面
@@ -647,79 +647,22 @@ rsx! {
                     h3 { class: "text-lg font-semibold text-gray-900 dark:text-white mb-3",
                         "Avatar Props"
                     }
-                    div { class: "overflow-x-auto",
-                        table { class: "w-full text-sm",
-                            thead {
-                                tr { class: "border-b border-gray-200 dark:border-gray-700",
-                                    th { class: "text-left py-2 px-3 font-medium text-gray-900 dark:text-white", "属性" }
-                                    th { class: "text-left py-2 px-3 font-medium text-gray-900 dark:text-white", "类型" }
-                                    th { class: "text-left py-2 px-3 font-medium text-gray-900 dark:text-white", "默认值" }
-                                    th { class: "text-left py-2 px-3 font-medium text-gray-900 dark:text-white", "说明" }
-                                }
-                            }
-                            tbody {
-                                tr { class: "border-b border-gray-200 dark:border-gray-700",
-                                    td { class: "py-2 px-3 text-gray-900 dark:text-white", "size" }
-                                    td { class: "py-2 px-3 text-gray-600 dark:text-gray-300", "AvatarSize" }
-                                    td { class: "py-2 px-3 text-gray-600 dark:text-gray-300", "Medium" }
-                                    td { class: "py-2 px-3 text-gray-600 dark:text-gray-300", "头像尺寸" }
-                                }
-                                tr { class: "border-b border-gray-200 dark:border-gray-700",
-                                    td { class: "py-2 px-3 text-gray-900 dark:text-white", "shape" }
-                                    td { class: "py-2 px-3 text-gray-600 dark:text-gray-300", "AvatarShape" }
-                                    td { class: "py-2 px-3 text-gray-600 dark:text-gray-300", "Circle" }
-                                    td { class: "py-2 px-3 text-gray-600 dark:text-gray-300", "头像形状" }
-                                }
-                                tr { class: "border-b border-gray-200 dark:border-gray-700",
-                                    td { class: "py-2 px-3 text-gray-900 dark:text-white", "text" }
-                                    td { class: "py-2 px-3 text-gray-600 dark:text-gray-300", "Option<String>" }
-                                    td { class: "py-2 px-3 text-gray-600 dark:text-gray-300", "None" }
-                                    td { class: "py-2 px-3 text-gray-600 dark:text-gray-300", "头像文字" }
-                                }
-                                tr { class: "border-b border-gray-200 dark:border-gray-700",
-                                    td { class: "py-2 px-3 text-gray-900 dark:text-white", "src" }
-                                    td { class: "py-2 px-3 text-gray-600 dark:text-gray-300", "Option<String>" }
-                                    td { class: "py-2 px-3 text-gray-600 dark:text-gray-300", "None" }
-                                    td { class: "py-2 px-3 text-gray-600 dark:text-gray-300", "头像图片源 URL，加载失败时自动显示裂开图标" }
-                                }
-                                tr { class: "border-b border-gray-200 dark:border-gray-700",
-                                    td { class: "py-2 px-3 text-gray-900 dark:text-white", "fallback_text" }
-                                    td { class: "py-2 px-3 text-gray-600 dark:text-gray-300", "Option<String>" }
-                                    td { class: "py-2 px-3 text-gray-600 dark:text-gray-300", "None" }
-                                    td { class: "py-2 px-3 text-gray-600 dark:text-gray-300", "图片加载失败时的备用文字" }
-                                }
-                                tr { class: "border-b border-gray-200 dark:border-gray-700",
-                                    td { class: "py-2 px-3 text-gray-900 dark:text-white", "children" }
-                                    td { class: "py-2 px-3 text-gray-600 dark:text-gray-300", "Option<Element>" }
-                                    td { class: "py-2 px-3 text-gray-600 dark:text-gray-300", "None" }
-                                    td { class: "py-2 px-3 text-gray-600 dark:text-gray-300", "自定义子元素（如图标）" }
-                                }
-                                tr { class: "border-b border-gray-200 dark:border-gray-700",
-                                    td { class: "py-2 px-3 text-gray-900 dark:text-white", "background_color" }
-                                    td { class: "py-2 px-3 text-gray-600 dark:text-gray-300", "Option<String>" }
-                                    td { class: "py-2 px-3 text-gray-600 dark:text-gray-300", "None" }
-                                    td { class: "py-2 px-3 text-gray-600 dark:text-gray-300", "背景色" }
-                                }
-                                tr { class: "border-b border-gray-200 dark:border-gray-700",
-                                    td { class: "py-2 px-3 text-gray-900 dark:text-white", "color" }
-                                    td { class: "py-2 px-3 text-gray-600 dark:text-gray-300", "Option<String>" }
-                                    td { class: "py-2 px-3 text-gray-600 dark:text-gray-300", "None" }
-                                    td { class: "py-2 px-3 text-gray-600 dark:text-gray-300", "文字颜色" }
-                                }
-                                tr { class: "border-b border-gray-200 dark:border-gray-700",
-                                    td { class: "py-2 px-3 text-gray-900 dark:text-white", "class" }
-                                    td { class: "py-2 px-3 text-gray-600 dark:text-gray-300", "Option<String>" }
-                                    td { class: "py-2 px-3 text-gray-600 dark:text-gray-300", "None" }
-                                    td { class: "py-2 px-3 text-gray-600 dark:text-gray-300", "自定义类名" }
-                                }
-                                tr { class: "border-b border-gray-200 dark:border-gray-700",
-                                    td { class: "py-2 px-3 text-gray-900 dark:text-white", "style" }
-                                    td { class: "py-2 px-3 text-gray-600 dark:text-gray-300", "Option<String>" }
-                                    td { class: "py-2 px-3 text-gray-600 dark:text-gray-300", "None" }
-                                    td { class: "py-2 px-3 text-gray-600 dark:text-gray-300", "自定义样式" }
-                                }
-                            }
-                        }
+                    Table {
+                        headers: Some(vec!["属性".to_string(), "类型".to_string(), "默认值".to_string(), "说明".to_string()]),
+                        data: vec![
+                            vec!["size".to_string(), "AvatarSize".to_string(), "Medium".to_string(), "头像尺寸".to_string()],
+                            vec!["shape".to_string(), "AvatarShape".to_string(), "Circle".to_string(), "头像形状".to_string()],
+                            vec!["text".to_string(), "Option<String>".to_string(), "None".to_string(), "头像文字".to_string()],
+                            vec!["src".to_string(), "Option<String>".to_string(), "None".to_string(), "头像图片源 URL，加载失败时自动显示裂开图标".to_string()],
+                            vec!["fallback_text".to_string(), "Option<String>".to_string(), "None".to_string(), "图片加载失败时的备用文字".to_string()],
+                            vec!["children".to_string(), "Option<Element>".to_string(), "None".to_string(), "自定义子元素（如图标）".to_string()],
+                            vec!["background_color".to_string(), "Option<String>".to_string(), "None".to_string(), "背景色".to_string()],
+                            vec!["color".to_string(), "Option<String>".to_string(), "None".to_string(), "文字颜色".to_string()],
+                            vec!["class".to_string(), "Option<String>".to_string(), "None".to_string(), "自定义类名".to_string()],
+                            vec!["style".to_string(), "Option<String>".to_string(), "None".to_string(), "自定义样式".to_string()],
+                        ],
+                        bordered: true,
+                        striped: true,
                     }
                 }
             }

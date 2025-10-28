@@ -1,7 +1,7 @@
 use crate::views::layout::{ComponentsSidebar, TocItem};
 use crate::views::DocPage;
 use dioxus::prelude::*;
-use helixui::components::{DemoBox, Divider, DividerHorizontal, DividerVertical};
+use helixui::components::{DemoBox, Divider, DividerHorizontal, DividerVertical, Table};
 
 /// Divider 组件演示页面
 #[component]
@@ -534,152 +534,18 @@ rsx! {
                         "Divider 组件的属性说明。"
                     }
 
-                    div {
-                        class: "overflow-x-auto",
-                        table {
-                            class: "w-full border-collapse border border-gray-200 dark:border-gray-700",
-
-                            thead {
-                                tr {
-                                    class: "bg-gray-50 dark:bg-gray-800",
-                                    th {
-                                        class: "border border-gray-200 dark:border-gray-700 px-4 py-2 text-left font-semibold text-gray-900 dark:text-white",
-                                        "属性"
-                                    }
-                                    th {
-                                        class: "border border-gray-200 dark:border-gray-700 px-4 py-2 text-left font-semibold text-gray-900 dark:text-white",
-                                        "类型"
-                                    }
-                                    th {
-                                        class: "border border-gray-200 dark:border-gray-700 px-4 py-2 text-left font-semibold text-gray-900 dark:text-white",
-                                        "默认值"
-                                    }
-                                    th {
-                                        class: "border border-gray-200 dark:border-gray-700 px-4 py-2 text-left font-semibold text-gray-900 dark:text-white",
-                                        "说明"
-                                    }
-                                }
-                            }
-
-                            tbody {
-                                tr {
-                                    td {
-                                        class: "border border-gray-200 dark:border-gray-700 px-4 py-2 font-mono text-sm text-gray-900 dark:text-white",
-                                        "direction"
-                                    }
-                                    td {
-                                        class: "border border-gray-200 dark:border-gray-700 px-4 py-2 text-gray-900 dark:text-white",
-                                        "DividerDirection"
-                                    }
-                                    td {
-                                        class: "border border-gray-200 dark:border-gray-700 px-4 py-2 text-gray-900 dark:text-white",
-                                        "Horizontal"
-                                    }
-                                    td {
-                                        class: "border border-gray-200 dark:border-gray-700 px-4 py-2 text-gray-900 dark:text-white",
-                                        "分割线方向，支持水平和垂直"
-                                    }
-                                }
-
-                                tr {
-                                    class: "bg-gray-50 dark:bg-gray-800",
-                                    td {
-                                        class: "border border-gray-200 dark:border-gray-700 px-4 py-2 font-mono text-sm text-gray-900 dark:text-white",
-                                        "dashed"
-                                    }
-                                    td {
-                                        class: "border border-gray-200 dark:border-gray-700 px-4 py-2 text-gray-900 dark:text-white",
-                                        "bool"
-                                    }
-                                    td {
-                                        class: "border border-gray-200 dark:border-gray-700 px-4 py-2 text-gray-900 dark:text-white",
-                                        "false"
-                                    }
-                                    td {
-                                        class: "border border-gray-200 dark:border-gray-700 px-4 py-2 text-gray-900 dark:text-white",
-                                        "是否为虚线"
-                                    }
-                                }
-
-                                tr {
-                                    td {
-                                        class: "border border-gray-200 dark:border-gray-700 px-4 py-2 font-mono text-sm text-gray-900 dark:text-white",
-                                        "title"
-                                    }
-                                    td {
-                                        class: "border border-gray-200 dark:border-gray-700 px-4 py-2 text-gray-900 dark:text-white",
-                                        "String?"
-                                    }
-                                    td {
-                                        class: "border border-gray-200 dark:border-gray-700 px-4 py-2 text-gray-900 dark:text-white",
-                                        "-"
-                                    }
-                                    td {
-                                        class: "border border-gray-200 dark:border-gray-700 px-4 py-2 text-gray-900 dark:text-white",
-                                        "分割线标题"
-                                    }
-                                }
-
-                                tr {
-                                    class: "bg-gray-50 dark:bg-gray-800",
-                                    td {
-                                        class: "border border-gray-200 dark:border-gray-700 px-4 py-2 font-mono text-sm text-gray-900 dark:text-white",
-                                        "title_placement"
-                                    }
-                                    td {
-                                        class: "border border-gray-200 dark:border-gray-700 px-4 py-2 text-gray-900 dark:text-white",
-                                        "String"
-                                    }
-                                    td {
-                                        class: "border border-gray-200 dark:border-gray-700 px-4 py-2 text-gray-900 dark:text-white",
-                                        "\"center\""
-                                    }
-                                    td {
-                                        class: "border border-gray-200 dark:border-gray-700 px-4 py-2 text-gray-900 dark:text-white",
-                                        "标题位置，支持 left、center、right"
-                                    }
-                                }
-
-                                tr {
-                                    td {
-                                        class: "border border-gray-200 dark:border-gray-700 px-4 py-2 font-mono text-sm text-gray-900 dark:text-white",
-                                        "class"
-                                    }
-                                    td {
-                                        class: "border border-gray-200 dark:border-gray-700 px-4 py-2 text-gray-900 dark:text-white",
-                                        "String?"
-                                    }
-                                    td {
-                                        class: "border border-gray-200 dark:border-gray-700 px-4 py-2 text-gray-900 dark:text-white",
-                                        "-"
-                                    }
-                                    td {
-                                        class: "border border-gray-200 dark:border-gray-700 px-4 py-2 text-gray-900 dark:text-white",
-                                        "自定义 CSS 类名"
-                                    }
-                                }
-
-                                tr {
-                                    class: "bg-gray-50 dark:bg-gray-800",
-                                    td {
-                                        class: "border border-gray-200 dark:border-gray-700 px-4 py-2 font-mono text-sm text-gray-900 dark:text-white",
-                                        "style"
-                                    }
-                                    td {
-                                        class: "border border-gray-200 dark:border-gray-700 px-4 py-2 text-gray-900 dark:text-white",
-                                        "String?"
-                                    }
-                                    td {
-                                        class: "border border-gray-200 dark:border-gray-700 px-4 py-2 text-gray-900 dark:text-white",
-                                        "-"
-                                    }
-                                    td {
-                                        class: "border border-gray-200 dark:border-gray-700 px-4 py-2 text-gray-900 dark:text-white",
-                                        "自定义内联样式"
-                                    }
-                                }
-                            }
-                        }
+                    Table {
+                        headers: Some(vec!["属性".to_string(), "类型".to_string(), "默认值".to_string(), "说明".to_string()]),
+                        data: vec![
+                            vec!["direction".to_string(), "DividerDirection".to_string(), "Horizontal".to_string(), "分割线方向，支持水平和垂直".to_string()],
+                            vec!["dashed".to_string(), "bool".to_string(), "false".to_string(), "是否为虚线".to_string()],
+                            vec!["title".to_string(), "String?".to_string(), "-".to_string(), "分割线标题".to_string()],
+                            vec!["title_placement".to_string(), "String".to_string(), "center".to_string(), "标题位置，支持 left、center、right".to_string()],
+                            vec!["class".to_string(), "String?".to_string(), "-".to_string(), "自定义 CSS 类名".to_string()],
+                            vec!["style".to_string(), "String?".to_string(), "-".to_string(), "自定义内联样式".to_string()],
+                        ],
+                        bordered: true,
+                        striped: true,
                     }
                 }
             }

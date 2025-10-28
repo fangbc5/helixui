@@ -107,7 +107,7 @@
 }
 
 /*
-! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com
+! tailwindcss v3.4.15 | MIT License | https://tailwindcss.com
 */
 
 /*
@@ -937,10 +937,6 @@ video {
   height: 1px;
 }
 
-.h-\[400px\] {
-  height: 400px;
-}
-
 .h-1\.5 {
   height: 0.375rem;
 }
@@ -957,12 +953,12 @@ video {
   min-height: 4rem;
 }
 
-.min-h-screen {
-  min-height: 100vh;
-}
-
 .min-h-\[200px\] {
   min-height: 200px;
+}
+
+.min-h-screen {
+  min-height: 100vh;
 }
 
 .min-h-full {
@@ -1421,14 +1417,6 @@ video {
 
 .overflow-y-hidden {
   overflow-y: hidden;
-}
-
-.overflow-x-scroll {
-  overflow-x: scroll;
-}
-
-.overflow-y-scroll {
-  overflow-y: scroll;
 }
 
 .overscroll-contain {
@@ -3181,6 +3169,11 @@ video {
   color: rgb(253 224 71 / var(--tw-text-opacity, 1));
 }
 
+.dark\:text-gray-200:is(.dark *) {
+  --tw-text-opacity: 1;
+  color: rgb(229 231 235 / var(--tw-text-opacity, 1));
+}
+
 .dark\:shadow-\[inset_0_0_0_1px_rgb\(75_85_99\)\]:is(.dark *) {
   --tw-shadow: inset 0 0 0 1px rgb(75 85 99);
   --tw-shadow-colored: inset 0 0 0 1px var(--tw-shadow-color);
@@ -3195,6 +3188,10 @@ video {
 .dark\:placeholder\:text-gray-500:is(.dark *)::placeholder {
   --tw-text-opacity: 1;
   color: rgb(107 114 128 / var(--tw-text-opacity, 1));
+}
+
+.dark\:even\:bg-gray-800\/50:nth-child(even):is(.dark *) {
+  background-color: rgb(31 41 55 / 0.5);
 }
 
 .dark\:-moz-read-only\:bg-gray-900:-moz-read-only:is(.dark *) {

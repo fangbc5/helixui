@@ -4,7 +4,7 @@ use crate::views::DocPage;
 use dioxus::prelude::*;
 use helixui::components::{
     Button, ButtonGroup, ButtonGroupItemProps, ButtonShape, ButtonSize, ButtonType, DemoBox, Icon,
-    IconType,
+    IconType, Table,
 };
 
 /// Button 组件文档页面
@@ -950,77 +950,20 @@ rsx! {
                     "Button Props"
                 }
 
-                div {
-                    class: "overflow-x-auto",
-                    table {
-                        class: "w-full text-left border-collapse",
-                        thead {
-                            tr {
-                                class: "border-b border-gray-200 dark:border-gray-700",
-                                th { class: "p-3 text-gray-900 dark:text-white font-semibold", "名称" }
-                                th { class: "p-3 text-gray-900 dark:text-white font-semibold", "类型" }
-                                th { class: "p-3 text-gray-900 dark:text-white font-semibold", "默认值" }
-                                th { class: "p-3 text-gray-900 dark:text-white font-semibold", "说明" }
-                            }
-                        }
-                        tbody {
-                            tr {
-                                class: "border-b border-gray-100 dark:border-gray-800",
-                                td { class: "p-3 text-gray-900 dark:text-white font-mono text-sm", "button_type" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300 font-mono text-sm", "ButtonType" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300", "Default" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300", "按钮的类型" }
-                            }
-                            tr {
-                                class: "border-b border-gray-100 dark:border-gray-800",
-                                td { class: "p-3 text-gray-900 dark:text-white font-mono text-sm", "size" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300 font-mono text-sm", "ButtonSize" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300", "Medium" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300", "按钮的尺寸" }
-                            }
-                            tr {
-                                class: "border-b border-gray-100 dark:border-gray-800",
-                                td { class: "p-3 text-gray-900 dark:text-white font-mono text-sm", "disabled" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300 font-mono text-sm", "bool" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300", "false" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300", "是否禁用" }
-                            }
-                            tr {
-                                class: "border-b border-gray-100 dark:border-gray-800",
-                                td { class: "p-3 text-gray-900 dark:text-white font-mono text-sm", "secondary" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300 font-mono text-sm", "bool" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300", "false" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300", "是否为次要按钮" }
-                            }
-                            tr {
-                                class: "border-b border-gray-100 dark:border-gray-800",
-                                td { class: "p-3 text-gray-900 dark:text-white font-mono text-sm", "dashed" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300 font-mono text-sm", "bool" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300", "false" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300", "是否为虚线边框" }
-                            }
-                            tr {
-                                class: "border-b border-gray-100 dark:border-gray-800",
-                                td { class: "p-3 text-gray-900 dark:text-white font-mono text-sm", "children" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300 font-mono text-sm", "Element" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300", "-" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300", "按钮内容（支持 Icon/文本/任意 rsx）" }
-                            }
-                            tr {
-                                class: "border-b border-gray-100 dark:border-gray-800",
-                                td { class: "p-3 text-gray-900 dark:text-white font-mono text-sm", "shape" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300 font-mono text-sm", "ButtonShape" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300", "Rounded" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300", "按钮形状（Default/Rounded/Circle/Ellipse）" }
-                            }
-                            tr {
-                                td { class: "p-3 text-gray-900 dark:text-white font-mono text-sm", "class" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300 font-mono text-sm", "Option<String>" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300", "None" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300", "自定义 CSS 类名" }
-                            }
-                        }
-                    }
+                Table {
+                    headers: Some(vec!["名称".to_string(), "类型".to_string(), "默认值".to_string(), "说明".to_string()]),
+                    data: vec![
+                        vec!["button_type".to_string(), "ButtonType".to_string(), "Default".to_string(), "按钮的类型".to_string()],
+                        vec!["size".to_string(), "ButtonSize".to_string(), "Medium".to_string(), "按钮的尺寸".to_string()],
+                        vec!["disabled".to_string(), "bool".to_string(), "false".to_string(), "是否禁用".to_string()],
+                        vec!["secondary".to_string(), "bool".to_string(), "false".to_string(), "是否为次要按钮".to_string()],
+                        vec!["dashed".to_string(), "bool".to_string(), "false".to_string(), "是否为虚线边框".to_string()],
+                        vec!["children".to_string(), "Element".to_string(), "-".to_string(), "按钮内容（支持 Icon/文本/任意 rsx）".to_string()],
+                        vec!["shape".to_string(), "ButtonShape".to_string(), "Rounded".to_string(), "按钮形状（Default/Rounded/Circle/Ellipse）".to_string()],
+                        vec!["class".to_string(), "Option<String>".to_string(), "None".to_string(), "自定义 CSS 类名".to_string()],
+                    ],
+                    bordered: true,
+                    striped: true,
                 }
 
                 h3 {
@@ -1028,64 +971,18 @@ rsx! {
                     "ButtonGroup Props"
                 }
 
-                div {
-                    class: "overflow-x-auto",
-                    table {
-                        class: "w-full border-collapse border border-gray-200 dark:border-gray-700",
-                        thead {
-                            tr {
-                                class: "bg-gray-50 dark:bg-gray-800",
-                                th { class: "p-3 text-left text-gray-900 dark:text-white font-semibold", "属性" }
-                                th { class: "p-3 text-left text-gray-900 dark:text-white font-semibold", "类型" }
-                                th { class: "p-3 text-left text-gray-900 dark:text-white font-semibold", "默认值" }
-                                th { class: "p-3 text-left text-gray-900 dark:text-white font-semibold", "说明" }
-                            }
-                        }
-                        tbody {
-                            tr {
-                                class: "border-b border-gray-100 dark:border-gray-800",
-                                td { class: "p-3 text-gray-900 dark:text-white font-mono text-sm", "buttons" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300 font-mono text-sm", "Vec<ButtonGroupItemProps>" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300", "-" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300", "按钮列表" }
-                            }
-                            tr {
-                                class: "border-b border-gray-100 dark:border-gray-800",
-                                td { class: "p-3 text-gray-900 dark:text-white font-mono text-sm", "size" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300 font-mono text-sm", "ButtonSize" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300", "Medium" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300", "按钮组尺寸" }
-                            }
-                            tr {
-                                class: "border-b border-gray-100 dark:border-gray-800",
-                                td { class: "p-3 text-gray-900 dark:text-white font-mono text-sm", "shape" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300 font-mono text-sm", "ButtonShape" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300", "Rounded" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300", "按钮组形状" }
-                            }
-                            tr {
-                                class: "border-b border-gray-100 dark:border-gray-800",
-                                td { class: "p-3 text-gray-900 dark:text-white font-mono text-sm", "compact" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300 font-mono text-sm", "bool" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300", "false" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300", "是否紧凑模式（按钮之间无间距，两侧半圆边框）" }
-                            }
-                            tr {
-                                class: "border-b border-gray-100 dark:border-gray-800",
-                                td { class: "p-3 text-gray-900 dark:text-white font-mono text-sm", "class" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300 font-mono text-sm", "Option<String>" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300", "None" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300", "自定义 CSS 类名" }
-                            }
-                            tr {
-                                class: "border-b border-gray-100 dark:border-gray-800",
-                                td { class: "p-3 text-gray-900 dark:text-white font-mono text-sm", "hover_color" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300 font-mono text-sm", "Option<String>" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300", "None" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300", "自定义 hover 颜色（如 ff6b6b）" }
-                            }
-                        }
-                    }
+                Table {
+                    headers: Some(vec!["属性".to_string(), "类型".to_string(), "默认值".to_string(), "说明".to_string()]),
+                    data: vec![
+                        vec!["buttons".to_string(), "Vec<ButtonGroupItemProps>".to_string(), "-".to_string(), "按钮列表".to_string()],
+                        vec!["size".to_string(), "ButtonSize".to_string(), "Medium".to_string(), "按钮组尺寸".to_string()],
+                        vec!["shape".to_string(), "ButtonShape".to_string(), "Rounded".to_string(), "按钮组形状".to_string()],
+                        vec!["compact".to_string(), "bool".to_string(), "false".to_string(), "是否紧凑模式（按钮之间无间距，两侧半圆边框）".to_string()],
+                        vec!["class".to_string(), "Option<String>".to_string(), "None".to_string(), "自定义 CSS 类名".to_string()],
+                        vec!["hover_color".to_string(), "Option<String>".to_string(), "None".to_string(), "自定义 hover 颜色（如 ff6b6b）".to_string()],
+                    ],
+                    bordered: true,
+                    striped: true,
                 }
 
                 h3 {
@@ -1093,72 +990,19 @@ rsx! {
                     "ButtonGroupItemProps"
                 }
 
-                div {
-                    class: "overflow-x-auto",
-                    table {
-                        class: "w-full border-collapse border border-gray-200 dark:border-gray-700",
-                        thead {
-                            tr {
-                                class: "bg-gray-50 dark:bg-gray-800",
-                                th { class: "p-3 text-left text-gray-900 dark:text-white font-semibold", "属性" }
-                                th { class: "p-3 text-left text-gray-900 dark:text-white font-semibold", "类型" }
-                                th { class: "p-3 text-left text-gray-900 dark:text-white font-semibold", "默认值" }
-                                th { class: "p-3 text-left text-gray-900 dark:text-white font-semibold", "说明" }
-                            }
-                        }
-                        tbody {
-                            tr {
-                                class: "border-b border-gray-100 dark:border-gray-800",
-                                td { class: "p-3 text-gray-900 dark:text-white font-mono text-sm", "button_type" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300 font-mono text-sm", "ButtonType" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300", "Default" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300", "按钮类型" }
-                            }
-
-                            tr {
-                                class: "border-b border-gray-100 dark:border-gray-800",
-                                td { class: "p-3 text-gray-900 dark:text-white font-mono text-sm", "disabled" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300 font-mono text-sm", "bool" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300", "false" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300", "是否禁用" }
-                            }
-                            tr {
-                                class: "border-b border-gray-100 dark:border-gray-800",
-                                td { class: "p-3 text-gray-900 dark:text-white font-mono text-sm", "secondary" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300 font-mono text-sm", "bool" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300", "false" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300", "是否为次要样式" }
-                            }
-                            tr {
-                                class: "border-b border-gray-100 dark:border-gray-800",
-                                td { class: "p-3 text-gray-900 dark:text-white font-mono text-sm", "dashed" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300 font-mono text-sm", "bool" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300", "false" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300", "是否为虚线边框" }
-                            }
-                            tr {
-                                class: "border-b border-gray-100 dark:border-gray-800",
-                                td { class: "p-3 text-gray-900 dark:text-white font-mono text-sm", "icon" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300 font-mono text-sm", "Option<IconType>" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300", "None" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300", "按钮图标" }
-                            }
-                            tr {
-                                class: "border-b border-gray-100 dark:border-gray-800",
-                                td { class: "p-3 text-gray-900 dark:text-white font-mono text-sm", "onclick" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300 font-mono text-sm", "Option<EventHandler<()>>" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300", "None" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300", "点击事件处理器" }
-                            }
-                            tr {
-                                class: "border-b border-gray-100 dark:border-gray-800",
-                                td { class: "p-3 text-gray-900 dark:text-white font-mono text-sm", "children" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300 font-mono text-sm", "Element" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300", "-" }
-                                td { class: "p-3 text-gray-600 dark:text-gray-300", "按钮内容" }
-                            }
-                        }
-                    }
+                Table {
+                    headers: Some(vec!["属性".to_string(), "类型".to_string(), "默认值".to_string(), "说明".to_string()]),
+                    data: vec![
+                        vec!["button_type".to_string(), "ButtonType".to_string(), "Default".to_string(), "按钮类型".to_string()],
+                        vec!["disabled".to_string(), "bool".to_string(), "false".to_string(), "是否禁用".to_string()],
+                        vec!["secondary".to_string(), "bool".to_string(), "false".to_string(), "是否为次要样式".to_string()],
+                        vec!["dashed".to_string(), "bool".to_string(), "false".to_string(), "是否为虚线边框".to_string()],
+                        vec!["icon".to_string(), "Option<IconType>".to_string(), "None".to_string(), "按钮图标".to_string()],
+                        vec!["onclick".to_string(), "Option<EventHandler<()>>".to_string(), "None".to_string(), "点击事件处理器".to_string()],
+                        vec!["children".to_string(), "Element".to_string(), "-".to_string(), "按钮内容".to_string()],
+                    ],
+                    bordered: true,
+                    striped: true,
                 }
             }
             }

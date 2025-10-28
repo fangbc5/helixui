@@ -2,6 +2,7 @@
 
 use crate::components::use_controlled;
 use dioxus::prelude::*;
+use dioxus_time::use_interval;
 
 /// The direction in which the carousel slides.
 #[derive(Clone, Copy, PartialEq, Default)]
@@ -21,8 +22,6 @@ struct CarouselCtx {
     total_slides: Signal<usize>,
     set_total_slides: Callback<usize>,
     direction: Memo<CarouselDirection>,
-    auto_play: Memo<bool>,
-    duration: Memo<u32>,
     show_arrows: Memo<bool>,
     show_dots: Memo<bool>,
 }
@@ -135,16 +134,63 @@ pub fn Carousel(props: CarouselProps) -> Element {
         total_slides,
         set_total_slides,
         direction: direction_memo,
-        auto_play: auto_play_memo,
-        duration: duration_memo,
         show_arrows: show_arrows_memo,
         show_dots: show_dots_memo,
     });
+
+    // Autoplay: 基于固定短周期轮询 + 上次触发时间，支持动态变更 duration
+    let mut paused = use_signal(|| false);
+    let ci = current_index;
+    let set_idx = set_current_index_cb;
+    let total = total_slides;
+    let auto = auto_play_memo;
+    let dur = duration_memo;
+
+    // 使用累计毫秒计数，避免在 wasm 中使用不支持的系统时间
+    let mut elapsed_ms = use_signal(|| 0u32);
+
+    // 当 duration 变化时，重置计时起点，确保新间隔立即生效
+    {
+        let dur_dep = dur;
+        let mut elapsed_set = elapsed_ms;
+        use_effect(move || {
+            let _ = dur_dep();
+            elapsed_set.set(0);
+        });
+    }
+
+    // 使用较小固定周期检查是否达到用户设定的间隔
+    let tick_period_ms: u32 = 50;
+    let _tick = use_interval(
+        std::time::Duration::from_millis(tick_period_ms as u64),
+        move |()| {
+            if !auto() || paused() {
+                return;
+            }
+            let n = total();
+            if n <= 1 {
+                return;
+            }
+            // 累计时间达到设定间隔则切换
+            let next_elapsed = elapsed_ms().saturating_add(tick_period_ms);
+            if next_elapsed >= dur() {
+                let next = (ci() + 1) % n;
+                set_idx.call(next);
+                elapsed_ms.set(0);
+            } else {
+                elapsed_ms.set(next_elapsed);
+            }
+        },
+    );
 
     rsx! {
         div {
             // 默认高度，用户无需额外 class 即可看到控件
             class: "relative h-64 w-full overflow-hidden rounded-lg group",
+            onmouseenter: move |_| paused.set(true),
+            onmouseleave: move |_| paused.set(false),
+            onfocusin: move |_| paused.set(true),
+            onfocusout: move |_| paused.set(false),
             "data-direction": match (props.direction)() {
                 CarouselDirection::Horizontal => "horizontal",
                 CarouselDirection::Vertical => "vertical",

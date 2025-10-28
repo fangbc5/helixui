@@ -30,13 +30,17 @@ pub struct TableProps {
 /// 表格组件
 #[component]
 pub fn Table(props: TableProps) -> Element {
-    let base_class = "min-w-full divide-y divide-gray-200";
+    let base_class = "min-w-full divide-y divide-gray-200 dark:divide-gray-700";
     let bordered_class = if props.bordered {
-        "border border-gray-300"
+        "border border-gray-300 dark:border-gray-600"
     } else {
         ""
     };
-    let striped_class = if props.striped { "even:bg-gray-50" } else { "" };
+    let striped_class = if props.striped {
+        "even:bg-gray-50 dark:even:bg-gray-800/50"
+    } else {
+        ""
+    };
     let compact_class = if props.compact { "text-sm" } else { "" };
 
     let final_class = if let Some(custom_class) = props.class {
@@ -58,11 +62,11 @@ pub fn Table(props: TableProps) -> Element {
                 class: final_class,
                 if let Some(headers) = &props.headers {
                     thead {
-                        class: "bg-gray-50",
+                        class: "bg-gray-50 dark:bg-gray-800",
                         tr {
                             for header in headers {
                                 th {
-                                    class: "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
+                                    class: "px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider",
                                     {header.clone()}
                                 }
                             }
@@ -70,13 +74,13 @@ pub fn Table(props: TableProps) -> Element {
                     }
                 }
                 tbody {
-                    class: "bg-white divide-y divide-gray-200",
+                    class: "bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700",
                     for (row_index, row) in props.data.iter().enumerate() {
                         tr {
-                            class: if props.striped && row_index % 2 == 1 { "bg-gray-50" } else { "" },
+                            class: if props.striped && row_index % 2 == 1 { "bg-gray-50 dark:bg-gray-800/50" } else { "" },
                             for cell in row {
                                 td {
-                                    class: "px-6 py-4 whitespace-nowrap text-sm text-gray-900",
+                                    class: "px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100",
                                     {cell.clone()}
                                 }
                             }

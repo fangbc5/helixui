@@ -4,7 +4,7 @@ use crate::views::DocPage;
 use dioxus::prelude::*;
 use helixui::components::{
     Button, ButtonType, Card, CardContent, CardFooter, CardGrid, CardGroup, CardShadow, CardSize,
-    DemoBox,
+    DemoBox, Table,
 };
 
 /// Card 组件文档页面
@@ -695,178 +695,19 @@ rsx! {
                                 class: "text-xl font-semibold text-gray-900 dark:text-white mb-4",
                                 "Card Props"
                             }
-                            div {
-                                class: "overflow-x-auto",
-                                table {
-                                    class: "w-full border-collapse border border-gray-200 dark:border-gray-700",
-                                    thead {
-                                        tr {
-                                            class: "bg-gray-50 dark:bg-gray-800",
-                                            th {
-                                                class: "border border-gray-200 dark:border-gray-700 px-4 py-2 text-left font-semibold text-gray-900 dark:text-white",
-                                                "属性"
-                                            }
-                                            th {
-                                                class: "border border-gray-200 dark:border-gray-700 px-4 py-2 text-left font-semibold text-gray-900 dark:text-white",
-                                                "类型"
-                                            }
-                                            th {
-                                                class: "border border-gray-200 dark:border-gray-700 px-4 py-2 text-left font-semibold text-gray-900 dark:text-white",
-                                                "默认值"
-                                            }
-                                            th {
-                                                class: "border border-gray-200 dark:border-gray-700 px-4 py-2 text-left font-semibold text-gray-900 dark:text-white",
-                                                "说明"
-                                            }
-                                        }
-                                    }
-                                    tbody {
-                                        tr {
-                                            td {
-                                                class: "border border-gray-200 dark:border-gray-700 px-4 py-2 font-mono text-sm text-gray-900 dark:text-white",
-                                                "title"
-                                            }
-                                            td {
-                                                class: "border border-gray-200 dark:border-gray-700 px-4 py-2 text-gray-900 dark:text-white",
-                                                "Option<String>"
-                                            }
-                                            td {
-                                                class: "border border-gray-200 dark:border-gray-700 px-4 py-2 text-gray-900 dark:text-white",
-                                                "None"
-                                            }
-                                            td {
-                                                class: "border border-gray-200 dark:border-gray-700 px-4 py-2 text-gray-900 dark:text-white",
-                                                "卡片标题"
-                                            }
-                                        }
-                                        tr {
-                                            td {
-                                                class: "border border-gray-200 dark:border-gray-700 px-4 py-2 font-mono text-sm text-gray-900 dark:text-white",
-                                                "subtitle"
-                                            }
-                                            td {
-                                                class: "border border-gray-200 dark:border-gray-700 px-4 py-2 text-gray-900 dark:text-white",
-                                                "Option<String>"
-                                            }
-                                            td {
-                                                class: "border border-gray-200 dark:border-gray-700 px-4 py-2 text-gray-900 dark:text-white",
-                                                "None"
-                                            }
-                                            td {
-                                                class: "border border-gray-200 dark:border-gray-700 px-4 py-2 text-gray-900 dark:text-white",
-                                                "卡片副标题"
-                                            }
-                                        }
-                                        tr {
-                                            td {
-                                                class: "border border-gray-200 dark:border-gray-700 px-4 py-2 font-mono text-sm text-gray-900 dark:text-white",
-                                                "size"
-                                            }
-                                            td {
-                                                class: "border border-gray-200 dark:border-gray-700 px-4 py-2 text-gray-900 dark:text-white",
-                                                "CardSize"
-                                            }
-                                            td {
-                                                class: "border border-gray-200 dark:border-gray-700 px-4 py-2 text-gray-900 dark:text-white",
-                                                "Medium"
-                                            }
-                                            td {
-                                                class: "border border-gray-200 dark:border-gray-700 px-4 py-2 text-gray-900 dark:text-white",
-                                                "卡片尺寸"
-                                            }
-                                        }
-                                        tr {
-                                            td {
-                                                class: "border border-gray-200 dark:border-gray-700 px-4 py-2 font-mono text-sm text-gray-900 dark:text-white",
-                                                "bordered"
-                                            }
-                                            td {
-                                                class: "border border-gray-200 dark:border-gray-700 px-4 py-2 text-gray-900 dark:text-white",
-                                                "bool"
-                                            }
-                                            td {
-                                                class: "border border-gray-200 dark:border-gray-700 px-4 py-2 text-gray-900 dark:text-white",
-                                                "true"
-                                            }
-                                            td {
-                                                class: "border border-gray-200 dark:border-gray-700 px-4 py-2 text-gray-900 dark:text-white",
-                                                "是否显示边框"
-                                            }
-                                        }
-                                        tr {
-                                            td {
-                                                class: "border border-gray-200 dark:border-gray-700 px-4 py-2 font-mono text-sm text-gray-900 dark:text-white",
-                                                "shadow"
-                                            }
-                                            td {
-                                                class: "border border-gray-200 dark:border-gray-700 px-4 py-2 text-gray-900 dark:text-white",
-                                                "CardShadow"
-                                            }
-                                            td {
-                                                class: "border border-gray-200 dark:border-gray-700 px-4 py-2 text-gray-900 dark:text-white",
-                                                "Hover"
-                                            }
-                                            td {
-                                                class: "border border-gray-200 dark:border-gray-700 px-4 py-2 text-gray-900 dark:text-white",
-                                                "阴影级别"
-                                            }
-                                        }
-                                        tr {
-                                            td {
-                                                class: "border border-gray-200 dark:border-gray-700 px-4 py-2 font-mono text-sm text-gray-900 dark:text-white",
-                                                "collapsible"
-                                            }
-                                            td {
-                                                class: "border border-gray-200 dark:border-gray-700 px-4 py-2 text-gray-900 dark:text-white",
-                                                "bool"
-                                            }
-                                            td {
-                                                class: "border border-gray-200 dark:border-gray-700 px-4 py-2 text-gray-900 dark:text-white",
-                                                "false"
-                                            }
-                                            td {
-                                                class: "border border-gray-200 dark:border-gray-700 px-4 py-2 text-gray-900 dark:text-white",
-                                                "是否可折叠"
-                                            }
-                                        }
-                                        tr {
-                                            td {
-                                                class: "border border-gray-200 dark:border-gray-700 px-4 py-2 font-mono text-sm text-gray-900 dark:text-white",
-                                                "default_expanded"
-                                            }
-                                            td {
-                                                class: "border border-gray-200 dark:border-gray-700 px-4 py-2 text-gray-900 dark:text-white",
-                                                "bool"
-                                            }
-                                            td {
-                                                class: "border border-gray-200 dark:border-gray-700 px-4 py-2 text-gray-900 dark:text-white",
-                                                "true"
-                                            }
-                                            td {
-                                                class: "border border-gray-200 dark:border-gray-700 px-4 py-2 text-gray-900 dark:text-white",
-                                                "是否默认展开（仅在可折叠时有效）"
-                                            }
-                                        }
-                                        tr {
-                                            td {
-                                                class: "border border-gray-200 dark:border-gray-700 px-4 py-2 font-mono text-sm text-gray-900 dark:text-white",
-                                                "class"
-                                            }
-                                            td {
-                                                class: "border border-gray-200 dark:border-gray-700 px-4 py-2 text-gray-900 dark:text-white",
-                                                "String"
-                                            }
-                                            td {
-                                                class: "border border-gray-200 dark:border-gray-700 px-4 py-2 text-gray-900 dark:text-white",
-                                                "\"\""
-                                            }
-                                            td {
-                                                class: "border border-gray-200 dark:border-gray-700 px-4 py-2 text-gray-900 dark:text-white",
-                                                "自定义类名"
-                                            }
-                                        }
-                                    }
-                                }
+                            Table {
+                                headers: Some(vec!["属性".to_string(), "类型".to_string(), "默认值".to_string(), "说明".to_string()]),
+                                data: vec![
+                                    vec!["title".to_string(), "Option<String>".to_string(), "None".to_string(), "卡片标题".to_string()],
+                                    vec!["subtitle".to_string(), "Option<String>".to_string(), "None".to_string(), "卡片副标题".to_string()],
+                                    vec!["size".to_string(), "CardSize".to_string(), "Medium".to_string(), "卡片尺寸".to_string()],
+                                    vec!["bordered".to_string(), "bool".to_string(), "true".to_string(), "是否显示边框".to_string()],
+                                    vec!["shadow".to_string(), "CardShadow".to_string(), "Hover".to_string(), "阴影级别".to_string()],
+                                    vec!["class".to_string(), "Option<String>".to_string(), "None".to_string(), "自定义类名".to_string()],
+                                    vec!["style".to_string(), "Option<String>".to_string(), "None".to_string(), "自定义内联样式".to_string()],
+                                ],
+                                bordered: true,
+                                striped: true,
                             }
                         }
                     }
