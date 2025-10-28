@@ -60,6 +60,13 @@ pub fn ComponentsPage() -> Element {
                                 status: ComponentStatus::Available,
                             },
                             ComponentCard {
+                                name: "Carousel".to_string(),
+                                name_zh: "轮播图".to_string(),
+                                description: "轮播图组件，用于展示多个内容卡片。".to_string(),
+                                route: crate::Route::CarouselPage {},
+                                status: ComponentStatus::Available,
+                            },
+                            ComponentCard {
                                 name: "Divider".to_string(),
                                 name_zh: "分割线".to_string(),
                                 description: "用于分隔内容的分割线组件。".to_string(),
@@ -162,6 +169,63 @@ pub fn ComponentsPage() -> Element {
                         ],
                     }
 
+                    // 数据展示
+                    ComponentCategory {
+                        title: "数据展示",
+                        description: "用于展示数据的组件",
+                        components: vec![
+                            ComponentCard {
+                                name: "Table".to_string(),
+                                name_zh: "表格".to_string(),
+                                description: "用于展示结构化数据。".to_string(),
+                                route: crate::Route::TablePage {},
+                                status: ComponentStatus::Available,
+                            },
+                            ComponentCard {
+                                name: "ScrollArea".to_string(),
+                                name_zh: "滚动域".to_string(),
+                                description: "创建可滚动的区域，支持多种滚动模式和方向。".to_string(),
+                                route: crate::Route::ScrollAreaPage {},
+                                status: ComponentStatus::Available,
+                            },
+                            ComponentCard {
+                                name: "List".to_string(),
+                                name_zh: "列表".to_string(),
+                                description: "用于展示列表数据。".to_string(),
+                                route: crate::Route::ComponentsPage {},
+                                status: ComponentStatus::ComingSoon,
+                            },
+                            ComponentCard {
+                                name: "Tag".to_string(),
+                                name_zh: "标签".to_string(),
+                                description: "用于标记和分类。".to_string(),
+                                route: crate::Route::ComponentsPage {},
+                                status: ComponentStatus::ComingSoon,
+                            },
+                            ComponentCard {
+                                name: "Progress".to_string(),
+                                name_zh: "进度条".to_string(),
+                                description: "用于显示操作进度。".to_string(),
+                                route: crate::Route::ComponentsPage {},
+                                status: ComponentStatus::ComingSoon,
+                            },
+                            ComponentCard {
+                                name: "Skeleton".to_string(),
+                                name_zh: "骨架屏".to_string(),
+                                description: "用于在内容加载时显示占位符。".to_string(),
+                                route: crate::Route::ComponentsPage {},
+                                status: ComponentStatus::ComingSoon,
+                            },
+                            ComponentCard {
+                                name: "Empty".to_string(),
+                                name_zh: "空状态".to_string(),
+                                description: "用于展示空数据状态。".to_string(),
+                                route: crate::Route::ComponentsPage {},
+                                status: ComponentStatus::ComingSoon,
+                            },
+                        ],
+                    }
+
                     // 反馈组件
                     ComponentCategory {
                         title: "反馈组件",
@@ -201,70 +265,6 @@ pub fn ComponentsPage() -> Element {
                                 description: "鼠标悬停时显示的提示信息。".to_string(),
                                 route: crate::Route::TooltipPage {},
                                 status: ComponentStatus::Available,
-                            },
-                            ComponentCard {
-                                name: "Notification".to_string(),
-                                name_zh: "通知".to_string(),
-                                description: "显示通知提醒消息。".to_string(),
-                                route: crate::Route::ComponentsPage {},
-                                status: ComponentStatus::ComingSoon,
-                            },
-                            ComponentCard {
-                                name: "Alert".to_string(),
-                                name_zh: "警告".to_string(),
-                                description: "静态的信息提示。".to_string(),
-                                route: crate::Route::ComponentsPage {},
-                                status: ComponentStatus::ComingSoon,
-                            },
-                        ],
-                    }
-
-                    // 数据展示
-                    ComponentCategory {
-                        title: "数据展示",
-                        description: "用于展示数据的组件",
-                        components: vec![
-                            ComponentCard {
-                                name: "Table".to_string(),
-                                name_zh: "表格".to_string(),
-                                description: "用于展示结构化数据。".to_string(),
-                                route: crate::Route::TablePage {},
-                                status: ComponentStatus::Available,
-                            },
-                            ComponentCard {
-                                name: "List".to_string(),
-                                name_zh: "列表".to_string(),
-                                description: "用于展示列表数据。".to_string(),
-                                route: crate::Route::ComponentsPage {},
-                                status: ComponentStatus::ComingSoon,
-                            },
-                            ComponentCard {
-                                name: "Tag".to_string(),
-                                name_zh: "标签".to_string(),
-                                description: "用于标记和分类。".to_string(),
-                                route: crate::Route::ComponentsPage {},
-                                status: ComponentStatus::ComingSoon,
-                            },
-                            ComponentCard {
-                                name: "Progress".to_string(),
-                                name_zh: "进度条".to_string(),
-                                description: "用于显示操作进度。".to_string(),
-                                route: crate::Route::ComponentsPage {},
-                                status: ComponentStatus::ComingSoon,
-                            },
-                            ComponentCard {
-                                name: "Skeleton".to_string(),
-                                name_zh: "骨架屏".to_string(),
-                                description: "用于在内容加载时显示占位符。".to_string(),
-                                route: crate::Route::ComponentsPage {},
-                                status: ComponentStatus::ComingSoon,
-                            },
-                            ComponentCard {
-                                name: "Empty".to_string(),
-                                name_zh: "空状态".to_string(),
-                                description: "用于展示空数据状态。".to_string(),
-                                route: crate::Route::ComponentsPage {},
-                                status: ComponentStatus::ComingSoon,
                             },
                         ],
                     }

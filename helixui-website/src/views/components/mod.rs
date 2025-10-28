@@ -5,9 +5,9 @@ pub mod feedback;
 pub mod form;
 pub mod layout;
 
-pub use common::{AvatarPage, ButtonPage, CardPage, DividerPage, IconPage};
+pub use common::{AvatarPage, ButtonPage, CardPage, CarouselPage, DividerPage, IconPage};
 pub use components_page::ComponentsPage;
-pub use data_display::TablePage;
+pub use data_display::{ScrollAreaPage, TablePage};
 pub use feedback::{AlertPage, BadgePage, DialogPage, ToastPage, TooltipPage};
 pub use form::{
     CheckboxPage, InputPage, RadioPage, SwitchPage, TextAreaPage,

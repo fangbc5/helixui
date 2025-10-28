@@ -3,6 +3,7 @@
 //! 包含各种数据展示组件，如表格、列表、卡片、统计等
 
 // 导出数据展示组件
+pub mod scroll_area;
 pub mod table;
 // pub mod list;
 // pub mod card;
@@ -19,6 +20,7 @@ pub mod table;
 // pub mod carousel;
 
 // 重新导出组件
+pub use scroll_area::*;
 pub use table::*;
 // pub use list::*;
 // pub use card::*;

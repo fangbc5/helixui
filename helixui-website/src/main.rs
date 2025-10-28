@@ -3,10 +3,10 @@
 use dioxus::prelude::*;
 
 use views::{
-    AlertPage, AvatarPage, BadgePage, ButtonPage, CardPage, CheckboxPage, ComponentsPage,
-    DialogPage, DividerPage, FlexPage, GridPage, Guide, Home, IconPage, InputPage, Introduction,
-    LayoutPage, QuickStart, RadioPage, SpacePage, SplitPage, SwitchPage, TablePage, TextAreaPage,
-    ToastPage, TooltipPage, TopNavbar, Version,
+    AlertPage, AvatarPage, BadgePage, ButtonPage, CardPage, CarouselPage, CheckboxPage,
+    ComponentsPage, DialogPage, DividerPage, FlexPage, GridPage, Guide, Home, IconPage, InputPage,
+    Introduction, LayoutPage, QuickStart, RadioPage, ScrollAreaPage, SpacePage, SplitPage,
+    SwitchPage, TablePage, TextAreaPage, ToastPage, TooltipPage, TopNavbar, Version,
 };
 
 /// i18n internationalization support
@@ -47,6 +47,8 @@ enum Route {
         ButtonPage {},
         #[route("/component/card")]
         CardPage {},
+        #[route("/component/carousel")]
+        CarouselPage {},
         #[route("/component/divider")]
         DividerPage {},
         #[route("/component/icon")]
@@ -81,6 +83,8 @@ enum Route {
         SwitchPage {},
         #[route("/component/table")]
         TablePage {},
+        #[route("/component/scroll-area")]
+        ScrollAreaPage {},
 }
 
 // We can import assets in dioxus with the `asset!` macro. This macro takes a path to an asset relative to the crate root.

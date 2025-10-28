@@ -173,6 +173,7 @@ pub fn ComponentsSidebar() -> Element {
                 SidebarItem::link(i18n::t("component.avatar"), crate::Route::AvatarPage {}),
                 SidebarItem::link(i18n::t("component.button"), crate::Route::ButtonPage {}),
                 SidebarItem::link(i18n::t("component.card"), crate::Route::CardPage {}),
+                SidebarItem::link(i18n::t("component.carousel"), crate::Route::CarouselPage {}),
                 SidebarItem::link(i18n::t("component.divider"), crate::Route::DividerPage {}),
                 SidebarItem::link(i18n::t("component.icon"), crate::Route::IconPage {}),
             ],
@@ -188,23 +189,10 @@ pub fn ComponentsSidebar() -> Element {
             ],
         ),
         SidebarItem::category(
-            i18n::t("sidebar.feedback"),
-            vec![
-                SidebarItem::link(i18n::t("component.alert"), crate::Route::AlertPage {}),
-                SidebarItem::link(i18n::t("component.badge"), crate::Route::BadgePage {}),
-                SidebarItem::link(i18n::t("component.dialog"), crate::Route::DialogPage {}),
-                SidebarItem::link(i18n::t("component.toast"), crate::Route::ToastPage {}),
-                SidebarItem::link(i18n::t("component.tooltip"), crate::Route::TooltipPage {}),
-            ],
-        ),
-        SidebarItem::category(
             i18n::t("sidebar.data-input"),
             vec![
                 SidebarItem::link(i18n::t("component.input"), crate::Route::InputPage {}),
-                SidebarItem::link(
-                    i18n::t("component.textarea"),
-                    crate::Route::TextAreaPage {},
-                ),
+                SidebarItem::link(i18n::t("component.textarea"), crate::Route::TextAreaPage {}),
                 SidebarItem::link(i18n::t("component.checkbox"), crate::Route::CheckboxPage {}),
                 SidebarItem::link(i18n::t("component.radio"), crate::Route::RadioPage {}),
                 SidebarItem::link(i18n::t("component.switch"), crate::Route::SwitchPage {}),
@@ -215,6 +203,10 @@ pub fn ComponentsSidebar() -> Element {
             i18n::t("sidebar.data-display"),
             vec![
                 SidebarItem::link(i18n::t("component.table"), crate::Route::TablePage {}),
+                SidebarItem::link(
+                    i18n::t("component.scroll-area"),
+                    crate::Route::ScrollAreaPage {},
+                ),
                 SidebarItem::link(i18n::t("component.list"), crate::Route::ComponentsPage {}),
                 SidebarItem::link(i18n::t("component.tag"), crate::Route::ComponentsPage {}),
                 SidebarItem::link(
@@ -226,6 +218,16 @@ pub fn ComponentsSidebar() -> Element {
                     crate::Route::ComponentsPage {},
                 ),
                 SidebarItem::link(i18n::t("component.empty"), crate::Route::ComponentsPage {}),
+            ],
+        ),
+        SidebarItem::category(
+            i18n::t("sidebar.feedback"),
+            vec![
+                SidebarItem::link(i18n::t("component.alert"), crate::Route::AlertPage {}),
+                SidebarItem::link(i18n::t("component.badge"), crate::Route::BadgePage {}),
+                SidebarItem::link(i18n::t("component.dialog"), crate::Route::DialogPage {}),
+                SidebarItem::link(i18n::t("component.toast"), crate::Route::ToastPage {}),
+                SidebarItem::link(i18n::t("component.tooltip"), crate::Route::TooltipPage {}),
             ],
         ),
     ];

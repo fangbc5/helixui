@@ -156,6 +156,8 @@ pub fn t(key: &str) -> String {
         (Language::EnUS, "component.button") => "Button",
         (Language::ZhCN, "component.card") => "卡片 Card",
         (Language::EnUS, "component.card") => "Card",
+        (Language::ZhCN, "component.carousel") => "轮播图 Carousel",
+        (Language::EnUS, "component.carousel") => "Carousel",
         (Language::ZhCN, "component.divider") => "分割线 Divider",
         (Language::EnUS, "component.divider") => "Divider",
         (Language::ZhCN, "component.icon") => "图标 Icon",
@@ -192,6 +194,8 @@ pub fn t(key: &str) -> String {
         // 数据展示组件
         (Language::ZhCN, "component.table") => "表格 Table",
         (Language::EnUS, "component.table") => "Table",
+        (Language::ZhCN, "component.scroll-area") => "滚动域 ScrollArea",
+        (Language::EnUS, "component.scroll-area") => "ScrollArea",
         (Language::ZhCN, "component.list") => "列表 List",
         (Language::EnUS, "component.list") => "List",
         (Language::ZhCN, "component.tag") => "标签 Tag",
