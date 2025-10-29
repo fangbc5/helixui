@@ -7,7 +7,7 @@ pub mod layout;
 
 pub use common::{
     AvatarPage, ButtonPage, CardPage, CarouselPage, CollapsiblePage, DividerPage, DropdownPage,
-    IconPage, TagPage,
+    EllipsisPage, FloatButtonPage, IconPage, TagPage, WatermarkPage,
 };
 pub use components_page::ComponentsPage;
 pub use data_display::{ScrollAreaPage, TablePage};

@@ -5,8 +5,11 @@ mod carousel;
 mod collapsible;
 mod divider;
 mod dropdown;
+mod ellipsis;
+mod float_button;
 mod icon;
 mod tag;
+mod watermark;
 
 pub use avatar::{Avatar, AvatarGroup, AvatarGroupProps, AvatarProps, AvatarShape, AvatarSize};
 pub use button::{
@@ -33,5 +36,10 @@ pub use dropdown::{
     Dropdown, DropdownContent, DropdownContentProps, DropdownItem, DropdownItemProps,
     DropdownProps, DropdownTrigger, DropdownTriggerProps,
 };
+pub use ellipsis::{Ellipsis, EllipsisLines, EllipsisProps};
+pub use float_button::{
+    FloatButton, FloatButtonBadge, FloatButtonPosition, FloatButtonProps, FloatButtonSize,
+};
 pub use icon::{Icon, IconSize, IconType};
 pub use tag::{Tag, TagProps, TagSize, TagType, TagVariant};
+pub use watermark::{Watermark, WatermarkProps};

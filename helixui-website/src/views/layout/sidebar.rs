@@ -128,7 +128,8 @@ fn SidebarNode(item: SidebarItem, on_toggle: EventHandler<usize>, index: usize) 
                 // 子项列表（带平滑过渡）
                 div {
                     class: if item.expanded {
-                        "overflow-hidden transition-all duration-300 ease-in-out max-h-96 opacity-100 transform translate-y-0"
+                        // 放大最大高度，避免内容较多时被裁剪
+                        "overflow-hidden transition-all duration-300 ease-in-out max-h-[1000px] opacity-100 transform translate-y-0"
                     } else {
                         "overflow-hidden transition-all duration-300 ease-in-out max-h-0 opacity-0 transform -translate-y-2"
                     },
@@ -182,6 +183,18 @@ pub fn ComponentsSidebar() -> Element {
                 SidebarItem::link(i18n::t("component.divider"), crate::Route::DividerPage {}),
                 SidebarItem::link(i18n::t("component.dropdown"), crate::Route::DropdownPage {}),
                 SidebarItem::link(i18n::t("component.tag"), crate::Route::TagPage {}),
+                SidebarItem::link(
+                    i18n::t("component.watermark"),
+                    crate::Route::WatermarkPage {},
+                ),
+                SidebarItem::link(
+                    i18n::t("component.float-button"),
+                    crate::Route::FloatButtonPage {},
+                ),
+                SidebarItem::link(
+                    i18n::t("component.ellipsis"),
+                    crate::Route::EllipsisPage {},
+                ),
             ],
         ),
         SidebarItem::category(

@@ -94,6 +94,27 @@ pub fn ComponentsPage() -> Element {
                                 route: crate::Route::TagPage {},
                                 status: ComponentStatus::Available,
                             },
+                            ComponentCard {
+                                name: "Watermark".to_string(),
+                                name_zh: "水印".to_string(),
+                                description: "用于在内容上显示水印。".to_string(),
+                                route: crate::Route::WatermarkPage {},
+                                status: ComponentStatus::Available,
+                            },
+                            ComponentCard {
+                                name: "FloatButton".to_string(),
+                                name_zh: "浮动按钮".to_string(),
+                                description: "固定在页面某个位置的浮动按钮，常用于返回顶部、快捷操作等。".to_string(),
+                                route: crate::Route::FloatButtonPage {},
+                                status: ComponentStatus::Available,
+                            },
+                            ComponentCard {
+                                name: "Ellipsis".to_string(),
+                                name_zh: "省略文字".to_string(),
+                                description: "用于文本过长时的省略显示，支持单行和多行省略，可展开收起。".to_string(),
+                                route: crate::Route::EllipsisPage {},
+                                status: ComponentStatus::Available,
+                            },
                         ],
                     }
 

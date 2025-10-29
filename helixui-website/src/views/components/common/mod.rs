@@ -5,9 +5,11 @@ pub mod carousel_page;
 pub mod collapsible_page;
 pub mod divider_page;
 pub mod dropdown_page;
+pub mod ellipsis_page;
+pub mod float_button_page;
 pub mod icon_page;
 pub mod tag_page;
-
+pub mod watermark_page;
 
 pub use avatar_page::AvatarPage;
 pub use button_page::ButtonPage;
@@ -16,5 +18,8 @@ pub use carousel_page::CarouselPage;
 pub use collapsible_page::CollapsiblePage;
 pub use divider_page::DividerPage;
 pub use dropdown_page::DropdownPage;
+pub use ellipsis_page::EllipsisPage;
+pub use float_button_page::FloatButtonPage;
 pub use icon_page::IconPage;
 pub use tag_page::TagPage;
+pub use watermark_page::WatermarkPage;
