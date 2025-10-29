@@ -1,5 +1,6 @@
 use dioxus::prelude::*;
-use dioxus_time::use_timeout;
+use dioxus_time::{use_timeout, TimeoutHandle};
+use std::time::Duration;
 
 /// 演示框组件 - 用于展示组件示例和代码
 #[component]
@@ -17,6 +18,17 @@ pub fn DemoBox(
 ) -> Element {
     let mut show_code = use_signal(|| false);
     let mut copied = use_signal(|| false);
+    let mut current_timeout: Signal<Option<TimeoutHandle>> = use_signal(|| None);
+
+    // 2 秒超时后重置 copied 状态
+    let reset_timeout = {
+        let mut copied = copied.clone();
+        let mut current_timeout = current_timeout.clone();
+        use_timeout(Duration::from_millis(2000), move |()| {
+            copied.set(false);
+            current_timeout.set(None);
+        })
+    };
 
     rsx! {
         div {
@@ -100,14 +112,14 @@ pub fn DemoBox(
                     class: "flex items-center gap-1 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors",
                     onclick: move |_| {
                         let _code_to_copy = code.clone();
-                        // 复制功能暂时禁用，避免 js-sys 依赖问题
-                        // TODO: 实现跨平台的复制功能
                         copied.set(true);
-                        // 2秒后重置复制状态
-                        let timeout = use_timeout(std::time::Duration::from_millis(2000), move |()| {
-                            copied.set(false);
-                        });
-                        timeout.action(());
+                        // 如有正在等待的超时，先取消
+                        if let Some(handle) = *current_timeout.read() {
+                            handle.cancel();
+                        }
+                        // 触发新的超时
+                        let handle = reset_timeout.action(());
+                        current_timeout.set(Some(handle));
                     },
 
                     if *copied.read() {

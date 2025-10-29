@@ -58,7 +58,7 @@ pub fn Sidebar(
             }
 
             nav {
-                class: "space-y-1",
+                class: "space-y-3",
                 for (index, item) in sidebar_items.read().iter().enumerate() {
                     SidebarNode {
                         item: item.clone(),
@@ -83,7 +83,7 @@ fn SidebarNode(item: SidebarItem, on_toggle: EventHandler<usize>, index: usize) 
         // 这是一个分类
         rsx! {
             div {
-                class: "mb-4",
+                class: "",
 
                 // 分类标题和展开/收起按钮
                 div {
@@ -170,8 +170,9 @@ pub fn ComponentsSidebar() -> Element {
         SidebarItem::category(
             i18n::t("sidebar.general"),
             vec![
-                SidebarItem::link(i18n::t("component.avatar"), crate::Route::AvatarPage {}),
                 SidebarItem::link(i18n::t("component.button"), crate::Route::ButtonPage {}),
+                SidebarItem::link(i18n::t("component.icon"), crate::Route::IconPage {}),
+                SidebarItem::link(i18n::t("component.avatar"), crate::Route::AvatarPage {}),
                 SidebarItem::link(i18n::t("component.card"), crate::Route::CardPage {}),
                 SidebarItem::link(i18n::t("component.carousel"), crate::Route::CarouselPage {}),
                 SidebarItem::link(
@@ -180,7 +181,7 @@ pub fn ComponentsSidebar() -> Element {
                 ),
                 SidebarItem::link(i18n::t("component.divider"), crate::Route::DividerPage {}),
                 SidebarItem::link(i18n::t("component.dropdown"), crate::Route::DropdownPage {}),
-                SidebarItem::link(i18n::t("component.icon"), crate::Route::IconPage {}),
+                SidebarItem::link(i18n::t("component.tag"), crate::Route::TagPage {}),
             ],
         ),
         SidebarItem::category(
@@ -213,7 +214,6 @@ pub fn ComponentsSidebar() -> Element {
                     crate::Route::ScrollAreaPage {},
                 ),
                 SidebarItem::link(i18n::t("component.list"), crate::Route::ComponentsPage {}),
-                SidebarItem::link(i18n::t("component.tag"), crate::Route::ComponentsPage {}),
                 SidebarItem::link(
                     i18n::t("component.progress"),
                     crate::Route::ComponentsPage {},

@@ -6,7 +6,7 @@ use views::{
     AlertPage, AvatarPage, BadgePage, ButtonPage, CardPage, CarouselPage, CheckboxPage,
     CollapsiblePage, ComponentsPage, DialogPage, DividerPage, DropdownPage, FlexPage, GridPage,
     Guide, Home, IconPage, InputPage, Introduction, LayoutPage, QuickStart, RadioPage,
-    ScrollAreaPage, SpacePage, SplitPage, SwitchPage, TablePage, TextAreaPage, ToastPage,
+    ScrollAreaPage, SpacePage, SplitPage, SwitchPage, TablePage, TagPage, TextAreaPage, ToastPage,
     TooltipPage, TopNavbar, Version,
 };
 
@@ -90,6 +90,8 @@ enum Route {
         TablePage {},
         #[route("/component/scroll-area")]
         ScrollAreaPage {},
+        #[route("/component/tag")]
+        TagPage {},
 }
 
 // We can import assets in dioxus with the `asset!` macro. This macro takes a path to an asset relative to the crate root.

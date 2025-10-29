@@ -87,6 +87,13 @@ pub fn ComponentsPage() -> Element {
                                 route: crate::Route::DropdownPage {},
                                 status: ComponentStatus::Available,
                             },
+                            ComponentCard {
+                                name: "Tag".to_string(),
+                                name_zh: "标签".to_string(),
+                                description: "用于标记和分类。".to_string(),
+                                route: crate::Route::TagPage {},
+                                status: ComponentStatus::Available,
+                            },
                         ],
                     }
 
@@ -206,13 +213,6 @@ pub fn ComponentsPage() -> Element {
                                 name: "List".to_string(),
                                 name_zh: "列表".to_string(),
                                 description: "用于展示列表数据。".to_string(),
-                                route: crate::Route::ComponentsPage {},
-                                status: ComponentStatus::ComingSoon,
-                            },
-                            ComponentCard {
-                                name: "Tag".to_string(),
-                                name_zh: "标签".to_string(),
-                                description: "用于标记和分类。".to_string(),
                                 route: crate::Route::ComponentsPage {},
                                 status: ComponentStatus::ComingSoon,
                             },

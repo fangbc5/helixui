@@ -6,7 +6,8 @@ pub mod form;
 pub mod layout;
 
 pub use common::{
-    AvatarPage, ButtonPage, CardPage, CarouselPage, CollapsiblePage, DividerPage, DropdownPage, IconPage,
+    AvatarPage, ButtonPage, CardPage, CarouselPage, CollapsiblePage, DividerPage, DropdownPage,
+    IconPage, TagPage,
 };
 pub use components_page::ComponentsPage;
 pub use data_display::{ScrollAreaPage, TablePage};

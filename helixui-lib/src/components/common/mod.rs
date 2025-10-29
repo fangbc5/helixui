@@ -6,6 +6,7 @@ mod collapsible;
 mod divider;
 mod dropdown;
 mod icon;
+mod tag;
 
 pub use avatar::{Avatar, AvatarGroup, AvatarGroupProps, AvatarProps, AvatarShape, AvatarSize};
 pub use button::{
@@ -29,7 +30,8 @@ pub use divider::{
     Divider, DividerDirection, DividerHorizontal, DividerPosition, DividerProps, DividerVertical,
 };
 pub use dropdown::{
-    Dropdown, DropdownContent, DropdownContentProps, DropdownItem,
-    DropdownItemProps, DropdownProps, DropdownTrigger, DropdownTriggerProps,
+    Dropdown, DropdownContent, DropdownContentProps, DropdownItem, DropdownItemProps,
+    DropdownProps, DropdownTrigger, DropdownTriggerProps,
 };
 pub use icon::{Icon, IconSize, IconType};
+pub use tag::{Tag, TagProps, TagSize, TagType, TagVariant};
