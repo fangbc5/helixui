@@ -17,14 +17,17 @@
 ### 🌍 多语言支持 / Multi-language Support
 
 #### 🇨🇳 中文文档 (Chinese Documentation)
+
 - [布局组件设计](docs/zh_CN/layout-components.md) - Flex、Space、Layout 等布局组件的设计文档
 - [反馈组件设计](docs/zh_CN/feedback-components.md) - Badge、Message、Dialog、Modal 等反馈组件的设计文档
 
 #### 🇺🇸 英文文档 (English Documentation)
+
 - [Layout Components Design](docs/en_US/layout-components.md) - Design documentation for Flex, Space, Layout and other layout components
 - [Feedback Components Design](docs/en_US/feedback-components.md) - Design documentation for Badge, Message, Dialog, Modal and other feedback components
 
 ### 📖 使用指南 / Usage Guide
+
 - [快速开始](GUIDE.md) - 快速上手 HelixUI / Quick Start Guide
 - [组件文档](https://github.com/fangbc5/helixui) - 详细的组件使用文档 / Detailed component documentation
 
@@ -46,15 +49,19 @@
 <div align="center">
 
 ### 🏠 首页
+
 ![首页](docs/images/首页.png)
 
 ### 📚 组件文档
+
 ![组件文档](docs/images/组件文档.png)
 
 ### 📋 组件列表
+
 ![组件列表](docs/images/组件列表.png)
 
 ### 📖 文档页面
+
 ![文档](docs/images/文档.png)
 
 </div>
@@ -66,22 +73,46 @@
 HelixUI 采用分层架构设计，组件按功能分为以下几类：
 
 #### 🎯 通用组件 (Common Components)
+
 - **Avatar** - 头像组件，支持文字、图片、图标
 - **Button** - 按钮组件，支持多种类型和样式
 - **Card** - 卡片组件，用于内容展示
+- **Carousel** - 轮播组件，支持箭头/指示点/自动播放
+- **Collapsible** - 折叠面板
 - **Divider** - 分割线组件
+- **Dropdown** - 下拉菜单（触发/内容/条目）
 - **Icon** - 图标组件
+- **Tag** - 标签组件，支持语义色/变体/尺寸/可关闭
 
 #### 💬 反馈组件 (Feedback Components)
+
+- **AlertDialog** - 警告确认对话框
 - **Badge** - 徽章组件，用于状态标识
-- **Message** - 消息提示组件
 - **Dialog** - 对话框组件
-- **Modal** - 模态框组件
+- **Toast** - 全局轻提示
+- **Tooltip** - 工具提示
 
 #### 🏗️ 布局组件 (Layout Components)
+
 - **Flex** - 弹性布局组件
 - **Space** - 间距组件
 - **Layout** - 页面布局组件（Header/Sider/Content/Footer）
+- **Grid** - 栅格系统
+- **Split** - 分隔面板
+- **Sider** - 侧边栏（折叠/触发/主题）
+
+#### ✍️ 表单组件 (Form Components)
+
+- **Input** - 输入框
+- **TextArea** - 多行文本
+- **Checkbox** - 复选框
+- **Radio** - 单选框
+- **Switch** - 开关
+
+#### 📊 数据展示 (Data Display)
+
+- **Table** - 表格
+- **ScrollArea** - 滚动区域
 
 ### 安装
 
@@ -107,14 +138,14 @@ fn App() -> Element {
                 button_type: ButtonType::Primary,
                 "开始使用 HelixUI"
             }
-            
+
             // 图标按钮
             Button {
                 button_type: ButtonType::Info,
                 variant: ButtonVariant::Icon,
                 icon: Some(IconType::Settings),
             }
-            
+
             // 纯文字按钮
             Button {
                 button_type: ButtonType::PureText,
@@ -129,30 +160,55 @@ fn App() -> Element {
 
 ### 🎯 通用组件 (Common)
 
-| 组件 | 描述 | 状态 |
-|------|------|------|
-| **Button** | 多功能按钮组件，支持多种类型和变体 | ✅ |
-| **Avatar** | 头像组件，支持图片、图标和文字 | ✅ |
-| **Card** | 卡片容器组件 | ✅ |
-| **Icon** | 图标组件，内置多种常用图标 | ✅ |
-| **Divider** | 分割线组件 | ✅ |
+| 组件            | 描述                                  | 状态 |
+| --------------- | ------------------------------------- | ---- |
+| **Button**      | 多功能按钮组件，支持多种类型和变体    | ✅   |
+| **Avatar**      | 头像组件，支持图片、图标和文字        | ✅   |
+| **Card**        | 卡片容器组件                          | ✅   |
+| **Carousel**    | 轮播组件，支持自动播放与指示器        | ✅   |
+| **Collapsible** | 可折叠面板                            | ✅   |
+| **Divider**     | 分割线组件                            | ✅   |
+| **Dropdown**    | 下拉菜单                              | ✅   |
+| **Icon**        | 图标组件，内置多种常用图标            | ✅   |
+| **Tag**         | 标签组件，支持语义色/变体/尺寸/可关闭 | ✅   |
 
 ### 💬 反馈组件 (Feedback)
 
-| 组件 | 描述 | 状态 |
-|------|------|------|
-| **Badge** | 徽章组件，用于状态标识 | ✅ |
-| **Dialog** | 对话框组件 | ✅ |
-| **Message** | 消息提示组件 | ✅ |
-| **Modal** | 模态框组件 | ✅ |
+| 组件            | 描述                   | 状态 |
+| --------------- | ---------------------- | ---- |
+| **AlertDialog** | 警告确认对话框         | ✅   |
+| **Badge**       | 徽章组件，用于状态标识 | ✅   |
+| **Dialog**      | 对话框组件             | ✅   |
+| **Toast**       | 全局轻提示             | ✅   |
+| **Tooltip**     | 工具提示               | ✅   |
 
 ### 🏗️ 布局组件 (Layout)
 
-| 组件 | 描述 | 状态 |
-|------|------|------|
-| **Flex** | 弹性布局组件 | ✅ |
-| **Space** | 间距组件 | ✅ |
-| **Layout** | 页面布局组件 | ✅ |
+| 组件       | 描述         | 状态 |
+| ---------- | ------------ | ---- |
+| **Flex**   | 弹性布局组件 | ✅   |
+| **Space**  | 间距组件     | ✅   |
+| **Layout** | 页面布局组件 | ✅   |
+| **Grid**   | 栅格系统     | ✅   |
+| **Split**  | 分隔面板     | ✅   |
+| **Sider**  | 侧边栏       | ✅   |
+
+### ✍️ 表单组件 (Form)
+
+| 组件         | 描述     | 状态 |
+| ------------ | -------- | ---- |
+| **Input**    | 输入框   | ✅   |
+| **TextArea** | 多行文本 | ✅   |
+| **Checkbox** | 复选框   | ✅   |
+| **Radio**    | 单选框   | ✅   |
+| **Switch**   | 开关     | ✅   |
+
+### 📊 数据展示 (Data Display)
+
+| 组件           | 描述     | 状态 |
+| -------------- | -------- | ---- |
+| **Table**      | 表格     | ✅   |
+| **ScrollArea** | 滚动区域 | ✅   |
 
 ## 🎨 设计系统
 
@@ -248,7 +304,7 @@ helixui/
 
 ### 开发计划
 
-- [ ] 更多通用组件 (Input, Select, Table 等)
+- [ ] 更多通用组件 (Select 等)
 - [ ] 数据展示组件 (Chart, Calendar 等)
 - [ ] 导航组件 (Menu, Breadcrumb 等)
 - [ ] 表单组件 (Form, Validation 等)
@@ -265,6 +321,7 @@ helixui/
 感谢所有为这个项目做出贡献的开发者！
 
 特别感谢：
+
 - [Dioxus](https://dioxuslabs.com/) - 优秀的 Rust 前端框架
 - [Tailwind CSS](https://tailwindcss.com/) - 实用的 CSS 框架
 - Rust 社区的所有贡献者
