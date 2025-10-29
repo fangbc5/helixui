@@ -4,9 +4,10 @@ use dioxus::prelude::*;
 
 use views::{
     AlertPage, AvatarPage, BadgePage, ButtonPage, CardPage, CarouselPage, CheckboxPage,
-    ComponentsPage, DialogPage, DividerPage, FlexPage, GridPage, Guide, Home, IconPage, InputPage,
-    Introduction, LayoutPage, QuickStart, RadioPage, ScrollAreaPage, SpacePage, SplitPage,
-    SwitchPage, TablePage, TextAreaPage, ToastPage, TooltipPage, TopNavbar, Version,
+    CollapsiblePage, ComponentsPage, DialogPage, DividerPage, DropdownPage, FlexPage, GridPage,
+    Guide, Home, IconPage, InputPage, Introduction, LayoutPage, QuickStart, RadioPage,
+    ScrollAreaPage, SpacePage, SplitPage, SwitchPage, TablePage, TextAreaPage, ToastPage,
+    TooltipPage, TopNavbar, Version,
 };
 
 /// i18n internationalization support
@@ -49,8 +50,12 @@ enum Route {
         CardPage {},
         #[route("/component/carousel")]
         CarouselPage {},
+        #[route("/component/collapsible")]
+        CollapsiblePage {},
         #[route("/component/divider")]
         DividerPage {},
+        #[route("/component/dropdown")]
+        DropdownPage {},
         #[route("/component/icon")]
         IconPage {},
         #[route("/component/flex")]

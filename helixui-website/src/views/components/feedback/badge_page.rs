@@ -4,7 +4,7 @@ use crate::views::DocPage;
 use dioxus::prelude::*;
 use helixui::components::{
     feedback::{Badge, BadgeType},
-    Button, ButtonSize, ButtonType, DemoBox,
+    Button, ButtonSize, ButtonType, DemoBox, Table,
 };
 
 /// Badge 页面组件
@@ -709,206 +709,26 @@ rsx! {
                         "API"
                     }
 
-                    div {
-                        class: "overflow-x-auto",
-                        table {
-                            class: "min-w-full divide-y divide-gray-200 dark:divide-gray-700",
-                            thead {
-                                class: "bg-gray-50 dark:bg-gray-800",
-                                tr {
-                                    th {
-                                        class: "px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider",
-                                        "属性"
-                                    }
-                                    th {
-                                        class: "px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider",
-                                        "类型"
-                                    }
-                                    th {
-                                        class: "px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider",
-                                        "默认值"
-                                    }
-                                    th {
-                                        class: "px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider",
-                                        "说明"
-                                    }
-                                }
-                            }
-                            tbody {
-                                class: "bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700",
-
-                                tr {
-                                    td {
-                                        class: "px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white",
-                                        "value"
-                                    }
-                                    td {
-                                        class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400",
-                                        "Option&lt;String&gt;"
-                                    }
-                                    td {
-                                        class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400",
-                                        "undefined"
-                                    }
-                                    td {
-                                        class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400",
-                                        "标记数量"
-                                    }
-                                }
-
-                                tr {
-                                    td {
-                                        class: "px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white",
-                                        "badge_type"
-                                    }
-                                    td {
-                                        class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400",
-                                        "BadgeType"
-                                    }
-                                    td {
-                                        class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400",
-                                        "Default"
-                                    }
-                                    td {
-                                        class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400",
-                                        "标记显示类型"
-                                    }
-                                }
-
-                                tr {
-                                    td {
-                                        class: "px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white",
-                                        "dot"
-                                    }
-                                    td {
-                                        class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400",
-                                        "bool"
-                                    }
-                                    td {
-                                        class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400",
-                                        "false"
-                                    }
-                                    td {
-                                        class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400",
-                                        "标记是否显示为点"
-                                    }
-                                }
-
-                                tr {
-                                    td {
-                                        class: "px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white",
-                                        "max"
-                                    }
-                                    td {
-                                        class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400",
-                                        "Option&lt;u32&gt;"
-                                    }
-                                    td {
-                                        class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400",
-                                        "undefined"
-                                    }
-                                    td {
-                                        class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400",
-                                        "标记最大数来处理溢出情况"
-                                    }
-                                }
-
-                                tr {
-                                    td {
-                                        class: "px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white",
-                                        "show_zero"
-                                    }
-                                    td {
-                                        class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400",
-                                        "bool"
-                                    }
-                                    td {
-                                        class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400",
-                                        "false"
-                                    }
-                                    td {
-                                        class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400",
-                                        "标记为0时是否显示"
-                                    }
-                                }
-
-                                tr {
-                                    td {
-                                        class: "px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white",
-                                        "show"
-                                    }
-                                    td {
-                                        class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400",
-                                        "bool"
-                                    }
-                                    td {
-                                        class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400",
-                                        "true"
-                                    }
-                                    td {
-                                        class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400",
-                                        "标记受控显示"
-                                    }
-                                }
-
-                                tr {
-                                    td {
-                                        class: "px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white",
-                                        "processing"
-                                    }
-                                    td {
-                                        class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400",
-                                        "bool"
-                                    }
-                                    td {
-                                        class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400",
-                                        "false"
-                                    }
-                                    td {
-                                        class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400",
-                                        "标记显示进度"
-                                    }
-                                }
-
-                                tr {
-                                    td {
-                                        class: "px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white",
-                                        "color"
-                                    }
-                                    td {
-                                        class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400",
-                                        "Option&lt;String&gt;"
-                                    }
-                                    td {
-                                        class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400",
-                                        "undefined"
-                                    }
-                                    td {
-                                        class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400",
-                                        "标记的颜色"
-                                    }
-                                }
-
-                                tr {
-                                    td {
-                                        class: "px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white",
-                                        "offset"
-                                    }
-                                    td {
-                                        class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400",
-                                        "Option&lt;(String, String)&gt;"
-                                    }
-                                    td {
-                                        class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400",
-                                        "undefined"
-                                    }
-                                    td {
-                                        class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400",
-                                        "距默认位置左侧、上方的偏移量"
-                                    }
-                                }
-                            }
-                        }
+                    Table {
+                        headers: Some(vec![
+                            "属性".to_string(),
+                            "类型".to_string(),
+                            "默认值".to_string(),
+                            "说明".to_string(),
+                        ]),
+                        data: vec![
+                            vec!["value".to_string(), "Option<String>".to_string(), "None".to_string(), "标记数量".to_string()],
+                            vec!["badge_type".to_string(), "BadgeType".to_string(), "Default".to_string(), "标记显示类型".to_string()],
+                            vec!["dot".to_string(), "bool".to_string(), "false".to_string(), "标记是否显示为点".to_string()],
+                            vec!["max".to_string(), "Option<u32>".to_string(), "None".to_string(), "标记最大数来处理溢出情况".to_string()],
+                            vec!["show_zero".to_string(), "bool".to_string(), "false".to_string(), "标记为0时是否显示".to_string()],
+                            vec!["show".to_string(), "bool".to_string(), "true".to_string(), "标记受控显示".to_string()],
+                            vec!["processing".to_string(), "bool".to_string(), "false".to_string(), "标记显示进度".to_string()],
+                            vec!["color".to_string(), "Option<String>".to_string(), "None".to_string(), "标记的颜色".to_string()],
+                            vec!["offset".to_string(), "Option<(String, String)>".to_string(), "None".to_string(), "距默认位置左侧、上方的偏移量".to_string()],
+                        ],
+                        bordered: true,
+                        striped: true,
                     }
                 }
             }

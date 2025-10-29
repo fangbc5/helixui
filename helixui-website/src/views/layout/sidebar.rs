@@ -174,7 +174,12 @@ pub fn ComponentsSidebar() -> Element {
                 SidebarItem::link(i18n::t("component.button"), crate::Route::ButtonPage {}),
                 SidebarItem::link(i18n::t("component.card"), crate::Route::CardPage {}),
                 SidebarItem::link(i18n::t("component.carousel"), crate::Route::CarouselPage {}),
+                SidebarItem::link(
+                    i18n::t("component.collapsible"),
+                    crate::Route::CollapsiblePage {},
+                ),
                 SidebarItem::link(i18n::t("component.divider"), crate::Route::DividerPage {}),
+                SidebarItem::link(i18n::t("component.dropdown"), crate::Route::DropdownPage {}),
                 SidebarItem::link(i18n::t("component.icon"), crate::Route::IconPage {}),
             ],
         ),

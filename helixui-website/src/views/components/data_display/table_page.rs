@@ -76,71 +76,23 @@ pub fn TablePage() -> Element {
                         "API"
                     }
 
-                    div {
-                        class: "overflow-x-auto mb-6",
-                        table {
-                            class: "min-w-full divide-y divide-gray-200 dark:divide-gray-700",
-                            thead {
-                                class: "bg-gray-50 dark:bg-gray-800",
-                                tr {
-                                    th {
-                                        class: "px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider",
-                                        "参数"
-                                    }
-                                    th {
-                                        class: "px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider",
-                                        "说明"
-                                    }
-                                    th {
-                                        class: "px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider",
-                                        "类型"
-                                    }
-                                    th {
-                                        class: "px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider",
-                                        "默认值"
-                                    }
-                                }
-                            }
-                            tbody {
-                                class: "bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700",
-                                tr {
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100", "data" }
-                                    td { class: "px-6 py-4 text-sm text-gray-600 dark:text-gray-400", "表格数据（二维数组）" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-900 dark:text-gray-100", "Vec<Vec<String>>" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400", "-" }
-                                }
-                                tr {
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100", "headers" }
-                                    td { class: "px-6 py-4 text-sm text-gray-600 dark:text-gray-400", "表头数据" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-900 dark:text-gray-100", "Option<Vec<String>>" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400", "None" }
-                                }
-                                tr {
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100", "bordered" }
-                                    td { class: "px-6 py-4 text-sm text-gray-600 dark:text-gray-400", "是否显示边框" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-900 dark:text-gray-100", "bool" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400", "true" }
-                                }
-                                tr {
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100", "striped" }
-                                    td { class: "px-6 py-4 text-sm text-gray-600 dark:text-gray-400", "是否显示斑马纹" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-900 dark:text-gray-100", "bool" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400", "false" }
-                                }
-                                tr {
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100", "compact" }
-                                    td { class: "px-6 py-4 text-sm text-gray-600 dark:text-gray-400", "是否紧凑模式" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-900 dark:text-gray-100", "bool" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400", "false" }
-                                }
-                                tr {
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100", "class" }
-                                    td { class: "px-6 py-4 text-sm text-gray-600 dark:text-gray-400", "自定义类名" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-900 dark:text-gray-100", "Option<String>" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400", "None" }
-                                }
-                            }
-                        }
+                    Table {
+                        headers: Some(vec![
+                            "参数".to_string(),
+                            "说明".to_string(),
+                            "类型".to_string(),
+                            "默认值".to_string(),
+                        ]),
+                        data: vec![
+                            vec!["data".to_string(), "表格数据（二维数组）".to_string(), "Vec<Vec<String>>".to_string(), "-".to_string()],
+                            vec!["headers".to_string(), "表头数据".to_string(), "Option<Vec<String>>".to_string(), "None".to_string()],
+                            vec!["bordered".to_string(), "是否显示边框".to_string(), "bool".to_string(), "true".to_string()],
+                            vec!["striped".to_string(), "是否显示斑马纹".to_string(), "bool".to_string(), "false".to_string()],
+                            vec!["compact".to_string(), "是否紧凑模式".to_string(), "bool".to_string(), "false".to_string()],
+                            vec!["class".to_string(), "自定义类名".to_string(), "Option<String>".to_string(), "None".to_string()],
+                        ],
+                        bordered: true,
+                        striped: true,
                     }
                 }
             }

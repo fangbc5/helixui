@@ -2,7 +2,7 @@ use crate::views::layout::{ComponentsSidebar, TocItem};
 use crate::views::DocPage;
 use dioxus::prelude::*;
 use helixui::components::layout::{Breakpoint, ResponsiveSize, Space, SpaceDirection, SpaceSize};
-use helixui::components::DemoBox;
+use helixui::components::{DemoBox, Table};
 use helixui::tokens::SpacingToken;
 
 #[component]
@@ -36,6 +36,11 @@ pub fn SpacePage() -> Element {
         TocItem {
             id: "split".to_string(),
             title: "分隔符".to_string(),
+            level: 1,
+        },
+        TocItem {
+            id: "api".to_string(),
+            title: "API".to_string(),
             level: 1,
         },
     ];
@@ -229,6 +234,36 @@ rsx! {
                                     div { class: "px-3 py-2 bg-gray-100 dark:bg-gray-800 rounded text-gray-700 dark:text-gray-300", "3" }
                                 }
                             }
+                        }
+                    }
+                }
+            }
+
+            // API 文档
+            section { id: "api", class: "mb-12",
+                h2 { class: "text-2xl font-semibold text-gray-900 dark:text-white mb-4 transition-colors", "API" }
+                div { class: "space-y-6",
+                    div {
+                        h3 { class: "text-lg font-semibold text-gray-900 dark:text-white mb-2", "Space Props" }
+                        Table {
+                            headers: Some(vec![
+                                "属性".to_string(),
+                                "类型".to_string(),
+                                "默认值".to_string(),
+                                "说明".to_string(),
+                            ]),
+                            data: vec![
+                                vec!["direction".to_string(), "SpaceDirection".to_string(), "Horizontal".to_string(), "排列方向（Horizontal/Vertical）".to_string()],
+                                vec!["size".to_string(), "Option<SpaceSize>".to_string(), "None".to_string(), "间距大小（Single/Pair）".to_string()],
+                                vec!["responsive_size".to_string(), "Option<ResponsiveSize>".to_string(), "None".to_string(), "按断点设置不同间距".to_string()],
+                                vec!["spacing_token".to_string(), "Option<SpacingToken>".to_string(), "None".to_string(), "设计令牌的间距值".to_string()],
+                                vec!["wrap".to_string(), "bool".to_string(), "false".to_string(), "是否换行".to_string()],
+                                vec!["split".to_string(), "Option<String>".to_string(), "None".to_string(), "子元素分隔符".to_string()],
+                                vec!["class".to_string(), "Option<String>".to_string(), "None".to_string(), "自定义类名".to_string()],
+                                vec!["style".to_string(), "Option<String>".to_string(), "None".to_string(), "内联样式".to_string()],
+                            ],
+                            bordered: true,
+                            striped: true,
                         }
                     }
                 }

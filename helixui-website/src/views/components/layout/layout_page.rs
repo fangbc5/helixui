@@ -6,7 +6,7 @@ use helixui::components::layout::{
     LayoutScrollStrategy, Sider, SiderCollapseMode, SiderShowTrigger, SiderTheme, SiderTrigger,
     SiderTriggerPlacement, Space, SpaceDirection, SpaceSize,
 };
-use helixui::components::DemoBox;
+use helixui::components::{DemoBox, Table};
 
 #[component]
 pub fn LayoutPage() -> Element {
@@ -613,31 +613,29 @@ rsx! {
                 div { class: "space-y-6",
                     div {
                         h3 { class: "text-lg font-semibold text-gray-900 dark:text-white mb-2", "Layout Props" }
-                        div { class: "overflow-x-auto",
-                            table { class: "min-w-full divide-y divide-gray-200 dark:divide-gray-700",
-                                thead { class: "bg-gray-50 dark:bg-gray-800",
-                                    tr {
-                                        th { class: "px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider", "属性" }
-                                        th { class: "px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider", "类型" }
-                                        th { class: "px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider", "默认值" }
-                                        th { class: "px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider", "说明" }
-                                    }
-                                }
-                                tbody { class: "bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700",
-                                    tr {
-                                        td { class: "px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white", "direction" }
-                                        td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300", "LayoutDirection" }
-                                        td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300", "Column" }
-                                        td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300", "布局方向" }
-                                    }
-                                    tr {
-                                        td { class: "px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white", "responsive" }
-                                        td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300", "Option<bool>" }
-                                        td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300", "None" }
-                                        td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300", "是否启用响应式" }
-                                    }
-                                }
-                            }
+                        Table {
+                            headers: Some(vec![
+                                "属性".to_string(),
+                                "类型".to_string(),
+                                "默认值".to_string(),
+                                "说明".to_string(),
+                            ]),
+                            data: vec![
+                                vec![
+                                    "direction".to_string(),
+                                    "LayoutDirection".to_string(),
+                                    "Column".to_string(),
+                                    "布局方向".to_string(),
+                                ],
+                                vec![
+                                    "responsive".to_string(),
+                                    "Option<bool>".to_string(),
+                                    "None".to_string(),
+                                    "是否启用响应式".to_string(),
+                                ],
+                            ],
+                            bordered: true,
+                            striped: true,
                         }
                     }
                 }

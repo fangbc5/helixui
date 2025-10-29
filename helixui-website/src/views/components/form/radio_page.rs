@@ -1,7 +1,7 @@
 use crate::views::layout::{ComponentsSidebar, TocItem};
 use crate::views::DocPage;
 use dioxus::prelude::*;
-use helixui::components::{DemoBox, RadioGroup, RadioItem};
+use helixui::components::{DemoBox, RadioGroup, RadioItem, Table};
 
 /// Radio 演示页面
 #[component]
@@ -150,125 +150,44 @@ RadioGroup {{
                         "RadioGroup"
                     }
 
-                    div {
-                        class: "overflow-x-auto mb-6",
-                        table {
-                            class: "min-w-full divide-y divide-gray-200 dark:divide-gray-700",
-                            thead {
-                                class: "bg-gray-50 dark:bg-gray-800",
-                                tr {
-                                    th {
-                                        class: "px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider",
-                                        "参数"
-                                    }
-                                    th {
-                                        class: "px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider",
-                                        "说明"
-                                    }
-                                    th {
-                                        class: "px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider",
-                                        "类型"
-                                    }
-                                    th {
-                                        class: "px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider",
-                                        "默认值"
-                                    }
-                                }
-                            }
-                            tbody {
-                                class: "bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700",
-                                tr {
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100", "value" }
-                                    td { class: "px-6 py-4 text-sm text-gray-600 dark:text-gray-400", "当前选中的值" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-900 dark:text-gray-100", "ReadSignal<Option<String>>" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400", "-" }
-                                }
-                                tr {
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100", "default_value" }
-                                    td { class: "px-6 py-4 text-sm text-gray-600 dark:text-gray-400", "默认选中的值" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-900 dark:text-gray-100", "String" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400", "-" }
-                                }
-                                tr {
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100", "on_value_change" }
-                                    td { class: "px-6 py-4 text-sm text-gray-600 dark:text-gray-400", "值变化时的回调" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-900 dark:text-gray-100", "Callback<String>" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400", "-" }
-                                }
-                                tr {
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100", "disabled" }
-                                    td { class: "px-6 py-4 text-sm text-gray-600 dark:text-gray-400", "是否禁用整个组" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-900 dark:text-gray-100", "ReadSignal<bool>" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400", "-" }
-                                }
-                                tr {
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100", "horizontal" }
-                                    td { class: "px-6 py-4 text-sm text-gray-600 dark:text-gray-400", "是否横向排列" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-900 dark:text-gray-100", "ReadSignal<bool>" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400", "-" }
-                                }
-                                tr {
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100", "roving_loop" }
-                                    td { class: "px-6 py-4 text-sm text-gray-600 dark:text-gray-400", "焦点是否循环" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-900 dark:text-gray-100", "ReadSignal<bool>" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400", "true" }
-                                }
-                            }
-                        }
+                    Table {
+                        headers: Some(vec![
+                            "参数".to_string(),
+                            "说明".to_string(),
+                            "类型".to_string(),
+                            "默认值".to_string(),
+                        ]),
+                        data: vec![
+                            vec!["value".to_string(), "当前选中的值".to_string(), "ReadSignal<Option<String>>".to_string(), "-".to_string()],
+                            vec!["default_value".to_string(), "默认选中的值".to_string(), "String".to_string(), "-".to_string()],
+                            vec!["on_value_change".to_string(), "值变化时的回调".to_string(), "Callback<String>".to_string(), "-".to_string()],
+                            vec!["disabled".to_string(), "是否禁用整个组".to_string(), "ReadSignal<bool>".to_string(), "-".to_string()],
+                            vec!["horizontal".to_string(), "是否横向排列".to_string(), "ReadSignal<bool>".to_string(), "-".to_string()],
+                            vec!["roving_loop".to_string(), "焦点是否循环".to_string(), "ReadSignal<bool>".to_string(), "true".to_string()],
+                        ],
+                        bordered: true,
+                        striped: true,
                     }
 
                     h3 {
-                        class: "text-xl font-bold text-gray-900 dark:text-white mb-4",
+                        class: "text-xl font-bold text-gray-900 dark:text-white mb-4 mt-8",
                         "RadioItem"
                     }
 
-                    div {
-                        class: "overflow-x-auto mb-6",
-                        table {
-                            class: "min-w-full divide-y divide-gray-200 dark:divide-gray-700",
-                            thead {
-                                class: "bg-gray-50 dark:bg-gray-800",
-                                tr {
-                                    th {
-                                        class: "px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider",
-                                        "参数"
-                                    }
-                                    th {
-                                        class: "px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider",
-                                        "说明"
-                                    }
-                                    th {
-                                        class: "px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider",
-                                        "类型"
-                                    }
-                                    th {
-                                        class: "px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider",
-                                        "默认值"
-                                    }
-                                }
-                            }
-                            tbody {
-                                class: "bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700",
-                                tr {
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100", "value" }
-                                    td { class: "px-6 py-4 text-sm text-gray-600 dark:text-gray-400", "单选框的值" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-900 dark:text-gray-100", "ReadSignal<String>" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400", "-" }
-                                }
-                                tr {
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100", "index" }
-                                    td { class: "px-6 py-4 text-sm text-gray-600 dark:text-gray-400", "单选框的索引" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-900 dark:text-gray-100", "ReadSignal<usize>" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400", "-" }
-                                }
-                                tr {
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100", "disabled" }
-                                    td { class: "px-6 py-4 text-sm text-gray-600 dark:text-gray-400", "是否禁用" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-900 dark:text-gray-100", "ReadSignal<bool>" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400", "-" }
-                                }
-                            }
-                        }
+                    Table {
+                        headers: Some(vec![
+                            "参数".to_string(),
+                            "说明".to_string(),
+                            "类型".to_string(),
+                            "默认值".to_string(),
+                        ]),
+                        data: vec![
+                            vec!["value".to_string(), "单选框的值".to_string(), "ReadSignal<String>".to_string(), "-".to_string()],
+                            vec!["index".to_string(), "单选框的索引".to_string(), "ReadSignal<usize>".to_string(), "-".to_string()],
+                            vec!["disabled".to_string(), "是否禁用".to_string(), "ReadSignal<bool>".to_string(), "-".to_string()],
+                        ],
+                        bordered: true,
+                        striped: true,
                     }
                 }
             }

@@ -2,7 +2,7 @@ use crate::views::layout::ComponentsSidebar;
 use crate::views::layout::TocItem;
 use crate::views::DocPage;
 use dioxus::prelude::*;
-use helixui::components::{DemoBox, Switch};
+use helixui::components::{DemoBox, Switch, Table};
 
 /// Switch 演示页面
 #[component]
@@ -85,59 +85,21 @@ Switch {{
                         "API"
                     }
 
-                    div {
-                        class: "overflow-x-auto mb-6",
-                        table {
-                            class: "min-w-full divide-y divide-gray-200 dark:divide-gray-700",
-                            thead {
-                                class: "bg-gray-50 dark:bg-gray-800",
-                                tr {
-                                    th {
-                                        class: "px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider",
-                                        "参数"
-                                    }
-                                    th {
-                                        class: "px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider",
-                                        "说明"
-                                    }
-                                    th {
-                                        class: "px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider",
-                                        "类型"
-                                    }
-                                    th {
-                                        class: "px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider",
-                                        "默认值"
-                                    }
-                                }
-                            }
-                            tbody {
-                                class: "bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700",
-                                tr {
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100", "checked" }
-                                    td { class: "px-6 py-4 text-sm text-gray-600 dark:text-gray-400", "开关的状态" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-900 dark:text-gray-100", "ReadSignal<Option<bool>>" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400", "-" }
-                                }
-                                tr {
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100", "default_checked" }
-                                    td { class: "px-6 py-4 text-sm text-gray-600 dark:text-gray-400", "默认状态" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-900 dark:text-gray-100", "bool" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400", "false" }
-                                }
-                                tr {
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100", "disabled" }
-                                    td { class: "px-6 py-4 text-sm text-gray-600 dark:text-gray-400", "是否禁用" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-900 dark:text-gray-100", "ReadSignal<bool>" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400", "false" }
-                                }
-                                tr {
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100", "on_checked_change" }
-                                    td { class: "px-6 py-4 text-sm text-gray-600 dark:text-gray-400", "状态变化时的回调" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-900 dark:text-gray-100", "Callback<bool>" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400", "-" }
-                                }
-                            }
-                        }
+                    Table {
+                        headers: Some(vec![
+                            "参数".to_string(),
+                            "说明".to_string(),
+                            "类型".to_string(),
+                            "默认值".to_string(),
+                        ]),
+                        data: vec![
+                            vec!["checked".to_string(), "开关的状态".to_string(), "ReadSignal<Option<bool>>".to_string(), "-".to_string()],
+                            vec!["default_checked".to_string(), "默认状态".to_string(), "bool".to_string(), "false".to_string()],
+                            vec!["disabled".to_string(), "是否禁用".to_string(), "ReadSignal<bool>".to_string(), "false".to_string()],
+                            vec!["on_checked_change".to_string(), "状态变化时的回调".to_string(), "Callback<bool>".to_string(), "-".to_string()],
+                        ],
+                        bordered: true,
+                        striped: true,
                     }
                 }
             }

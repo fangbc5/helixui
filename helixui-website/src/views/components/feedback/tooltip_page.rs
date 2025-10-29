@@ -2,10 +2,10 @@ use crate::views::layout::ComponentsSidebar;
 use crate::views::layout::TocItem;
 use crate::views::DocPage;
 use dioxus::prelude::*;
-use helixui::components::DemoBox;
 use helixui::components::{
     Button, ButtonType, ContentAlign, ContentSide, Tooltip, TooltipContent, TooltipTrigger,
 };
+use helixui::components::{DemoBox, Table};
 
 /// Tooltip 演示页面
 #[component]
@@ -543,6 +543,47 @@ fn TooltipAdvancedDemo() -> Element {
                         children: rsx! {
                             TooltipAdvancedDemo {}
                         }
+                    }
+                }
+
+                // API 文档
+                section {
+                    id: "api",
+                    class: "mb-12",
+                    h2 { class: "text-2xl font-semibold text-gray-900 dark:text-white mb-4", "API" }
+
+                    h3 { class: "text-xl font-semibold text-gray-900 dark:text-white mb-3", "Tooltip Props" }
+                    Table {
+                        headers: Some(vec!["属性".to_string(), "类型".to_string(), "默认值".to_string(), "说明".to_string()]),
+                        data: vec![
+                            vec!["children".to_string(), "Element".to_string(), "-".to_string(), "触发器与内容".to_string()],
+                        ],
+                        bordered: true,
+                        striped: true,
+                    }
+
+                    h3 { class: "text-xl font-semibold text-gray-900 dark:text-white mb-3 mt-8", "TooltipTrigger Props" }
+                    Table {
+                        headers: Some(vec!["属性".to_string(), "类型".to_string(), "默认值".to_string(), "说明".to_string()]),
+                        data: vec![
+                            vec!["children".to_string(), "Element".to_string(), "-".to_string(), "触发元素".to_string()],
+                        ],
+                        bordered: true,
+                        striped: true,
+                    }
+
+                    h3 { class: "text-xl font-semibold text-gray-900 dark:text-white mb-3 mt-8", "TooltipContent Props" }
+                    Table {
+                        headers: Some(vec!["属性".to_string(), "类型".to_string(), "默认值".to_string(), "说明".to_string()]),
+                        data: vec![
+                            vec!["side".to_string(), "ContentSide".to_string(), "Top".to_string(), "显示位置（Top/Right/Bottom/Left）".to_string()],
+                            vec!["align".to_string(), "ContentAlign".to_string(), "Center".to_string(), "对齐方式（Start/Center/End）".to_string()],
+                            vec!["class".to_string(), "Option<String>".to_string(), "None".to_string(), "自定义样式类".to_string()],
+                            vec!["style".to_string(), "Option<String>".to_string(), "None".to_string(), "内联样式".to_string()],
+                            vec!["children".to_string(), "Element".to_string(), "-".to_string(), "提示内容".to_string()],
+                        ],
+                        bordered: true,
+                        striped: true,
                     }
                 }
             }

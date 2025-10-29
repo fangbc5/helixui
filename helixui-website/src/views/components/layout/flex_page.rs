@@ -4,7 +4,7 @@ use dioxus::prelude::*;
 use helixui::components::layout::{
     AlignItems, Flex, FlexDirection, Justify, Space, SpaceDirection, SpaceSize,
 };
-use helixui::components::DemoBox;
+use helixui::components::{DemoBox, Table};
 
 #[component]
 pub fn FlexPage() -> Element {
@@ -57,6 +57,11 @@ pub fn FlexPage() -> Element {
         TocItem {
             id: "align-items".to_string(),
             title: "交叉轴对齐（align-items）".to_string(),
+            level: 1,
+        },
+        TocItem {
+            id: "api".to_string(),
+            title: "API".to_string(),
             level: 1,
         },
     ];
@@ -323,6 +328,36 @@ rsx! {
                                 div { class: "px-3 py-2 bg-gray-100 dark:bg-gray-800 rounded text-gray-700 dark:text-gray-300", "B" }
                                 div { class: "px-3 py-2 bg-gray-100 dark:bg-gray-800 rounded text-gray-700 dark:text-gray-300", "C" }
                             }
+                        }
+                    }
+                }
+            }
+
+            // API 文档
+            section { id: "api", class: "mb-12",
+                h2 { class: "text-2xl font-semibold text-gray-900 dark:text-white mb-4 transition-colors", "API" }
+                div { class: "space-y-6",
+                    // Flex Props
+                    div {
+                        h3 { class: "text-lg font-semibold text-gray-900 dark:text-white mb-2", "Flex Props" }
+                        Table {
+                            headers: Some(vec![
+                                "属性".to_string(),
+                                "类型".to_string(),
+                                "默认值".to_string(),
+                                "说明".to_string(),
+                            ]),
+                            data: vec![
+                                vec!["direction".to_string(), "FlexDirection".to_string(), "Row".to_string(), "主轴方向（Row/Column）".to_string()],
+                                vec!["wrap".to_string(), "bool".to_string(), "false".to_string(), "是否换行".to_string()],
+                                vec!["gap".to_string(), "Option<i32>".to_string(), "None".to_string(), "行/列间距（px）".to_string()],
+                                vec!["justify".to_string(), "Option<Justify>".to_string(), "None".to_string(), "主轴对齐方式".to_string()],
+                                vec!["align".to_string(), "Option<AlignItems>".to_string(), "None".to_string(), "交叉轴对齐方式".to_string()],
+                                vec!["class".to_string(), "Option<String>".to_string(), "None".to_string(), "自定义类名".to_string()],
+                                vec!["style".to_string(), "Option<String>".to_string(), "None".to_string(), "内联样式".to_string()],
+                            ],
+                            bordered: true,
+                            striped: true,
                         }
                     }
                 }

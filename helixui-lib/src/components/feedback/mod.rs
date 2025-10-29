@@ -5,8 +5,6 @@ mod portal;
 mod toast;
 mod tooltip;
 
-mod dropdown_menu;
-
 // Re-export components
 pub use alert_dialog::{
     AlertDialogAction, AlertDialogActions, AlertDialogCancel, AlertDialogContent,
@@ -14,6 +12,7 @@ pub use alert_dialog::{
 };
 pub use badge::{Badge, BadgeType};
 pub use dialog::{DialogContent, DialogDescription, DialogRoot, DialogTitle};
+pub use portal::{use_portal, PortalIn, PortalOut};
 pub use toast::{
     consume_toast, use_toast, Toast, ToastOptions, ToastProps, ToastProvider, ToastProviderProps,
     ToastType, Toasts,

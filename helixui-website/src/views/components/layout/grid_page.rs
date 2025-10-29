@@ -2,7 +2,7 @@ use crate::views::layout::{ComponentsSidebar, TocItem};
 use crate::views::DocPage;
 use dioxus::prelude::*;
 use helixui::components::layout::{Breakpoint, Grid, GridItem};
-use helixui::components::DemoBox;
+use helixui::components::{DemoBox, Table};
 use std::collections::HashMap;
 
 #[component]
@@ -133,74 +133,40 @@ rsx! {
                     // Grid Props
                     div {
                         h3 { class: "text-lg font-semibold text-gray-900 dark:text-white mb-2", "Grid Props" }
-                        div { class: "overflow-x-auto",
-                            table { class: "min-w-full divide-y divide-gray-200 dark:divide-gray-700",
-                                thead { class: "bg-gray-50 dark:bg-gray-800",
-                                    tr {
-                                        th { class: "px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider", "属性" }
-                                        th { class: "px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider", "类型" }
-                                        th { class: "px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider", "默认值" }
-                                        th { class: "px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider", "说明" }
-                                    }
-                                }
-                                tbody { class: "bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700",
-                                    tr {
-                                        td { class: "px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white", "cols" }
-                                        td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300", "u16" }
-                                        td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300", "24" }
-                                        td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300", "总列数（建议 24）" }
-                                    }
-                                    tr {
-                                        td { class: "px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white", "x_gap" }
-                                        td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300", "Option<i32>" }
-                                        td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300", "None" }
-                                        td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300", "列间横向间距（px）" }
-                                    }
-                                    tr {
-                                        td { class: "px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white", "y_gap" }
-                                        td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300", "Option<i32>" }
-                                        td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300", "None" }
-                                        td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300", "行间纵向间距（px）" }
-                                    }
-                                    tr {
-                                        td { class: "px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white", "responsive_cols" }
-                                        td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300", "Option<HashMap<Breakpoint, u16>>" }
-                                        td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300", "None" }
-                                        td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300", "按断点设置不同列数" }
-                                    }
-                                }
-                            }
+                        Table {
+                            headers: Some(vec![
+                                "属性".to_string(),
+                                "类型".to_string(),
+                                "默认值".to_string(),
+                                "说明".to_string(),
+                            ]),
+                            data: vec![
+                                vec!["cols".to_string(), "u16".to_string(), "24".to_string(), "总列数（建议 24）".to_string()],
+                                vec!["x_gap".to_string(), "Option<i32>".to_string(), "None".to_string(), "列间横向间距（px）".to_string()],
+                                vec!["y_gap".to_string(), "Option<i32>".to_string(), "None".to_string(), "行间纵向间距（px）".to_string()],
+                                vec!["responsive_cols".to_string(), "Option<HashMap<Breakpoint, u16>>".to_string(), "None".to_string(), "按断点设置不同列数".to_string()],
+                            ],
+                            bordered: true,
+                            striped: true,
                         }
                     }
 
                     // GridItem Props
                     div {
                         h3 { class: "text-lg font-semibold text-gray-900 dark:text-white mb-2", "GridItem Props" }
-                        div { class: "overflow-x-auto",
-                            table { class: "min-w-full divide-y divide-gray-200 dark:divide-gray-700",
-                                thead { class: "bg-gray-50 dark:bg-gray-800",
-                                    tr {
-                                        th { class: "px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider", "属性" }
-                                        th { class: "px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider", "类型" }
-                                        th { class: "px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider", "默认值" }
-                                        th { class: "px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider", "说明" }
-                                    }
-                                }
-                                tbody { class: "bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700",
-                                    tr {
-                                        td { class: "px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white", "span" }
-                                        td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300", "Option<u16>" }
-                                        td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300", "Some(1)" }
-                                        td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300", "占用列数" }
-                                    }
-                                    tr {
-                                        td { class: "px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white", "offset" }
-                                        td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300", "Option<u16>" }
-                                        td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300", "None" }
-                                        td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300", "左侧偏移列数" }
-                                    }
-                                }
-                            }
+                        Table {
+                            headers: Some(vec![
+                                "属性".to_string(),
+                                "类型".to_string(),
+                                "默认值".to_string(),
+                                "说明".to_string(),
+                            ]),
+                            data: vec![
+                                vec!["span".to_string(), "Option<u16>".to_string(), "Some(1)".to_string(), "占用列数".to_string()],
+                                vec!["offset".to_string(), "Option<u16>".to_string(), "None".to_string(), "左侧偏移列数".to_string()],
+                            ],
+                            bordered: true,
+                            striped: true,
                         }
                     }
                 }

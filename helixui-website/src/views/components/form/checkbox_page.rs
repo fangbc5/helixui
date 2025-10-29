@@ -3,7 +3,7 @@ use crate::views::layout::TocItem;
 use crate::views::DocPage;
 use dioxus::prelude::*;
 use helixui::components::form::checkbox::CheckboxState;
-use helixui::components::{Checkbox, DemoBox};
+use helixui::components::{Checkbox, DemoBox, Table};
 
 /// Checkbox 演示页面
 #[component]
@@ -104,59 +104,21 @@ Checkbox {{
                         "API"
                     }
 
-                    div {
-                        class: "overflow-x-auto mb-6",
-                        table {
-                            class: "min-w-full divide-y divide-gray-200 dark:divide-gray-700",
-                            thead {
-                                class: "bg-gray-50 dark:bg-gray-800",
-                                tr {
-                                    th {
-                                        class: "px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider",
-                                        "参数"
-                                    }
-                                    th {
-                                        class: "px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider",
-                                        "说明"
-                                    }
-                                    th {
-                                        class: "px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider",
-                                        "类型"
-                                    }
-                                    th {
-                                        class: "px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider",
-                                        "默认值"
-                                    }
-                                }
-                            }
-                            tbody {
-                                class: "bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700",
-                                tr {
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100", "checked" }
-                                    td { class: "px-6 py-4 text-sm text-gray-600 dark:text-gray-400", "复选框的状态" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-900 dark:text-gray-100", "ReadSignal<Option<CheckboxState>>" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400", "-" }
-                                }
-                                tr {
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100", "default_checked" }
-                                    td { class: "px-6 py-4 text-sm text-gray-600 dark:text-gray-400", "默认状态" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-900 dark:text-gray-100", "CheckboxState" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400", "Unchecked" }
-                                }
-                                tr {
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100", "disabled" }
-                                    td { class: "px-6 py-4 text-sm text-gray-600 dark:text-gray-400", "是否禁用" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-900 dark:text-gray-100", "ReadSignal<bool>" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400", "-" }
-                                }
-                                tr {
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100", "on_checked_change" }
-                                    td { class: "px-6 py-4 text-sm text-gray-600 dark:text-gray-400", "状态变化时的回调" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-900 dark:text-gray-100", "Callback<CheckboxState>" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400", "-" }
-                                }
-                            }
-                        }
+                    Table {
+                        headers: Some(vec![
+                            "参数".to_string(),
+                            "说明".to_string(),
+                            "类型".to_string(),
+                            "默认值".to_string(),
+                        ]),
+                        data: vec![
+                            vec!["checked".to_string(), "复选框的状态".to_string(), "ReadSignal<Option<CheckboxState>>".to_string(), "-".to_string()],
+                            vec!["default_checked".to_string(), "默认状态".to_string(), "CheckboxState".to_string(), "Unchecked".to_string()],
+                            vec!["disabled".to_string(), "是否禁用".to_string(), "ReadSignal<bool>".to_string(), "-".to_string()],
+                            vec!["on_checked_change".to_string(), "状态变化时的回调".to_string(), "Callback<CheckboxState>".to_string(), "-".to_string()],
+                        ],
+                        bordered: true,
+                        striped: true,
                     }
                 }
             }

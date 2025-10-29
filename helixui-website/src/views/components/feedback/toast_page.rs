@@ -2,7 +2,9 @@ use crate::views::layout::ComponentsSidebar;
 use crate::views::layout::TocItem;
 use crate::views::DocPage;
 use dioxus::prelude::*;
-use helixui::components::{use_toast, Button, ButtonType, DemoBox, ToastOptions, ToastProvider};
+use helixui::components::{
+    use_toast, Button, ButtonType, DemoBox, Table, ToastOptions, ToastProvider,
+};
 use std::time::Duration;
 
 /// Toast 演示页面
@@ -523,6 +525,40 @@ fn ToastAdvancedDemo() -> Element {
                                 ToastAdvancedDemo {}
                             }
                         }
+                    }
+                }
+
+                // API 文档
+                section {
+                    id: "api",
+                    class: "mb-12",
+                    h2 { class: "text-2xl font-semibold text-gray-900 dark:text-white mb-4", "API" }
+
+                    // ToastOptions
+                    h3 { class: "text-xl font-semibold text-gray-900 dark:text-white mb-3", "ToastOptions" }
+                    Table {
+                        headers: Some(vec!["属性".to_string(), "类型".to_string(), "默认值".to_string(), "说明".to_string()]),
+                        data: vec![
+                            vec!["description".to_string(), "Option<String>".to_string(), "None".to_string(), "描述信息".to_string()],
+                            vec!["duration".to_string(), "Option<Duration>".to_string(), "Some(5s)".to_string(), "显示时长".to_string()],
+                            vec!["permanent".to_string(), "bool".to_string(), "false".to_string(), "是否永久显示（需手动关闭）".to_string()],
+                        ],
+                        bordered: true,
+                        striped: true,
+                    }
+
+                    // use_toast API（方法）
+                    h3 { class: "text-xl font-semibold text-gray-900 dark:text-white mb-3 mt-8", "use_toast() 方法" }
+                    Table {
+                        headers: Some(vec!["方法".to_string(), "签名".to_string(), "说明".to_string(), "示例".to_string()]),
+                        data: vec![
+                            vec!["success".to_string(), "fn success(msg: String, opts: ToastOptions)".to_string(), "成功提示".to_string(), "success(\"操作成功\".into(), ToastOptions::new())".to_string()],
+                            vec!["error".to_string(), "fn error(msg: String, opts: ToastOptions)".to_string(), "错误提示".to_string(), "error(\"失败\".into(), ToastOptions::new())".to_string()],
+                            vec!["warning".to_string(), "fn warning(msg: String, opts: ToastOptions)".to_string(), "警告提示".to_string(), "warning(\"注意\".into(), ToastOptions::new())".to_string()],
+                            vec!["info".to_string(), "fn info(msg: String, opts: ToastOptions)".to_string(), "信息提示".to_string(), "info(\"消息\".into(), ToastOptions::new())".to_string()],
+                        ],
+                        bordered: true,
+                        striped: true,
                     }
                 }
             }

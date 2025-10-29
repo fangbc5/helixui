@@ -3,7 +3,7 @@ use crate::views::layout::TocItem;
 use crate::views::DocPage;
 use dioxus::prelude::*;
 use helixui::components::data_display::scroll_area::{ScrollArea, ScrollDirection, ScrollType};
-use helixui::components::DemoBox;
+use helixui::components::{DemoBox, Table};
 
 /// ScrollArea 演示页面
 #[component]
@@ -76,53 +76,20 @@ pub fn ScrollAreaPage() -> Element {
                         "ScrollArea"
                     }
 
-                    div {
-                        class: "overflow-x-auto mb-6",
-                        table {
-                            class: "min-w-full divide-y divide-gray-200 dark:divide-gray-700",
-                            thead {
-                                class: "bg-gray-50 dark:bg-gray-800",
-                                tr {
-                                    th {
-                                        class: "px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider",
-                                        "参数"
-                                    }
-                                    th {
-                                        class: "px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider",
-                                        "说明"
-                                    }
-                                    th {
-                                        class: "px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider",
-                                        "类型"
-                                    }
-                                    th {
-                                        class: "px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider",
-                                        "默认值"
-                                    }
-                                }
-                            }
-                            tbody {
-                                class: "bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700",
-                                tr {
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100", "direction" }
-                                    td { class: "px-6 py-4 text-sm text-gray-600 dark:text-gray-400", "滚动方向" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-900 dark:text-gray-100", "ReadSignal<ScrollDirection>" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400", "Both" }
-                                }
-                                tr {
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100", "scroll_type" }
-                                    td { class: "px-6 py-4 text-sm text-gray-600 dark:text-gray-400", "滚动条显示类型" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-900 dark:text-gray-100", "ReadSignal<ScrollType>" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400", "Auto" }
-                                }
-                                tr {
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100", "always_show_scrollbars" }
-                                    td { class: "px-6 py-4 text-sm text-gray-600 dark:text-gray-400", "是否始终显示滚动条" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-900 dark:text-gray-100", "ReadSignal<bool>" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400", "false" }
-                                }
-                            }
-                        }
+                    Table {
+                        headers: Some(vec![
+                            "参数".to_string(),
+                            "说明".to_string(),
+                            "类型".to_string(),
+                            "默认值".to_string(),
+                        ]),
+                        data: vec![
+                            vec!["direction".to_string(), "滚动方向".to_string(), "ReadSignal<ScrollDirection>".to_string(), "Both".to_string()],
+                            vec!["scroll_type".to_string(), "滚动条显示类型".to_string(), "ReadSignal<ScrollType>".to_string(), "Auto".to_string()],
+                            vec!["always_show_scrollbars".to_string(), "是否始终显示滚动条".to_string(), "ReadSignal<bool>".to_string(), "false".to_string()],
+                        ],
+                        bordered: true,
+                        striped: true,
                     }
                 }
             }

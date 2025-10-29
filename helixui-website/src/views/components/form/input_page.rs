@@ -1,7 +1,7 @@
 use crate::views::layout::{ComponentsSidebar, TocItem};
 use crate::views::DocPage;
 use dioxus::prelude::*;
-use helixui::components::{DemoBox, Input};
+use helixui::components::{DemoBox, Input, Table};
 
 /// Input 演示页面
 #[component]
@@ -107,77 +107,24 @@ Input {{
                         "API"
                     }
 
-                    div {
-                        class: "overflow-x-auto mb-6",
-                        table {
-                            class: "min-w-full divide-y divide-gray-200 dark:divide-gray-700",
-                            thead {
-                                class: "bg-gray-50 dark:bg-gray-800",
-                                tr {
-                                    th {
-                                        class: "px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider",
-                                        "参数"
-                                    }
-                                    th {
-                                        class: "px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider",
-                                        "说明"
-                                    }
-                                    th {
-                                        class: "px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider",
-                                        "类型"
-                                    }
-                                    th {
-                                        class: "px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider",
-                                        "默认值"
-                                    }
-                                }
-                            }
-                            tbody {
-                                class: "bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700",
-                                tr {
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100", "input_type" }
-                                    td { class: "px-6 py-4 text-sm text-gray-600 dark:text-gray-400", "输入框类型，如 'text', 'password', 'number' 等" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-900 dark:text-gray-100", "String" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400", "'text'" }
-                                }
-                                tr {
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100", "value" }
-                                    td { class: "px-6 py-4 text-sm text-gray-600 dark:text-gray-400", "输入框的值" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-900 dark:text-gray-100", "Option<String>" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400", "None" }
-                                }
-                                tr {
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100", "placeholder" }
-                                    td { class: "px-6 py-4 text-sm text-gray-600 dark:text-gray-400", "占位符文本" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-900 dark:text-gray-100", "Option<String>" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400", "None" }
-                                }
-                                tr {
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100", "disabled" }
-                                    td { class: "px-6 py-4 text-sm text-gray-600 dark:text-gray-400", "是否禁用" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-900 dark:text-gray-100", "bool" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400", "false" }
-                                }
-                                tr {
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100", "readonly" }
-                                    td { class: "px-6 py-4 text-sm text-gray-600 dark:text-gray-400", "是否只读" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-900 dark:text-gray-100", "bool" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400", "false" }
-                                }
-                                tr {
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100", "on_change" }
-                                    td { class: "px-6 py-4 text-sm text-gray-600 dark:text-gray-400", "值变化时的回调" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-900 dark:text-gray-100", "Option<EventHandler<String>>" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400", "None" }
-                                }
-                                tr {
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100", "class" }
-                                    td { class: "px-6 py-4 text-sm text-gray-600 dark:text-gray-400", "自定义类名" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-900 dark:text-gray-100", "Option<String>" }
-                                    td { class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400", "None" }
-                                }
-                            }
-                        }
+                    Table {
+                        headers: Some(vec![
+                            "参数".to_string(),
+                            "说明".to_string(),
+                            "类型".to_string(),
+                            "默认值".to_string(),
+                        ]),
+                        data: vec![
+                            vec!["input_type".to_string(), "输入框类型，如 'text', 'password', 'number' 等".to_string(), "String".to_string(), "'text'".to_string()],
+                            vec!["value".to_string(), "输入框的值".to_string(), "Option<String>".to_string(), "None".to_string()],
+                            vec!["placeholder".to_string(), "占位符文本".to_string(), "Option<String>".to_string(), "None".to_string()],
+                            vec!["disabled".to_string(), "是否禁用".to_string(), "bool".to_string(), "false".to_string()],
+                            vec!["readonly".to_string(), "是否只读".to_string(), "bool".to_string(), "false".to_string()],
+                            vec!["on_change".to_string(), "值变化时的回调".to_string(), "Option<EventHandler<String>>".to_string(), "None".to_string()],
+                            vec!["class".to_string(), "自定义类名".to_string(), "Option<String>".to_string(), "None".to_string()],
+                        ],
+                        bordered: true,
+                        striped: true,
                     }
                 }
             }

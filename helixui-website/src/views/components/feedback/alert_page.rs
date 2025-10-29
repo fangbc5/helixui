@@ -2,11 +2,11 @@ use crate::views::layout::ComponentsSidebar;
 use crate::views::layout::TocItem;
 use crate::views::DocPage;
 use dioxus::prelude::*;
-use helixui::components::DemoBox;
 use helixui::components::{
     AlertDialogAction, AlertDialogActions, AlertDialogCancel, AlertDialogContent,
     AlertDialogDescription, AlertDialogRoot, AlertDialogTitle, Button, ButtonType,
 };
+use helixui::components::{DemoBox, Table};
 
 /// Alert 演示页面
 #[component]
@@ -522,57 +522,17 @@ fn AlertDestructiveDemo() -> Element {
                                 class: "text-xl font-semibold text-gray-900 dark:text-white mb-4",
                                 "AlertDialogRootRoot Props"
                             }
-                            div {
-                                class: "overflow-x-auto",
-                                table {
-                                    class: "w-full border-collapse border border-gray-200 dark:border-gray-700",
-                                    thead {
-                                        tr {
-                                            class: "bg-gray-50 dark:bg-gray-800",
-                                            th { class: "p-3 text-left text-sm font-medium text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700", "属性" }
-                                            th { class: "p-3 text-left text-sm font-medium text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700", "类型" }
-                                            th { class: "p-3 text-left text-sm font-medium text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700", "默认值" }
-                                            th { class: "p-3 text-left text-sm font-medium text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700", "说明" }
-                                        }
-                                    }
-                                    tbody {
-                                        tr {
-                                            class: "border-b border-gray-200 dark:border-gray-700",
-                                            td { class: "p-3 text-sm text-gray-900 dark:text-white font-mono", "id" }
-                                            td { class: "p-3 text-sm text-gray-600 dark:text-gray-300", "ReadSignal<Option<String>>" }
-                                            td { class: "p-3 text-sm text-gray-600 dark:text-gray-300", "None" }
-                                            td { class: "p-3 text-sm text-gray-600 dark:text-gray-300", "Alert 对话框的 ID" }
-                                        }
-                                        tr {
-                                            class: "border-b border-gray-200 dark:border-gray-700",
-                                            td { class: "p-3 text-sm text-gray-900 dark:text-white font-mono", "default_open" }
-                                            td { class: "p-3 text-sm text-gray-600 dark:text-gray-300", "bool" }
-                                            td { class: "p-3 text-sm text-gray-600 dark:text-gray-300", "false" }
-                                            td { class: "p-3 text-sm text-gray-600 dark:text-gray-300", "默认是否打开" }
-                                        }
-                                        tr {
-                                            class: "border-b border-gray-200 dark:border-gray-700",
-                                            td { class: "p-3 text-sm text-gray-900 dark:text-white font-mono", "open" }
-                                            td { class: "p-3 text-sm text-gray-600 dark:text-gray-300", "ReadSignal<Option<bool>>" }
-                                            td { class: "p-3 text-sm text-gray-600 dark:text-gray-300", "None" }
-                                            td { class: "p-3 text-sm text-gray-600 dark:text-gray-300", "控制 Alert 的显示状态" }
-                                        }
-                                        tr {
-                                            class: "border-b border-gray-200 dark:border-gray-700",
-                                            td { class: "p-3 text-sm text-gray-900 dark:text-white font-mono", "on_open_change" }
-                                            td { class: "p-3 text-sm text-gray-600 dark:text-gray-300", "Callback<bool>" }
-                                            td { class: "p-3 text-sm text-gray-600 dark:text-gray-300", "-" }
-                                            td { class: "p-3 text-sm text-gray-600 dark:text-gray-300", "打开状态改变时的回调" }
-                                        }
-                                        tr {
-                                            class: "border-b border-gray-200 dark:border-gray-700",
-                                            td { class: "p-3 text-sm text-gray-900 dark:text-white font-mono", "children" }
-                                            td { class: "p-3 text-sm text-gray-600 dark:text-gray-300", "Element" }
-                                            td { class: "p-3 text-sm text-gray-600 dark:text-gray-300", "-" }
-                                            td { class: "p-3 text-sm text-gray-600 dark:text-gray-300", "Alert 的子元素" }
-                                        }
-                                    }
-                                }
+                            Table {
+                                headers: Some(vec!["属性".to_string(), "类型".to_string(), "默认值".to_string(), "说明".to_string()]),
+                                data: vec![
+                                    vec!["id".to_string(), "ReadSignal<Option<String>>".to_string(), "None".to_string(), "Alert 对话框的 ID".to_string()],
+                                    vec!["default_open".to_string(), "bool".to_string(), "false".to_string(), "默认是否打开".to_string()],
+                                    vec!["open".to_string(), "ReadSignal<Option<bool>>".to_string(), "None".to_string(), "控制 Alert 的显示状态".to_string()],
+                                    vec!["on_open_change".to_string(), "Callback<bool>".to_string(), "-".to_string(), "打开状态改变时的回调".to_string()],
+                                    vec!["children".to_string(), "Element".to_string(), "-".to_string(), "Alert 的子元素".to_string()],
+                                ],
+                                bordered: true,
+                                striped: true,
                             }
                         }
 
@@ -582,36 +542,14 @@ fn AlertDestructiveDemo() -> Element {
                                 class: "text-xl font-semibold text-gray-900 dark:text-white mb-4",
                                 "AlertDialogContent Props"
                             }
-                            div {
-                                class: "overflow-x-auto",
-                                table {
-                                    class: "w-full border-collapse border border-gray-200 dark:border-gray-700",
-                                    thead {
-                                        tr {
-                                            class: "bg-gray-50 dark:bg-gray-800",
-                                            th { class: "p-3 text-left text-sm font-medium text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700", "属性" }
-                                            th { class: "p-3 text-left text-sm font-medium text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700", "类型" }
-                                            th { class: "p-3 text-left text-sm font-medium text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700", "默认值" }
-                                            th { class: "p-3 text-left text-sm font-medium text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700", "说明" }
-                                        }
-                                    }
-                                    tbody {
-                                        tr {
-                                            class: "border-b border-gray-200 dark:border-gray-700",
-                                            td { class: "p-3 text-sm text-gray-900 dark:text-white font-mono", "id" }
-                                            td { class: "p-3 text-sm text-gray-600 dark:text-gray-300", "ReadSignal<Option<String>>" }
-                                            td { class: "p-3 text-sm text-gray-600 dark:text-gray-300", "None" }
-                                            td { class: "p-3 text-sm text-gray-600 dark:text-gray-300", "内容区域的 ID" }
-                                        }
-                                        tr {
-                                            class: "border-b border-gray-200 dark:border-gray-700",
-                                            td { class: "p-3 text-sm text-gray-900 dark:text-white font-mono", "children" }
-                                            td { class: "p-3 text-sm text-gray-600 dark:text-gray-300", "Element" }
-                                            td { class: "p-3 text-sm text-gray-600 dark:text-gray-300", "-" }
-                                            td { class: "p-3 text-sm text-gray-600 dark:text-gray-300", "内容区域的子元素" }
-                                        }
-                                    }
-                                }
+                            Table {
+                                headers: Some(vec!["属性".to_string(), "类型".to_string(), "默认值".to_string(), "说明".to_string()]),
+                                data: vec![
+                                    vec!["id".to_string(), "ReadSignal<Option<String>>".to_string(), "None".to_string(), "内容区域的 ID".to_string()],
+                                    vec!["children".to_string(), "Element".to_string(), "-".to_string(), "内容区域的子元素".to_string()],
+                                ],
+                                bordered: true,
+                                striped: true,
                             }
                         }
 
@@ -621,36 +559,14 @@ fn AlertDestructiveDemo() -> Element {
                                 class: "text-xl font-semibold text-gray-900 dark:text-white mb-4",
                                 "AlertDialogTitle Props"
                             }
-                            div {
-                                class: "overflow-x-auto",
-                                table {
-                                    class: "w-full border-collapse border border-gray-200 dark:border-gray-700",
-                                    thead {
-                                        tr {
-                                            class: "bg-gray-50 dark:bg-gray-800",
-                                            th { class: "p-3 text-left text-sm font-medium text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700", "属性" }
-                                            th { class: "p-3 text-left text-sm font-medium text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700", "类型" }
-                                            th { class: "p-3 text-left text-sm font-medium text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700", "默认值" }
-                                            th { class: "p-3 text-left text-sm font-medium text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700", "说明" }
-                                        }
-                                    }
-                                    tbody {
-                                        tr {
-                                            class: "border-b border-gray-200 dark:border-gray-700",
-                                            td { class: "p-3 text-sm text-gray-900 dark:text-white font-mono", "id" }
-                                            td { class: "p-3 text-sm text-gray-600 dark:text-gray-300", "ReadSignal<Option<String>>" }
-                                            td { class: "p-3 text-sm text-gray-600 dark:text-gray-300", "None" }
-                                            td { class: "p-3 text-sm text-gray-600 dark:text-gray-300", "标题的 ID" }
-                                        }
-                                        tr {
-                                            class: "border-b border-gray-200 dark:border-gray-700",
-                                            td { class: "p-3 text-sm text-gray-900 dark:text-white font-mono", "children" }
-                                            td { class: "p-3 text-sm text-gray-600 dark:text-gray-300", "Element" }
-                                            td { class: "p-3 text-sm text-gray-600 dark:text-gray-300", "-" }
-                                            td { class: "p-3 text-sm text-gray-600 dark:text-gray-300", "标题内容" }
-                                        }
-                                    }
-                                }
+                            Table {
+                                headers: Some(vec!["属性".to_string(), "类型".to_string(), "默认值".to_string(), "说明".to_string()]),
+                                data: vec![
+                                    vec!["id".to_string(), "ReadSignal<Option<String>>".to_string(), "None".to_string(), "标题的 ID".to_string()],
+                                    vec!["children".to_string(), "Element".to_string(), "-".to_string(), "标题内容".to_string()],
+                                ],
+                                bordered: true,
+                                striped: true,
                             }
                         }
 
@@ -660,36 +576,14 @@ fn AlertDestructiveDemo() -> Element {
                                 class: "text-xl font-semibold text-gray-900 dark:text-white mb-4",
                                 "AlertDialogDescription Props"
                             }
-                            div {
-                                class: "overflow-x-auto",
-                                table {
-                                    class: "w-full border-collapse border border-gray-200 dark:border-gray-700",
-                                    thead {
-                                        tr {
-                                            class: "bg-gray-50 dark:bg-gray-800",
-                                            th { class: "p-3 text-left text-sm font-medium text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700", "属性" }
-                                            th { class: "p-3 text-left text-sm font-medium text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700", "类型" }
-                                            th { class: "p-3 text-left text-sm font-medium text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700", "默认值" }
-                                            th { class: "p-3 text-left text-sm font-medium text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700", "说明" }
-                                        }
-                                    }
-                                    tbody {
-                                        tr {
-                                            class: "border-b border-gray-200 dark:border-gray-700",
-                                            td { class: "p-3 text-sm text-gray-900 dark:text-white font-mono", "id" }
-                                            td { class: "p-3 text-sm text-gray-600 dark:text-gray-300", "ReadSignal<Option<String>>" }
-                                            td { class: "p-3 text-sm text-gray-600 dark:text-gray-300", "None" }
-                                            td { class: "p-3 text-sm text-gray-600 dark:text-gray-300", "描述的 ID" }
-                                        }
-                                        tr {
-                                            class: "border-b border-gray-200 dark:border-gray-700",
-                                            td { class: "p-3 text-sm text-gray-900 dark:text-white font-mono", "children" }
-                                            td { class: "p-3 text-sm text-gray-600 dark:text-gray-300", "Element" }
-                                            td { class: "p-3 text-sm text-gray-600 dark:text-gray-300", "-" }
-                                            td { class: "p-3 text-sm text-gray-600 dark:text-gray-300", "描述内容" }
-                                        }
-                                    }
-                                }
+                            Table {
+                                headers: Some(vec!["属性".to_string(), "类型".to_string(), "默认值".to_string(), "说明".to_string()]),
+                                data: vec![
+                                    vec!["id".to_string(), "ReadSignal<Option<String>>".to_string(), "None".to_string(), "描述的 ID".to_string()],
+                                    vec!["children".to_string(), "Element".to_string(), "-".to_string(), "描述内容".to_string()],
+                                ],
+                                bordered: true,
+                                striped: true,
                             }
                         }
 
@@ -699,29 +593,13 @@ fn AlertDestructiveDemo() -> Element {
                                 class: "text-xl font-semibold text-gray-900 dark:text-white mb-4",
                                 "AlertDialogActions Props"
                             }
-                            div {
-                                class: "overflow-x-auto",
-                                table {
-                                    class: "w-full border-collapse border border-gray-200 dark:border-gray-700",
-                                    thead {
-                                        tr {
-                                            class: "bg-gray-50 dark:bg-gray-800",
-                                            th { class: "p-3 text-left text-sm font-medium text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700", "属性" }
-                                            th { class: "p-3 text-left text-sm font-medium text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700", "类型" }
-                                            th { class: "p-3 text-left text-sm font-medium text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700", "默认值" }
-                                            th { class: "p-3 text-left text-sm font-medium text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700", "说明" }
-                                        }
-                                    }
-                                    tbody {
-                                        tr {
-                                            class: "border-b border-gray-200 dark:border-gray-700",
-                                            td { class: "p-3 text-sm text-gray-900 dark:text-white font-mono", "children" }
-                                            td { class: "p-3 text-sm text-gray-600 dark:text-gray-300", "Element" }
-                                            td { class: "p-3 text-sm text-gray-600 dark:text-gray-300", "-" }
-                                            td { class: "p-3 text-sm text-gray-600 dark:text-gray-300", "操作按钮区域的内容" }
-                                        }
-                                    }
-                                }
+                            Table {
+                                headers: Some(vec!["属性".to_string(), "类型".to_string(), "默认值".to_string(), "说明".to_string()]),
+                                data: vec![
+                                    vec!["children".to_string(), "Element".to_string(), "-".to_string(), "操作按钮区域的内容".to_string()],
+                                ],
+                                bordered: true,
+                                striped: true,
                             }
                         }
 
@@ -731,29 +609,13 @@ fn AlertDestructiveDemo() -> Element {
                                 class: "text-xl font-semibold text-gray-900 dark:text-white mb-4",
                                 "AlertDialogAction Props"
                             }
-                            div {
-                                class: "overflow-x-auto",
-                                table {
-                                    class: "w-full border-collapse border border-gray-200 dark:border-gray-700",
-                                    thead {
-                                        tr {
-                                            class: "bg-gray-50 dark:bg-gray-800",
-                                            th { class: "p-3 text-left text-sm font-medium text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700", "属性" }
-                                            th { class: "p-3 text-left text-sm font-medium text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700", "类型" }
-                                            th { class: "p-3 text-left text-sm font-medium text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700", "默认值" }
-                                            th { class: "p-3 text-left text-sm font-medium text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700", "说明" }
-                                        }
-                                    }
-                                    tbody {
-                                        tr {
-                                            class: "border-b border-gray-200 dark:border-gray-700",
-                                            td { class: "p-3 text-sm text-gray-900 dark:text-white font-mono", "children" }
-                                            td { class: "p-3 text-sm text-gray-600 dark:text-gray-300", "Element" }
-                                            td { class: "p-3 text-sm text-gray-600 dark:text-gray-300", "-" }
-                                            td { class: "p-3 text-sm text-gray-600 dark:text-gray-300", "确认按钮的内容" }
-                                        }
-                                    }
-                                }
+                            Table {
+                                headers: Some(vec!["属性".to_string(), "类型".to_string(), "默认值".to_string(), "说明".to_string()]),
+                                data: vec![
+                                    vec!["children".to_string(), "Element".to_string(), "-".to_string(), "确认按钮的内容".to_string()],
+                                ],
+                                bordered: true,
+                                striped: true,
                             }
                         }
 
@@ -763,29 +625,13 @@ fn AlertDestructiveDemo() -> Element {
                                 class: "text-xl font-semibold text-gray-900 dark:text-white mb-4",
                                 "AlertDialogCancel Props"
                             }
-                            div {
-                                class: "overflow-x-auto",
-                                table {
-                                    class: "w-full border-collapse border border-gray-200 dark:border-gray-700",
-                                    thead {
-                                        tr {
-                                            class: "bg-gray-50 dark:bg-gray-800",
-                                            th { class: "p-3 text-left text-sm font-medium text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700", "属性" }
-                                            th { class: "p-3 text-left text-sm font-medium text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700", "类型" }
-                                            th { class: "p-3 text-left text-sm font-medium text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700", "默认值" }
-                                            th { class: "p-3 text-left text-sm font-medium text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700", "说明" }
-                                        }
-                                    }
-                                    tbody {
-                                        tr {
-                                            class: "border-b border-gray-200 dark:border-gray-700",
-                                            td { class: "p-3 text-sm text-gray-900 dark:text-white font-mono", "children" }
-                                            td { class: "p-3 text-sm text-gray-600 dark:text-gray-300", "Element" }
-                                            td { class: "p-3 text-sm text-gray-600 dark:text-gray-300", "-" }
-                                            td { class: "p-3 text-sm text-gray-600 dark:text-gray-300", "取消按钮的内容" }
-                                        }
-                                    }
-                                }
+                            Table {
+                                headers: Some(vec!["属性".to_string(), "类型".to_string(), "默认值".to_string(), "说明".to_string()]),
+                                data: vec![
+                                    vec!["children".to_string(), "Element".to_string(), "-".to_string(), "取消按钮的内容".to_string()],
+                                ],
+                                bordered: true,
+                                striped: true,
                             }
                         }
 
@@ -795,29 +641,13 @@ fn AlertDestructiveDemo() -> Element {
                                 class: "text-xl font-semibold text-gray-900 dark:text-white mb-4",
                                 "Button Props"
                             }
-                            div {
-                                class: "overflow-x-auto",
-                                table {
-                                    class: "w-full border-collapse border border-gray-200 dark:border-gray-700",
-                                    thead {
-                                        tr {
-                                            class: "bg-gray-50 dark:bg-gray-800",
-                                            th { class: "p-3 text-left text-sm font-medium text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700", "属性" }
-                                            th { class: "p-3 text-left text-sm font-medium text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700", "类型" }
-                                            th { class: "p-3 text-left text-sm font-medium text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700", "默认值" }
-                                            th { class: "p-3 text-left text-sm font-medium text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700", "说明" }
-                                        }
-                                    }
-                                    tbody {
-                                        tr {
-                                            class: "border-b border-gray-200 dark:border-gray-700",
-                                            td { class: "p-3 text-sm text-gray-900 dark:text-white font-mono", "children" }
-                                            td { class: "p-3 text-sm text-gray-600 dark:text-gray-300", "Element" }
-                                            td { class: "p-3 text-sm text-gray-600 dark:text-gray-300", "-" }
-                                            td { class: "p-3 text-sm text-gray-600 dark:text-gray-300", "触发元素的内容" }
-                                        }
-                                    }
-                                }
+                            Table {
+                                headers: Some(vec!["属性".to_string(), "类型".to_string(), "默认值".to_string(), "说明".to_string()]),
+                                data: vec![
+                                    vec!["children".to_string(), "Element".to_string(), "-".to_string(), "触发元素的内容".to_string()],
+                                ],
+                                bordered: true,
+                                striped: true,
                             }
                         }
                     }

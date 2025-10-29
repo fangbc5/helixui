@@ -2,7 +2,7 @@ use crate::views::layout::{ComponentsSidebar, TocItem};
 use crate::views::DocPage;
 use dioxus::prelude::*;
 use helixui::components::layout::{Split, SplitDirection};
-use helixui::components::DemoBox;
+use helixui::components::{DemoBox, Table};
 
 #[component]
 pub fn SplitPage() -> Element {
@@ -30,6 +30,11 @@ pub fn SplitPage() -> Element {
         TocItem {
             id: "custom-sizes".to_string(),
             title: "自定义比例".to_string(),
+            level: 1,
+        },
+        TocItem {
+            id: "api".to_string(),
+            title: "API".to_string(),
             level: 1,
         },
     ];
@@ -167,6 +172,36 @@ rsx! {
                                     panel2: rsx! { div { class: "px-3 py-6 bg-gray-100 dark:bg-gray-800 rounded text-gray-700 dark:text-gray-300 text-center h-full flex items-center justify-center", "70%" } },
                                 }
                             }
+                        }
+                    }
+                }
+            }
+
+            // API 文档
+            section { id: "api", class: "mb-12",
+                h2 { class: "text-2xl font-semibold text-gray-900 dark:text-white mb-4 transition-colors", "API" }
+                div { class: "space-y-6",
+                    div {
+                        h3 { class: "text-lg font-semibold text-gray-900 dark:text-white mb-2", "Split Props" }
+                        Table {
+                            headers: Some(vec![
+                                "属性".to_string(),
+                                "类型".to_string(),
+                                "默认值".to_string(),
+                                "说明".to_string(),
+                            ]),
+                            data: vec![
+                                vec!["direction".to_string(), "SplitDirection".to_string(), "Row".to_string(), "分割方向（Row/Column）".to_string()],
+                                vec!["initial_sizes".to_string(), "Vec<f32>".to_string(), "-".to_string(), "两个面板初始尺寸（像素）".to_string()],
+                                vec!["min_sizes".to_string(), "Vec<f32>".to_string(), "-".to_string(), "两个面板的最小尺寸（像素）".to_string()],
+                                vec!["disabled".to_string(), "bool".to_string(), "false".to_string(), "是否禁用拖拽".to_string()],
+                                vec!["panel1".to_string(), "Element".to_string(), "-".to_string(), "左（上）侧面板内容".to_string()],
+                                vec!["panel2".to_string(), "Element".to_string(), "-".to_string(), "右（下）侧面板内容".to_string()],
+                                vec!["class".to_string(), "Option<String>".to_string(), "None".to_string(), "自定义类名".to_string()],
+                                vec!["style".to_string(), "Option<String>".to_string(), "None".to_string(), "内联样式".to_string()],
+                            ],
+                            bordered: true,
+                            striped: true,
                         }
                     }
                 }

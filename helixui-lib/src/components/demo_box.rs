@@ -20,7 +20,7 @@ pub fn DemoBox(
 
     rsx! {
         div {
-            class: "mb-8 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden transition-colors",
+            class: "mb-8 border border-gray-200 dark:border-gray-700 rounded-lg transition-colors",
 
             // 标题和描述
             if !title.is_empty() || !description.is_empty() {
