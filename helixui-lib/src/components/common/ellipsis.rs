@@ -56,20 +56,41 @@ pub fn Ellipsis(props: EllipsisProps) -> Element {
         format!("{} {}", base_class, user_class)
     };
 
-    // 合并样式
-    let final_style = if line_clamp_style.is_empty() {
-        props.style.as_deref().unwrap_or("").to_string()
+    // 用户样式与折叠/展开样式
+    let user_style = props.style.as_deref().unwrap_or("").to_string();
+    // 展开时样式：显式取消任何裁剪
+    let expanded_style = if user_style.is_empty() {
+        "display:block; overflow: visible; -webkit-line-clamp: unset; white-space: normal; word-break: break-word; overflow-wrap: anywhere;".to_string()
     } else {
-        let user_style = props.style.as_deref().unwrap_or("");
-        if user_style.is_empty() {
-            line_clamp_style
-        } else {
-            format!("{}; {}", line_clamp_style, user_style)
+        format!(
+            "{}; display:block; overflow: visible; -webkit-line-clamp: unset; white-space: normal; word-break: break-word; overflow-wrap: anywhere;",
+            user_style
+        )
+    };
+    // 折叠时的样式
+    let collapsed_style = match props.lines {
+        EllipsisLines::Single => {
+            // 单行：强制内联样式，避免 class 被先前的 inline 样式覆盖
+            let single_style = "overflow: hidden; white-space: nowrap; text-overflow: ellipsis;";
+            if user_style.is_empty() {
+                single_style.to_string()
+            } else {
+                format!("{} {}", single_style, user_style)
+            }
+        }
+        EllipsisLines::Multiple(_) => {
+            if line_clamp_style.is_empty() {
+                user_style.clone()
+            } else if user_style.is_empty() {
+                line_clamp_style.clone()
+            } else {
+                format!("{}; {}", line_clamp_style, user_style)
+            }
         }
     };
 
     let has_expand_button = props.expand_text.is_some();
-    let is_expanded = *expanded.peek();
+    let is_expanded = expanded();
 
     rsx! {
         span {
@@ -79,7 +100,7 @@ pub fn Ellipsis(props: EllipsisProps) -> Element {
                     class: "flex items-baseline gap-1 flex-wrap",
                     span {
                         class: "{final_class} block flex-1 min-w-0",
-                        style: final_style,
+                        style: collapsed_style,
                         {props.text.clone()}
                     }
                     button {
@@ -97,8 +118,8 @@ pub fn Ellipsis(props: EllipsisProps) -> Element {
                 span {
                     class: "flex items-baseline gap-1 flex-wrap",
                     span {
-                        class: "{user_class} block flex-1 min-w-0",
-                        style: final_style,
+                        class: "{user_class} block flex-1 min-w-0 whitespace-normal break-words",
+                        style: expanded_style,
                         {props.text.clone()}
                     }
                     button {
@@ -115,7 +136,7 @@ pub fn Ellipsis(props: EllipsisProps) -> Element {
             } else {
                 span {
                     class: "{final_class} block w-full",
-                    style: final_style,
+                    style: collapsed_style,
                     {props.text.clone()}
                 }
             }
