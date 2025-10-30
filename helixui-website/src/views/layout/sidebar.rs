@@ -195,6 +195,10 @@ pub fn ComponentsSidebar() -> Element {
                     i18n::t("component.ellipsis"),
                     crate::Route::EllipsisPage {},
                 ),
+                SidebarItem::link(
+                    i18n::t("component.gradient-text"),
+                    crate::Route::GradientTextPage {},
+                ),
             ],
         ),
         SidebarItem::category(

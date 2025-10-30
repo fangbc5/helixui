@@ -115,6 +115,13 @@ pub fn ComponentsPage() -> Element {
                                 route: crate::Route::EllipsisPage {},
                                 status: ComponentStatus::Available,
                             },
+                            ComponentCard {
+                                name: "GradientText".to_string(),
+                                name_zh: "渐变文字".to_string(),
+                                description: "使用线性渐变实现的渐变文字。".to_string(),
+                                route: crate::Route::GradientTextPage {},
+                                status: ComponentStatus::Available,
+                            },
                         ],
                     }
 

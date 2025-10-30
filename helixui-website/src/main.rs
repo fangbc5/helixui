@@ -5,9 +5,9 @@ use dioxus::prelude::*;
 use views::{
     AlertPage, AvatarPage, BadgePage, ButtonPage, CardPage, CarouselPage, CheckboxPage,
     CollapsiblePage, ComponentsPage, DialogPage, DividerPage, DropdownPage, EllipsisPage, FlexPage,
-    FloatButtonPage, GridPage, Guide, Home, IconPage, InputPage, Introduction, LayoutPage,
-    QuickStart, RadioPage, ScrollAreaPage, SpacePage, SplitPage, SwitchPage, TablePage, TagPage,
-    TextAreaPage, ToastPage, TooltipPage, TopNavbar, Version, WatermarkPage,
+    FloatButtonPage, GradientTextPage, GridPage, Guide, Home, IconPage, InputPage, Introduction,
+    LayoutPage, QuickStart, RadioPage, ScrollAreaPage, SpacePage, SplitPage, SwitchPage, TablePage,
+    TagPage, TextAreaPage, ToastPage, TooltipPage, TopNavbar, Version, WatermarkPage,
 };
 
 /// i18n internationalization support
@@ -98,6 +98,8 @@ enum Route {
         FloatButtonPage {},
         #[route("/component/ellipsis")]
         EllipsisPage {},
+        #[route("/component/gradient-text")]
+        GradientTextPage {},
 }
 
 // We can import assets in dioxus with the `asset!` macro. This macro takes a path to an asset relative to the crate root.

@@ -13,6 +13,7 @@ edition = "2021"
 [workspace.dependencies]
 dioxus = "0.7.0-rc.3"
 dioxus-time = { git = "https://github.com/ealmloff/dioxus-std", branch = "0.7" }
+time = { version = "0.3.41", features = ["std", "macros", "parsing"] }
 tracing = { version = "0.1", features = ["std"] }
 
 [profile]

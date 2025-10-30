@@ -5,6 +5,7 @@
 // 导出数据展示组件
 pub mod scroll_area;
 pub mod table;
+pub mod calendar;
 // pub mod list;
 // pub mod card;
 // pub mod statistic;
@@ -22,6 +23,7 @@ pub mod table;
 // 重新导出组件
 pub use scroll_area::*;
 pub use table::*;
+pub use calendar::*;
 // pub use list::*;
 // pub use card::*;
 // pub use statistic::*;

@@ -5,8 +5,8 @@ pub mod layout;
 
 pub use components::{
     AlertPage, AvatarPage, BadgePage, ButtonPage, CardPage, CarouselPage, CheckboxPage,
-    CollapsiblePage, ComponentsPage, DialogPage, DividerPage, DropdownPage, EllipsisPage,
-    FloatButtonPage, FlexPage, GridPage, IconPage, InputPage, LayoutPage, RadioPage,
+    CollapsiblePage, ComponentsPage, DialogPage, DividerPage, DropdownPage, EllipsisPage, FlexPage,
+    FloatButtonPage, GradientTextPage, GridPage, IconPage, InputPage, LayoutPage, RadioPage,
     ScrollAreaPage, SpacePage, SplitPage, SwitchPage, TablePage, TagPage, TextAreaPage, ToastPage,
     TooltipPage, WatermarkPage,
 };

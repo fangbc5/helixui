@@ -7,6 +7,7 @@ mod divider;
 mod dropdown;
 mod ellipsis;
 mod float_button;
+mod gradient_text;
 mod icon;
 mod tag;
 mod watermark;
@@ -40,6 +41,7 @@ pub use ellipsis::{Ellipsis, EllipsisLines, EllipsisProps};
 pub use float_button::{
     FloatButton, FloatButtonBadge, FloatButtonPosition, FloatButtonProps, FloatButtonSize,
 };
+pub use gradient_text::{GradientDirection, GradientText, GradientTextProps};
 pub use icon::{Icon, IconSize, IconType};
 pub use tag::{Tag, TagProps, TagSize, TagType, TagVariant};
 pub use watermark::{Watermark, WatermarkProps};

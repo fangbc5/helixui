@@ -210,6 +210,8 @@ pub fn t(key: &str) -> String {
         (Language::EnUS, "component.float-button") => "FloatButton",
         (Language::ZhCN, "component.ellipsis") => "省略文字 Ellipsis",
         (Language::EnUS, "component.ellipsis") => "Ellipsis",
+        (Language::ZhCN, "component.gradient-text") => "渐变文字 GradientText",
+        (Language::EnUS, "component.gradient-text") => "GradientText",
         (Language::ZhCN, "component.progress") => "进度条 Progress",
         (Language::EnUS, "component.progress") => "Progress",
         (Language::ZhCN, "component.skeleton") => "骨架屏 Skeleton",
