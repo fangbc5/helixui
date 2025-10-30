@@ -4,7 +4,7 @@ use crate::components::feedback::portal::{use_portal, PortalIn, PortalOut};
 use crate::components::{use_global_keydown_listener, use_unique_id};
 use dioxus::dioxus_core::DynamicNode;
 use dioxus::prelude::*;
-use dioxus_time::use_timeout;
+use crate::use_timeout;
 use std::collections::VecDeque;
 use std::time::Duration;
 

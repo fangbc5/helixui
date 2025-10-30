@@ -198,6 +198,8 @@ pub fn t(key: &str) -> String {
         // 数据展示组件
         (Language::ZhCN, "component.table") => "表格 Table",
         (Language::EnUS, "component.table") => "Table",
+        (Language::ZhCN, "component.calendar") => "日历 Calendar",
+        (Language::EnUS, "component.calendar") => "Calendar",
         (Language::ZhCN, "component.scroll-area") => "滚动域 ScrollArea",
         (Language::EnUS, "component.scroll-area") => "ScrollArea",
         (Language::ZhCN, "component.list") => "列表 List",

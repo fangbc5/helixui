@@ -2,7 +2,7 @@
 
 use crate::components::use_controlled;
 use dioxus::prelude::*;
-use dioxus_time::use_interval;
+use crate::use_interval;
 
 /// The direction in which the carousel slides.
 #[derive(Clone, Copy, PartialEq, Default)]

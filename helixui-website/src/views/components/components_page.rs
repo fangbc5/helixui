@@ -231,6 +231,13 @@ pub fn ComponentsPage() -> Element {
                                 status: ComponentStatus::Available,
                             },
                             ComponentCard {
+                                name: "Calendar".to_string(),
+                                name_zh: "日历".to_string(),
+                                description: "用于日期选择与查看。".to_string(),
+                                route: crate::Route::CalendarPage {},
+                                status: ComponentStatus::Available,
+                            },
+                            ComponentCard {
                                 name: "ScrollArea".to_string(),
                                 name_zh: "滚动域".to_string(),
                                 description: "创建可滚动的区域，支持多种滚动模式和方向。".to_string(),

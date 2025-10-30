@@ -6,7 +6,9 @@ use std::{
     rc::Rc,
 };
 
-use time::{ext::NumericalDuration, macros::date, Date, Month, UtcDateTime, Weekday};
+use crate::time::cross_platform_date::{date_add_days, date_sub_days, today_utc};
+use time::macros::date;
+use time::{Date, Month, Weekday};
 
 // A collection of [`Weekday`]s stored as a single byte
 // Implemented as a bitmask where bits 1-7 correspond to Monday-Sunday
@@ -230,11 +232,11 @@ pub struct CalendarProps {
     pub on_format_month: Callback<Month, String>,
 
     /// The month being viewed
-    #[props(default = ReadSignal::new(Signal::new(UtcDateTime::now().date())))]
+    #[props(default = ReadSignal::new(Signal::new(today_utc())))]
     pub view_date: ReadSignal<Date>,
 
     /// The current date (used for highlighting today)
-    #[props(default = UtcDateTime::now().date())]
+    #[props(default = today_utc())]
     pub today: Date,
 
     /// Callback when view date changes
@@ -333,6 +335,7 @@ pub fn Calendar(props: CalendarProps) -> Element {
 
     rsx! {
         div {
+            class: "calendar inline-block border border-gray-200 rounded-2xl bg-white shadow-[0_8px_30px_rgba(0,0,0,0.08)] font-sans p-4",
             role: "application",
             aria_label: "Calendar",
             "data-disabled": (props.disabled)(),
@@ -376,7 +379,7 @@ pub fn Calendar(props: CalendarProps) -> Element {
                             }
                         } else {
                             // Otherwise, move to the previous week
-                            set_focused_date(Some(focused_date.saturating_sub(7.days())));
+                            set_focused_date(Some(date_sub_days(focused_date, 7)));
                         }
                     }
                     Key::ArrowDown => {
@@ -387,7 +390,7 @@ pub fn Calendar(props: CalendarProps) -> Element {
                             }
                         } else {
                             // Otherwise, move to the next week
-                            set_focused_date(Some(focused_date.saturating_add(7.days())));
+                            set_focused_date(Some(date_add_days(focused_date, 7)));
                         }
                     }
                     _ => {}
@@ -531,7 +534,7 @@ pub struct CalendarNavigationProps {
 #[component]
 pub fn CalendarNavigation(props: CalendarNavigationProps) -> Element {
     rsx! {
-        div { class: "calendar-navigation", ..props.attributes,
+        div { class: "calendar-navigation flex items-center justify-between px-3 pt-3 pb-1", ..props.attributes,
             {props.children}
         }
     }
@@ -617,7 +620,7 @@ pub fn CalendarPreviousMonthButton(props: CalendarPreviousMonthButtonProps) -> E
 
     rsx! {
         button {
-            class: "calendar-nav-prev",
+            class: "calendar-nav-prev flex w-9 h-9 items-center justify-center rounded-xl border border-gray-200 bg-white text-gray-500 text-base cursor-pointer hover:bg-gray-50 hover:text-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-500",
             aria_label: "Previous month",
             type: "button",
             onclick: handle_prev_month,
@@ -712,7 +715,7 @@ pub fn CalendarNextMonthButton(props: CalendarNextMonthButtonProps) -> Element {
 
     rsx! {
         button {
-            class: "calendar-nav-next",
+            class: "calendar-nav-next flex w-9 h-9 items-center justify-center rounded-xl border border-gray-200 bg-white text-gray-500 text-base cursor-pointer hover:bg-gray-50 hover:text-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-500",
             aria_label: "Next month",
             type: "button",
             onclick: handle_next_month,
@@ -767,7 +770,9 @@ pub struct CalendarMonthTitleProps {
 ///                     CalendarPreviousMonthButton {
 ///                         "<"
 ///                     }
-///                     CalendarMonthTitle {}
+///                     CalendarMonthTitle {
+///                         class: "calendar-nav-title text-[16px] font-semibold text-[var(--secondary-color-4)]"
+///                     }
 ///                     CalendarNextMonthButton {
 ///                         ">"
 ///                     }
@@ -789,10 +794,14 @@ pub fn CalendarMonthTitle(props: CalendarMonthTitleProps) -> Element {
 
     rsx! {
         div {
-            class: "calendar-month-title",
+            class: "calendar-month-title text-[16px] font-semibold text-gray-900",
             ..props.attributes,
 
-            {month_year}
+            // 使用下拉的月份与年份选择器，代替纯文本标题
+            span { class: "flex items-center gap-2",
+                CalendarSelectMonth {}
+                CalendarSelectYear {}
+            }
         }
     }
 }
@@ -859,7 +868,9 @@ pub struct CalendarGridProps {
 ///                     }
 ///                 }
 ///             }
-///             CalendarGrid {}
+///             CalendarGrid {
+///                 class: "calendar-grid w-full p-2"
+///             }
 ///         }
 ///     }
 /// }
@@ -891,7 +902,7 @@ pub fn CalendarGrid(props: CalendarGridProps) -> Element {
             .replace_day(1)
             .expect("invalid or out-of-range date");
         let num_days = days_since(view_date, ctx.first_day_of_week);
-        let mut date = previous_month.saturating_sub(num_days.days());
+        let mut date = date_sub_days(previous_month, num_days);
         for _ in 1..=num_days {
             grid.push(date);
             date = date.next_day().expect("invalid or out-of-range date");
@@ -933,7 +944,7 @@ pub fn CalendarGrid(props: CalendarGridProps) -> Element {
         table {
             role: "grid",
             id: props.id,
-            class: "calendar-grid",
+            class: "calendar-grid table-auto p-2",
             ..props.attributes,
 
             // Day headers
@@ -944,7 +955,7 @@ pub fn CalendarGrid(props: CalendarGridProps) -> Element {
                     for (weekday, label) in weekday_headers() {
                         th {
                             key: "{weekday:?}",  // Add key for efficient diffing
-                            class: "calendar-grid-day-header",
+                            class: "calendar-grid-day-header w-10 text-gray-400 text-sm font-medium text-center",
                             {label}
                         }
                     }
@@ -959,7 +970,7 @@ pub fn CalendarGrid(props: CalendarGridProps) -> Element {
                         role: "row",
                         class: "calendar-grid-week",
                         for date in row.iter().copied() {
-                            td {
+                            td { class: "p-0 text-center align-middle",
                                 {props.render_day.call(date)}
                             }
                         }
@@ -1012,7 +1023,9 @@ pub struct CalendarSelectMonthProps {
 ///                     CalendarPreviousMonthButton {
 ///                         "<"
 ///                     }
-///                     CalendarSelectMonth {}
+///                     CalendarSelectMonth {
+///                         class: "calendar-month-select-container"
+///                     }
 ///                     CalendarNextMonthButton {
 ///                         ">"
 ///                     }
@@ -1054,8 +1067,9 @@ pub fn CalendarSelectMonth(props: CalendarSelectMonthProps) -> Element {
     });
 
     rsx! {
-        span { class: "calendar-month-select-container",
+        span { class: "calendar-month-select-container relative",
             select {
+                class: "calendar-month-select absolute w-full h-full p-1 m-0 inset-0 opacity-0",
                 aria_label: "Month",
                 onchange: move |e| {
                     let mut view_date = calendar.view_date();
@@ -1067,16 +1081,16 @@ pub fn CalendarSelectMonth(props: CalendarSelectMonthProps) -> Element {
                 ..props.attributes,
                 for month in months() {
                     option {
-                        value: Some(month as u8),
+                        value: month as u8,
                         selected: calendar.view_date().month() == month,
                         {calendar.format_month.call(month)}
                     }
                 }
             }
-            span { class: "calendar-month-select-value",
+            span { class: "calendar-month-select-value inline-flex items-center justify-center px-3 py-1.5 rounded-xl border border-gray-200 bg-white text-gray-900 cursor-pointer text-base transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500",
                 {calendar.format_month.call(month)}
                 svg {
-                    class: "select-expand-icon",
+                    class: "select-expand-icon w-5 h-5 stroke-gray-500",
                     view_box: "0 0 24 24",
                     xmlns: "http://www.w3.org/2000/svg",
                     polyline { points: "6 9 12 15 18 9" }
@@ -1128,7 +1142,9 @@ pub struct CalendarSelectYearProps {
 ///                     CalendarPreviousMonthButton {
 ///                         "<"
 ///                     }
-///                     CalendarSelectYear {}
+///                     CalendarSelectYear {
+///                         class: "calendar-year-select-container"
+///                     }
 ///                     CalendarNextMonthButton {
 ///                         ">"
 ///                     }
@@ -1162,8 +1178,9 @@ pub fn CalendarSelectYear(props: CalendarSelectYearProps) -> Element {
     });
 
     rsx! {
-        span { class: "calendar-year-select-container",
+        span { class: "calendar-year-select-container relative",
             select {
+                class: "calendar-year-select absolute w-full h-full p-1 m-0 inset-0 opacity-0",
                 aria_label: "Year",
                 onchange: move |e| {
                     let mut view_date = calendar.view_date();
@@ -1180,10 +1197,10 @@ pub fn CalendarSelectYear(props: CalendarSelectYearProps) -> Element {
                     }
                 }
             }
-            span { class: "calendar-year-select-value",
+            span { class: "calendar-year-select-value inline-flex items-center justify-center px-2.5 py-1.5 rounded-xl border border-gray-200 bg-white text-gray-900 cursor-pointer text-base transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500",
                 "{year}"
                 svg {
-                    class: "select-expand-icon",
+                    class: "select-expand-icon w-5 h-5 stroke-gray-500",
                     view_box: "0 0 24 24",
                     xmlns: "http://www.w3.org/2000/svg",
                     polyline { points: "6 9 12 15 18 9" }
@@ -1285,9 +1302,27 @@ fn CalendarDay(props: CalendarDayProps) -> Element {
         })
         .unwrap_or(view_date);
 
+    // 生成动态样式：今天且未选中时浅灰底；非本月用浅灰文字
+    let selected_now = is_selected();
+    let cell_base = "calendar-grid-cell w-10 h-10 border-none rounded-xl bg-none text-base focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-500";
+    let text_class = if in_current_month {
+        "text-gray-900"
+    } else {
+        "text-gray-400"
+    };
+    let cursor_hover = if in_current_month {
+        "cursor-pointer hover:bg-gray-100"
+    } else {
+        "cursor-default"
+    };
+    let mut cell_class = format!("{} {} {}", cell_base, text_class, cursor_hover);
+    if is_today && in_current_month && !selected_now {
+        cell_class.push_str(" bg-gray-100");
+    }
+
     rsx! {
         button {
-            class: "calendar-grid-cell",
+            class: "{cell_class}",
             type: "button",
             tabindex: if date == focusable_date {
                 "0"
@@ -1296,7 +1331,7 @@ fn CalendarDay(props: CalendarDayProps) -> Element {
             },
             aria_label: aria_label(&props.date),
             "data-today": is_today,
-            "data-selected": is_selected(),
+            "data-selected": selected_now,
             "data-month": "{month}",
             onclick: move |e| {
                 e.prevent_default();

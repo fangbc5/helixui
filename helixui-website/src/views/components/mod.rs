@@ -10,7 +10,7 @@ pub use common::{
     EllipsisPage, FloatButtonPage, GradientTextPage, IconPage, TagPage, WatermarkPage,
 };
 pub use components_page::ComponentsPage;
-pub use data_display::{ScrollAreaPage, TablePage};
+pub use data_display::{CalendarPage, ScrollAreaPage, TablePage};
 pub use feedback::{AlertPage, BadgePage, DialogPage, ToastPage, TooltipPage};
 pub use form::{CheckboxPage, InputPage, RadioPage, SwitchPage, TextAreaPage};
 pub use layout::{FlexPage, GridPage, LayoutPage, SpacePage, SplitPage};

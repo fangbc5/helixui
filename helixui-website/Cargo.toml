@@ -13,6 +13,7 @@ path = "src/main.rs"
 helixui = { path = "../helixui-lib" }
 dioxus = { workspace = true, features = ["router"] }
 tracing = { workspace = true}
+time.workspace = true
 
 [features]
 default = ["web"]

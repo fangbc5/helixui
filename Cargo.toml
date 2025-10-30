@@ -13,8 +13,16 @@ edition = "2021"
 [workspace.dependencies]
 dioxus = "0.7.0-rc.3"
 dioxus-time = { git = "https://github.com/ealmloff/dioxus-std", branch = "0.7" }
-time = { version = "0.3.41", features = ["std", "macros", "parsing"] }
 tracing = { version = "0.1", features = ["std"] }
+tokio = { version = "1.43.0", features = ["time"]}
+time = { version = "0.3.41", features = ["std", "macros", "parsing"] }
+gloo-timers = { version = "0.3.0", features = ["futures"] }
+futures = "0.3.31"
+futures-util = "0.3.31"
+js-sys = "0.3.77"
+web-sys = { version = "0.3", features = ["Window", "Navigator", "Clipboard"] }
+wasm-bindgen-futures = "0.4"
+arboard = "3"
 
 [profile]
 

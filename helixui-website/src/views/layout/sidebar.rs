@@ -191,10 +191,7 @@ pub fn ComponentsSidebar() -> Element {
                     i18n::t("component.float-button"),
                     crate::Route::FloatButtonPage {},
                 ),
-                SidebarItem::link(
-                    i18n::t("component.ellipsis"),
-                    crate::Route::EllipsisPage {},
-                ),
+                SidebarItem::link(i18n::t("component.ellipsis"), crate::Route::EllipsisPage {}),
                 SidebarItem::link(
                     i18n::t("component.gradient-text"),
                     crate::Route::GradientTextPage {},
@@ -226,6 +223,7 @@ pub fn ComponentsSidebar() -> Element {
             i18n::t("sidebar.data-display"),
             vec![
                 SidebarItem::link(i18n::t("component.table"), crate::Route::TablePage {}),
+                SidebarItem::link(i18n::t("component.calendar"), crate::Route::CalendarPage {}),
                 SidebarItem::link(
                     i18n::t("component.scroll-area"),
                     crate::Route::ScrollAreaPage {},

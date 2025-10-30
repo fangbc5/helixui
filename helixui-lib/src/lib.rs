@@ -27,6 +27,9 @@
 //! ```
 
 pub mod components;
+pub mod platform;
+pub mod time;
 
 // Re-export commonly used components
 pub use components::*;
+pub use time::*;

@@ -1,5 +1,5 @@
+use crate::{use_timeout, TimeoutHandle};
 use dioxus::prelude::*;
-use dioxus_time::{use_timeout, TimeoutHandle};
 use std::time::Duration;
 
 /// 演示框组件 - 用于展示组件示例和代码
@@ -111,7 +111,12 @@ pub fn DemoBox(
                 button {
                     class: "flex items-center gap-1 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors",
                     onclick: move |_| {
-                        let _code_to_copy = code.clone();
+                        let code_to_copy = code.clone();
+                        // 统一跨平台复制
+                        spawn(async move {
+                            crate::platform::clipboard::copy_to_clipboard(code_to_copy).await;
+                        });
+
                         copied.set(true);
                         // 如有正在等待的超时，先取消
                         if let Some(handle) = *current_timeout.read() {
