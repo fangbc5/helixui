@@ -161,7 +161,7 @@ pub fn Select<T: Clone + PartialEq + 'static>(props: SelectProps<T>) -> Element 
 
     rsx! {
         div {
-            class: "select relative",
+            class: "select relative w-max",
             // Data attributes
             "data-state": if open() { "open" } else { "closed" },
             "data-disabled": (props.disabled)(),

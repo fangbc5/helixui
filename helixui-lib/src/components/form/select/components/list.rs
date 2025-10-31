@@ -161,7 +161,7 @@ pub fn SelectList(props: SelectListProps) -> Element {
 
     let panel_class = use_memo(move || {
         if open() {
-            "select-list absolute z-[1000] top-full left-0 w-full box-border p-2 rounded-xl mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-xl origin-top will-change-[transform,opacity] ring-2 ring-blue-500".to_string()
+            "select-list absolute z-[1000] top-full left-0 w-full box-border p-2 rounded-xl mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-xl origin-top will-change-[transform,opacity]".to_string()
         } else {
             "select-list absolute z-[1000] top-full left-0 w-full box-border p-2 rounded-xl mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-xl origin-top will-change-[transform,opacity]".to_string()
         }
