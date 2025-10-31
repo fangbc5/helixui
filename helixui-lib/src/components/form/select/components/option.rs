@@ -147,7 +147,12 @@ pub fn SelectOption<T: PartialEq + Clone + 'static>(props: SelectOptionProps<T>)
     let focused = move || ctx.focus_state.is_focused(index());
     let disabled = ctx.disabled.cloned() || props.disabled.cloned();
     let selected = use_memo(move || {
-        ctx.value.read().as_ref().and_then(|v| v.as_ref::<T>()) == Some(&props.value.read())
+        if (ctx.multiple)() {
+            let cur = RcPartialEqValue::new(props.value.read().clone());
+            (ctx.selected_values).read().iter().any(|v| *v == cur)
+        } else {
+            ctx.value.read().as_ref().and_then(|v| v.as_ref::<T>()) == Some(&props.value.read())
+        }
     });
 
     use_context_provider(|| SelectOptionContext {
@@ -170,17 +175,38 @@ pub fn SelectOption<T: PartialEq + Clone + 'static>(props: SelectOptionProps<T>)
                 aria_label: props.aria_label.clone(),
                 aria_roledescription: props.aria_roledescription.clone(),
 
-                class: if disabled {
-                    "select-option flex items-center justify-between px-3 py-2 rounded-[calc(0.5rem-0.25rem)] text-sm text-gray-400 cursor-not-allowed"
-                } else {
-                    "select-option flex items-center justify-between px-3 py-2 rounded-[calc(0.5rem-0.25rem)] text-sm cursor-pointer hover:bg-gray-100 hover:text-gray-900 focus-visible:outline-none"
+                class: {
+                    let size = (ctx.size)();
+                    let size_class = match size {
+                        super::super::context::SelectSize::Small => "px-3 py-1 text-sm",
+                        super::super::context::SelectSize::Medium => "px-3 py-2 text-base",
+                        super::super::context::SelectSize::Large => "px-4 py-3 text-lg",
+                    };
+                    if disabled {
+                        format!("select-option flex items-center justify-between {} rounded-[calc(0.5rem-0.25rem)] text-gray-400 cursor-not-allowed", size_class)
+                    } else {
+                        format!("select-option flex items-center justify-between {} rounded-[calc(0.5rem-0.25rem)] cursor-pointer hover:bg-gray-100 hover:text-gray-900 focus-visible:outline-none", size_class)
+                    }
                 },
                 "data-disabled": if disabled { "true" } else { "false" },
 
                 onpointerdown: move |event| {
                     if !disabled && event.trigger_button() == Some(MouseButton::Primary) {
-                        ctx.set_value.call(Some(RcPartialEqValue::new(props.value.cloned())));
-                        ctx.open.set(false);
+                        if (ctx.multiple)() {
+                            // toggle in multi-select set
+                            let cur = RcPartialEqValue::new(props.value.read().clone());
+                            let mut list = (ctx.selected_values).read().clone();
+                            if let Some(idx) = list.iter().position(|v| *v == cur) {
+                                list.remove(idx);
+                            } else {
+                                list.push(cur);
+                            }
+                            (ctx.selected_values).set(list.clone());
+                            (ctx.set_selected_values).call(list);
+                        } else {
+                            ctx.set_value.call(Some(RcPartialEqValue::new(props.value.cloned())));
+                            ctx.open.set(false);
+                        }
                     }
                 },
                 onblur: move |_| {

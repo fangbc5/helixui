@@ -84,7 +84,15 @@ pub fn SelectTrigger(props: SelectTriggerProps) -> Element {
 
     rsx! {
         button {
-            class: "select-trigger inline-flex items-center justify-between w-56 px-4 py-2 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 shadow-sm cursor-pointer gap-2 transition-colors duration-100 ease-out hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500",
+            class: {
+                let size = (ctx.size)();
+                let size_class = match size {
+                    super::super::context::SelectSize::Small => "px-3 py-1 text-sm",
+                    super::super::context::SelectSize::Medium => "px-4 py-2 text-base",
+                    super::super::context::SelectSize::Large => "px-5 py-3 text-lg",
+                };
+                format!("select-trigger inline-flex items-center justify-between w-56 {} rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 shadow-sm cursor-pointer gap-2 transition-colors duration-100 ease-out hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500", size_class)
+            },
             style: trigger_style,
             "data-disabled": (ctx.disabled)(),
             // Standard HTML attributes

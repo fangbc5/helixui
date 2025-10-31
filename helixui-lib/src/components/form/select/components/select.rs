@@ -7,6 +7,7 @@ use crate::components::{use_controlled, use_effect};
 use dioxus::prelude::*;
 use dioxus_core::Task;
 
+use super::super::context::SelectSize;
 use super::super::context::{RcPartialEqValue, SelectContext};
 use crate::components::focus::use_focus_provider;
 
@@ -44,6 +45,18 @@ pub struct SelectProps<T: Clone + PartialEq + 'static = String> {
     /// Timeout in milliseconds before clearing typeahead buffer
     #[props(default = ReadSignal::new(Signal::new(Duration::from_millis(1000))))]
     pub typeahead_timeout: ReadSignal<Duration>,
+
+    /// Size of the select (Small/Medium/Large)
+    #[props(default = ReadSignal::new(Signal::new(SelectSize::Medium)))]
+    pub size: ReadSignal<SelectSize>,
+
+    /// Multiple selection mode (not yet fully implemented)
+    #[props(default = ReadSignal::new(Signal::new(false)))]
+    pub multiple: ReadSignal<bool>,
+
+    /// Enable filter input in dropdown (not yet implemented)
+    #[props(default = ReadSignal::new(Signal::new(false)))]
+    pub filterable: ReadSignal<bool>,
 
     /// Additional attributes for the select element
     #[props(extends = GlobalAttributes)]
@@ -130,6 +143,12 @@ pub fn Select<T: Clone + PartialEq + 'static>(props: SelectProps<T>) -> Element 
         }
     });
 
+    // multi-select values & setter
+    let selected_values: Signal<Vec<RcPartialEqValue>> = use_signal(Vec::new);
+    let on_values_change: Callback<Vec<RcPartialEqValue>> =
+        use_callback(|_v: Vec<RcPartialEqValue>| {});
+    let set_selected_values = on_values_change;
+
     let focus_state = use_focus_provider(props.roving_loop);
 
     // Clear the typeahead buffer when the select is closed
@@ -157,6 +176,11 @@ pub fn Select<T: Clone + PartialEq + 'static>(props: SelectProps<T>) -> Element 
         placeholder: props.placeholder,
         typeahead_clear_task,
         typeahead_timeout: props.typeahead_timeout,
+        size: props.size,
+        multiple: props.multiple,
+        filterable: props.filterable,
+        selected_values,
+        set_selected_values,
     });
 
     rsx! {

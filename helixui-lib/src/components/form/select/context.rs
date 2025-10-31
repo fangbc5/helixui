@@ -9,6 +9,13 @@ use std::{any::Any, rc::Rc, time::Duration};
 
 use super::text_search::AdaptiveKeyboard;
 
+#[derive(Clone, Copy, PartialEq, Eq)]
+pub enum SelectSize {
+    Small,
+    Medium,
+    Large,
+}
+
 trait DynPartialEq: Any {
     fn eq(&self, other: &dyn Any) -> bool;
 }
@@ -53,9 +60,9 @@ pub(super) struct SelectContext {
     pub typeahead_buffer: Signal<String>,
     /// If the select is open
     pub open: Signal<bool>,
-    /// Current value
+    /// Current value (single-select)
     pub value: Memo<Option<RcPartialEqValue>>,
-    /// Set the value callback
+    /// Set the value callback (single-select)
     pub set_value: Callback<Option<RcPartialEqValue>>,
     /// A list of options with their states
     pub options: Signal<Vec<OptionState>>,
@@ -73,6 +80,16 @@ pub(super) struct SelectContext {
     pub typeahead_clear_task: Signal<Option<Task>>,
     /// Timeout before clearing typeahead buffer
     pub typeahead_timeout: ReadSignal<Duration>,
+    /// Size of select
+    pub size: ReadSignal<SelectSize>,
+    /// Multiple selection flag
+    pub multiple: ReadSignal<bool>,
+    /// Filterable flag
+    pub filterable: ReadSignal<bool>,
+    /// Selected values for multi-select
+    pub selected_values: Signal<Vec<RcPartialEqValue>>,
+    /// Callback to set selected values (multi-select)
+    pub set_selected_values: Callback<Vec<RcPartialEqValue>>,
 }
 
 impl SelectContext {

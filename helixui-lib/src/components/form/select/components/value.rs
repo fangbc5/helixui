@@ -67,13 +67,30 @@ pub fn SelectValue(props: SelectValueProps) -> Element {
 
     let selected_text_value = use_memo(move || {
         let value = ctx.value.read();
-        value.as_ref().and_then(|v| {
-            ctx.options
-                .read()
-                .iter()
-                .find(|opt| opt.value == *v)
-                .map(|opt| opt.text_value.clone())
-        })
+        if (ctx.multiple)() {
+            // join selected values' text
+            let selected = (ctx.selected_values).read();
+            let options = ctx.options.read();
+            let mut texts: Vec<String> = Vec::new();
+            for v in selected.iter() {
+                if let Some(text) = options
+                    .iter()
+                    .find(|opt| opt.value == *v)
+                    .map(|opt| opt.text_value.clone())
+                {
+                    texts.push(text);
+                }
+            }
+            Some(texts.join(", "))
+        } else {
+            value.as_ref().and_then(|v| {
+                ctx.options
+                    .read()
+                    .iter()
+                    .find(|opt| opt.value == *v)
+                    .map(|opt| opt.text_value.clone())
+            })
+        }
     });
 
     let display_value = selected_text_value().unwrap_or_else(|| ctx.placeholder.cloned());
