@@ -3,6 +3,7 @@
 use dioxus::prelude::*;
 
 use super::super::context::SelectContext;
+use crate::components::{Icon, IconType};
 
 /// The props for the [`SelectTrigger`] component
 #[derive(Props, Clone, PartialEq)]
@@ -82,63 +83,85 @@ pub fn SelectTrigger(props: SelectTriggerProps) -> Element {
         style
     });
 
-    rsx! {
-        button {
-            class: {
-                let size = (ctx.size)();
-                let size_class = match size {
-                    super::super::context::SelectSize::Small => "px-3 py-1 text-sm",
-                    super::super::context::SelectSize::Medium => "px-4 py-2 text-base",
-                    super::super::context::SelectSize::Large => "px-5 py-3 text-lg",
-                };
-                format!("select-trigger inline-flex items-center justify-between w-56 {} rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 shadow-sm cursor-pointer gap-2 transition-colors duration-100 ease-out hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500", size_class)
-            },
-            style: trigger_style,
-            "data-disabled": (ctx.disabled)(),
-            // Standard HTML attributes
-            disabled: (ctx.disabled)(),
-            type: "button",
-
-            onclick: move |_| {
-                open.toggle();
-            },
-            onkeydown: move |event| {
-                match event.key() {
-                    Key::ArrowUp => {
-                        open.set(true);
-                        ctx.focus_state.focus_last();
-                        event.prevent_default();
-                        event.stop_propagation();
+    // 计算 input 的 value 值
+    let input_value = use_memo(move || {
+        if (ctx.filterable)() {
+            (ctx.filter_query)()
+        } else {
+            let mut text = String::new();
+            if (ctx.multiple)() {
+                let options = ctx.options.read();
+                let selected = (ctx.selected_values).read();
+                let parts: Vec<String> = selected
+                    .iter()
+                    .filter_map(|v| {
+                        options
+                            .iter()
+                            .find(|o| o.value == *v)
+                            .map(|o| o.text_value.clone())
+                    })
+                    .collect();
+                text = parts.join(", ");
+            } else {
+                let cur = ctx.value.read();
+                if let Some(val) = cur.as_ref() {
+                    if let Some(opt) = ctx.options.read().iter().find(|o| o.value == *val) {
+                        text = opt.text_value.clone();
                     }
-                    Key::ArrowDown => {
-                        open.set(true);
-                        ctx.focus_state.focus_first();
-                        event.prevent_default();
-                        event.stop_propagation();
-                    }
-                    _ => {}
                 }
-            },
-
-            // ARIA attributes
-            aria_haspopup: "listbox",
-            aria_expanded: open(),
-            aria_controls: ctx.list_id,
-
-            // Pass through other attributes
-            ..props.attributes,
-
-            // Render children (value)
-            div { class: "flex-1 text-left truncate",
-                {props.children}
             }
-            // caret icon
-            svg {
-                class: "select-expand-icon w-5 h-5 shrink-0 stroke-gray-500 dark:stroke-gray-400",
-                view_box: "0 0 24 24",
-                fill: "none",
-                xmlns: "http://www.w3.org/2000/svg",
-                polyline { points: "6 9 12 15 18 9", stroke_linecap: "round", stroke_linejoin: "round", stroke_width: "2" }
+            if text.is_empty() {
+                (ctx.placeholder)()
+            } else {
+                text
+            }
+        }
+    });
+
+    rsx! {
+        Fragment {
+            // 仅使用 dioxus 自带 input
+            input {
+                r#type: if (ctx.filterable)() { "text" } else { "button" },
+                class: {
+                    let size = (ctx.size)();
+                    let size_class = match size {
+                        super::super::context::SelectSize::Small => "px-3 py-1 text-sm",
+                        super::super::context::SelectSize::Medium => "px-4 py-2 text-base",
+                        super::super::context::SelectSize::Large => "px-5 py-3 text-lg",
+                    };
+                    // 右侧给图标预留 padding
+                    format!("select-trigger inline-block align-middle w-56 pr-8 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 shadow-sm placeholder:text-gray-400 {}", size_class)
+                },
+                style: trigger_style,
+                placeholder: (ctx.placeholder)(),
+                value: input_value(),
+                readonly: !(ctx.filterable)(),
+                onfocus: move |_| { open.set(true); },
+                onclick: move |e| { e.stop_propagation(); open.set(true); },
+                onpointerdown: move |e| { e.stop_propagation(); },
+                oninput: move |e| { if (ctx.filterable)() { (ctx.filter_query).set(e.value().to_string()); } },
+                onkeydown: move |event| {
+                    match event.key() {
+                        Key::ArrowUp => { open.set(true); ctx.focus_state.focus_last(); event.prevent_default(); event.stop_propagation(); }
+                        Key::ArrowDown => { open.set(true); ctx.focus_state.focus_first(); event.prevent_default(); event.stop_propagation(); }
+                        Key::Escape => { open.set(false); event.prevent_default(); event.stop_propagation(); }
+                        _ => {}
+                    }
+                },
+                onblur: move |_| {
+                    // 若失焦（并非点击列表，因为列表已阻止默认），则关闭面板
+                    if open() { open.set(false); }
+                },
+                "aria-haspopup": "listbox",
+                "aria-expanded": open(),
+                aria_controls: ctx.list_id,
+                ..props.attributes,
+            }
+            // 自研图标：作为兄弟节点，通过负边距与相对定位覆盖到输入框右侧
+            Icon {
+                icon: IconType::ChevronDown,
+                class: "inline-block align-middle -ml-7 -translate-x-1 relative text-gray-500 dark:text-gray-400".to_string()
             }
         }
     }

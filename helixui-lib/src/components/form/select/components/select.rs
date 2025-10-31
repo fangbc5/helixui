@@ -148,6 +148,7 @@ pub fn Select<T: Clone + PartialEq + 'static>(props: SelectProps<T>) -> Element 
     let on_values_change: Callback<Vec<RcPartialEqValue>> =
         use_callback(|_v: Vec<RcPartialEqValue>| {});
     let set_selected_values = on_values_change;
+    let filter_query: Signal<String> = use_signal(String::new);
 
     let focus_state = use_focus_provider(props.roving_loop);
 
@@ -179,6 +180,7 @@ pub fn Select<T: Clone + PartialEq + 'static>(props: SelectProps<T>) -> Element 
         size: props.size,
         multiple: props.multiple,
         filterable: props.filterable,
+        filter_query,
         selected_values,
         set_selected_values,
     });

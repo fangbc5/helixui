@@ -20,6 +20,16 @@ pub fn SelectPage() -> Element {
             title: "尺寸".to_string(),
             level: 1,
         },
+        TocItem {
+            id: "multiple".to_string(),
+            title: "多选".to_string(),
+            level: 1,
+        },
+        TocItem {
+            id: "filter".to_string(),
+            title: "可过滤".to_string(),
+            level: 1,
+        },
     ];
     rsx! {
         DocPage {
@@ -72,9 +82,9 @@ fn Demo() -> Element {
                                     SelectList { aria_label: "选择器演示",
                                         SelectGroup {
                                             SelectGroupLabel { "水果" }
-                                            SelectOption::<String> { index: 0usize, value: "apple", span { class: "flex-1 truncate", "Apple" } SelectItemIndicator { "✔" } }
-                                            SelectOption::<String> { index: 1usize, value: "banana", span { class: "flex-1 truncate", "Banana" } SelectItemIndicator { "✔" } }
-                                            SelectOption::<String> { index: 2usize, value: "orange", span { class: "flex-1 truncate", "Orange" } SelectItemIndicator { "✔" } }
+                                            SelectOption::<String> { index: 0usize, value: "apple", span { class: "flex-1 truncate", "Apple" } SelectItemIndicator {} }
+                                            SelectOption::<String> { index: 1usize, value: "banana", span { class: "flex-1 truncate", "Banana" } SelectItemIndicator {} }
+                                            SelectOption::<String> { index: 2usize, value: "orange", span { class: "flex-1 truncate", "Orange" } SelectItemIndicator {} }
                                         }
                                     }
                                 }
@@ -240,6 +250,59 @@ fn Demo() -> Element {
                                         SelectOption::<String> { index: 1usize, value: "banana", span { class: "flex-1 truncate", "Banana" } SelectItemIndicator { "✔" } }
                                         SelectOption::<String> { index: 2usize, value: "orange", span { class: "flex-1 truncate", "Orange" } SelectItemIndicator { "✔" } }
                                         SelectOption::<String> { index: 3usize, value: "strawberry", span { class: "flex-1 truncate", "Strawberry" } SelectItemIndicator { "✔" } }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // 可过滤演示
+                section { id: "filter", class: "mb-12",
+                    h2 { class: "text-2xl font-semibold text-gray-900 dark:text-white mb-4", "可过滤" }
+                    helixui::components::DemoBox {
+                        title: "可过滤".to_string(),
+                        description: "在面板顶部输入框实时过滤选项（大小写不敏感）".to_string(),
+                        code: {r##"
+use dioxus::prelude::*;
+use helixui::components::form::select::{Select, SelectGroup, SelectGroupLabel, SelectItemIndicator, SelectList, SelectOption, SelectTrigger, SelectValue, SelectSize};
+
+#[component]
+fn Demo() -> Element {
+    rsx! {
+        Select::<String> {
+            filterable: ReadSignal::new(Signal::new(true)),
+            size: ReadSignal::new(Signal::new(SelectSize::Medium)),
+            placeholder: "搜索水果...",
+            SelectTrigger { aria_label: "Filter", width: "18rem", SelectValue {} }
+            SelectList { aria_label: "Filter List",
+                SelectGroup {
+                    SelectGroupLabel { "Fruits" }
+                    SelectOption::<String> { index: 0usize, value: "Apple", span { class: "flex-1 truncate", "Apple" } SelectItemIndicator { "✔" } }
+                    SelectOption::<String> { index: 1usize, value: "Banana", span { class: "flex-1 truncate", "Banana" } SelectItemIndicator { "✔" } }
+                    SelectOption::<String> { index: 2usize, value: "Orange", span { class: "flex-1 truncate", "Orange" } SelectItemIndicator { "✔" } }
+                    SelectOption::<String> { index: 3usize, value: "Watermelon", span { class: "flex-1 truncate", "Watermelon" } SelectItemIndicator { "✔" } }
+                    SelectOption::<String> { index: 4usize, value: "Strawberry", span { class: "flex-1 truncate", "Strawberry" } SelectItemIndicator { "✔" } }
+                }
+            }
+        }
+    }
+}
+"##.to_string()},
+                        children: rsx! {
+                            Select::<String> {
+                                filterable: ReadSignal::new(Signal::new(true)),
+                                size: ReadSignal::new(Signal::new(SelectSize::Medium)),
+                                placeholder: "搜索水果...",
+                                SelectTrigger { aria_label: "Filter", width: "18rem", SelectValue {} }
+                                SelectList { aria_label: "Filter List",
+                                    SelectGroup {
+                                        SelectGroupLabel { "Fruits" }
+                                        SelectOption::<String> { index: 0usize, value: "Apple", span { class: "flex-1 truncate", "Apple" } SelectItemIndicator { "✔" } }
+                                        SelectOption::<String> { index: 1usize, value: "Banana", span { class: "flex-1 truncate", "Banana" } SelectItemIndicator { "✔" } }
+                                        SelectOption::<String> { index: 2usize, value: "Orange", span { class: "flex-1 truncate", "Orange" } SelectItemIndicator { "✔" } }
+                                        SelectOption::<String> { index: 3usize, value: "Watermelon", span { class: "flex-1 truncate", "Watermelon" } SelectItemIndicator { "✔" } }
+                                        SelectOption::<String> { index: 4usize, value: "Strawberry", span { class: "flex-1 truncate", "Strawberry" } SelectItemIndicator { "✔" } }
                                     }
                                 }
                             }

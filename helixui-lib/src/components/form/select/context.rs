@@ -86,6 +86,8 @@ pub(super) struct SelectContext {
     pub multiple: ReadSignal<bool>,
     /// Filterable flag
     pub filterable: ReadSignal<bool>,
+    /// Filter query text (when filterable)
+    pub filter_query: Signal<String>,
     /// Selected values for multi-select
     pub selected_values: Signal<Vec<RcPartialEqValue>>,
     /// Callback to set selected values (multi-select)
@@ -101,6 +103,10 @@ impl SelectContext {
                 let options = self.options.read();
                 if let Some(option) = options.iter().find(|opt| opt.tab_index == focused_index) {
                     self.set_value.call(Some(option.value.clone()));
+                    // 可过滤模式下，把选中文本回填到输入框
+                    if self.filterable.cloned() {
+                        self.filter_query.set(option.text_value.clone());
+                    }
                     self.open.set(false);
                 }
             }

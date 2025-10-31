@@ -161,8 +161,23 @@ pub fn SelectOption<T: PartialEq + Clone + 'static>(props: SelectOptionProps<T>)
 
     let render = use_context::<SelectListContext>().render;
 
+    // 过滤条件：当启用可过滤时，基于 text_value 做大小写不敏感包含匹配
+    let passes_filter = move || {
+        if (ctx.filterable)() {
+            let q = (ctx.filter_query)();
+            let q = q.trim().to_lowercase();
+            if q.is_empty() {
+                true
+            } else {
+                text_value().to_lowercase().contains(&q)
+            }
+        } else {
+            true
+        }
+    };
+
     rsx! {
-        if render() {
+        if render() && passes_filter() {
             div {
                 role: "option",
                 id,
@@ -204,7 +219,13 @@ pub fn SelectOption<T: PartialEq + Clone + 'static>(props: SelectOptionProps<T>)
                             (ctx.selected_values).set(list.clone());
                             (ctx.set_selected_values).call(list);
                         } else {
-                            ctx.set_value.call(Some(RcPartialEqValue::new(props.value.cloned())));
+                            // 单选：设置值并根据需要回填过滤输入
+                            let selected_value = RcPartialEqValue::new(props.value.cloned());
+                            let selected_text = text_value();
+                            ctx.set_value.call(Some(selected_value));
+                            if (ctx.filterable)() {
+                                (ctx.filter_query).set(selected_text);
+                            }
                             ctx.open.set(false);
                         }
                     }
@@ -285,14 +306,15 @@ pub fn SelectItemIndicator(props: SelectItemIndicatorProps) -> Element {
     if !(ctx.selected)() {
         return rsx! {};
     }
+    let has_children = props.children.is_ok();
     rsx! {
-        // 使用统一的勾选图标样式
-        svg {
+        // 若用户提供了自定义 children，则优先展示；否则使用默认对勾图标
+        if has_children { {props.children} } else { svg {
             class: "select-check-icon w-4 h-4 shrink-0 stroke-gray-500 dark:stroke-gray-400 ml-2",
             view_box: "0 0 24 24",
             fill: "none",
             xmlns: "http://www.w3.org/2000/svg",
             polyline { points: "20 6 9 17 4 12", stroke_linecap: "round", stroke_linejoin: "round", stroke_width: "2" }
-        }
+        }}
     }
 }

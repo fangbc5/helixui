@@ -79,13 +79,14 @@ pub fn SelectList(props: SelectListProps) -> Element {
 
     let mut open = ctx.open;
     let mut listbox_ref: Signal<Option<std::rc::Rc<MountedData>>> = use_signal(|| None);
-    let focused = move || open() && !ctx.focus_state.any_focused();
+    // 列表是否应当接管焦点（过滤模式下不接管）
+    let should_focus_list = move || open() && !ctx.focus_state.any_focused() && !(ctx.filterable)();
 
     use_effect(move || {
         let Some(listbox_ref) = listbox_ref() else {
             return;
         };
-        if focused() {
+        if should_focus_list() {
             spawn(async move {
                 _ = listbox_ref.set_focus(true);
             });
@@ -174,7 +175,7 @@ pub fn SelectList(props: SelectListProps) -> Element {
             div {
                 id,
                 role: "listbox",
-                tabindex: if focused() { "0" } else { "-1" },
+                tabindex: if should_focus_list() { "0" } else { "-1" },
 
                 // Data attributes
                 "data-state": if open() { "open" } else { "closed" },
@@ -189,7 +190,8 @@ pub fn SelectList(props: SelectListProps) -> Element {
                     event.stop_propagation();
                 },
                 onblur: move |_| {
-                    if focused() {
+                    // 列表失焦即关闭（点击列表内部已通过 pointerdown 阻止默认，不会触发此分支）
+                    if open() {
                         open.set(false);
                     }
                 },
