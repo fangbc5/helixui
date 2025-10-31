@@ -139,7 +139,9 @@ pub fn SelectList(props: SelectListProps) -> Element {
             }
             Key::Enter => {
                 ctx.select_current_item();
-                open.set(false);
+                if !(ctx.multiple)() {
+                    open.set(false);
+                }
                 event.prevent_default();
                 event.stop_propagation();
             }
@@ -181,6 +183,11 @@ pub fn SelectList(props: SelectListProps) -> Element {
 
                 onmounted: move |evt| listbox_ref.set(Some(evt.data())),
                 onkeydown,
+                // 阻止点击列表内部触发 blur 从而关闭
+                onpointerdown: move |event| {
+                    event.prevent_default();
+                    event.stop_propagation();
+                },
                 onblur: move |_| {
                     if focused() {
                         open.set(false);

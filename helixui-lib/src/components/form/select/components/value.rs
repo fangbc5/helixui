@@ -2,7 +2,9 @@
 
 use dioxus::prelude::*;
 
+use super::super::context::RcPartialEqValue;
 use super::super::context::SelectContext;
+use crate::components::{Tag, TagSize, TagType, TagVariant};
 
 /// The props for the [`SelectValue`] component
 #[derive(Props, Clone, PartialEq)]
@@ -63,38 +65,46 @@ pub struct SelectValueProps {
 /// The [`SelectValue`] component defines a span with a `data-placeholder` attribute if a placeholder is set.
 #[component]
 pub fn SelectValue(props: SelectValueProps) -> Element {
-    let ctx = use_context::<SelectContext>();
+    let mut ctx = use_context::<SelectContext>();
 
-    let selected_text_value = use_memo(move || {
+    // 单选文本
+    let single_text = use_memo(move || {
         let value = ctx.value.read();
-        if (ctx.multiple)() {
-            // join selected values' text
-            let selected = (ctx.selected_values).read();
-            let options = ctx.options.read();
-            let mut texts: Vec<String> = Vec::new();
-            for v in selected.iter() {
-                if let Some(text) = options
-                    .iter()
-                    .find(|opt| opt.value == *v)
-                    .map(|opt| opt.text_value.clone())
-                {
-                    texts.push(text);
-                }
-            }
-            Some(texts.join(", "))
-        } else {
-            value.as_ref().and_then(|v| {
-                ctx.options
-                    .read()
-                    .iter()
-                    .find(|opt| opt.value == *v)
-                    .map(|opt| opt.text_value.clone())
-            })
-        }
+        value.as_ref().and_then(|v| {
+            ctx.options
+                .read()
+                .iter()
+                .find(|opt| opt.value == *v)
+                .map(|opt| opt.text_value.clone())
+        })
     });
 
-    let display_value = selected_text_value().unwrap_or_else(|| ctx.placeholder.cloned());
-    let is_placeholder = ctx.value.read().is_none();
+    // 多选条目：(value, text)
+    let selected_items = use_memo(move || {
+        let mut items: Vec<(RcPartialEqValue, String)> = Vec::new();
+        if (ctx.multiple)() {
+            let selected = (ctx.selected_values).read().clone();
+            let options = ctx.options.read();
+            for v in selected.into_iter() {
+                if let Some(text) = options
+                    .iter()
+                    .find(|opt| opt.value == v)
+                    .map(|opt| opt.text_value.clone())
+                {
+                    items.push((v, text));
+                }
+            }
+        }
+        items
+    });
+
+    let is_placeholder = if (ctx.multiple)() {
+        (ctx.selected_values).read().is_empty()
+    } else {
+        ctx.value.read().is_none()
+    };
+    let display_value = single_text().unwrap_or_else(|| ctx.placeholder.cloned());
+
     let base_class = "select-value";
     let class = if is_placeholder {
         format!("{} {}", base_class, "text-[var(--secondary-color-5)]")
@@ -103,12 +113,39 @@ pub fn SelectValue(props: SelectValueProps) -> Element {
     };
 
     rsx! {
-        // Add placeholder option if needed
-        span {
-            class: "{class}",
-            "data-placeholder": is_placeholder,
-            ..props.attributes,
-            {display_value}
+        if (ctx.multiple)() {
+            div { class: "flex flex-wrap gap-1 items-center",
+                if is_placeholder {
+                    span { class: "text-gray-400", {display_value} }
+                } else {
+                    for (val, text) in selected_items().into_iter() {
+                        span {
+                            onpointerdown: move |e| { e.prevent_default(); e.stop_propagation(); },
+                            onclick: move |e| { e.prevent_default(); e.stop_propagation(); },
+                            Tag { tag_type: TagType::Default, variant: TagVariant::Soft, size: TagSize::Small, round: true, closable: true, class: Some("max-w-full".to_string()),
+                                on_close: move |_| {
+                                    let mut list = (ctx.selected_values).read().clone();
+                                    let remove_val = val.clone();
+                                    if let Some(idx) = list.iter().position(|v| *v == remove_val) {
+                                        list.remove(idx);
+                                        (ctx.selected_values).set(list.clone());
+                                        (ctx.set_selected_values).call(list);
+                                    }
+                                },
+                                span { class: "truncate", "{text}" }
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            // 单选：保留原有行为
+            span {
+                class: "{class}",
+                "data-placeholder": is_placeholder,
+                ..props.attributes,
+                {display_value}
+            }
         }
     }
 }
