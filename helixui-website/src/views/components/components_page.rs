@@ -212,8 +212,8 @@ pub fn ComponentsPage() -> Element {
                                 name: "Select".to_string(),
                                 name_zh: "选择器".to_string(),
                                 description: "用于从多个选项中选择。".to_string(),
-                                route: crate::Route::ComponentsPage {},
-                                status: ComponentStatus::ComingSoon,
+                                route: crate::Route::SelectPage {},
+                                status: ComponentStatus::Available,
                             },
                         ],
                     }

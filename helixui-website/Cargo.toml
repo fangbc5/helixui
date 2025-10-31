@@ -12,11 +12,12 @@ path = "src/main.rs"
 [dependencies]
 helixui = { path = "../helixui-lib" }
 dioxus = { workspace = true, features = ["router"] }
+dioxus-desktop = { version = "0.7.0-rc.3", optional = true }
 tracing = { workspace = true}
 time.workspace = true
 
 [features]
 default = ["web"]
 web = ["dioxus/web"]
-desktop = ["dioxus/desktop"]
+desktop = ["dioxus/desktop", "dioxus-desktop"]
 mobile = ["dioxus/mobile"]

@@ -216,7 +216,7 @@ pub fn ComponentsSidebar() -> Element {
                 SidebarItem::link(i18n::t("component.checkbox"), crate::Route::CheckboxPage {}),
                 SidebarItem::link(i18n::t("component.radio"), crate::Route::RadioPage {}),
                 SidebarItem::link(i18n::t("component.switch"), crate::Route::SwitchPage {}),
-                SidebarItem::link(i18n::t("component.select"), crate::Route::ComponentsPage {}),
+                SidebarItem::link(i18n::t("component.select"), crate::Route::SelectPage {}),
             ],
         ),
         SidebarItem::category(
