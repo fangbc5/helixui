@@ -12,4 +12,3 @@ pub use components::{
 };
 pub use docs::{DocPage, Guide, Introduction, QuickStart, Version};
 pub use home::Home;
-pub use layout::TopNavbar;

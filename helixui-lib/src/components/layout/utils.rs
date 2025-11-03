@@ -96,7 +96,12 @@ pub fn generate_grid_column_style(
     } else {
         let span = span.unwrap_or(1);
         let offset = offset.unwrap_or(0);
-        format!("grid-column: {} / span {};", offset + 1, span)
+        // 默认（未设置 col/offset 且 span 为 1）时不指定 grid-column，交给浏览器自动放置
+        if offset == 0 && span == 1 {
+            String::new()
+        } else {
+            format!("grid-column: {} / span {};", offset + 1, span)
+        }
     }
 }
 
