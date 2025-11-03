@@ -257,7 +257,7 @@ pub struct ContentProps {
 /// Content 组件
 #[allow(non_snake_case)]
 pub fn Content(props: ContentProps) -> Element {
-    let padding = props.padding.unwrap_or(24);
+    let padding = props.padding.unwrap_or_default();
     let class = props.class.unwrap_or_default();
     let style = props.style.unwrap_or_default();
 
@@ -321,13 +321,16 @@ pub enum FooterTheme {
 /// Footer 组件
 #[allow(non_snake_case)]
 pub fn Footer(props: FooterProps) -> Element {
-    let height = props.height.unwrap_or(48);
+    let height_opt = props.height; // 高度改为可选：未提供时不强制设置，交给 children 自适应
     let z_index = props.z_index.unwrap_or(1000);
     let class = props.class.unwrap_or_default();
     let style = props.style.unwrap_or_default();
 
     // 构建样式
-    let mut footer_style = format!("height:{}px;", height);
+    let mut footer_style = String::new();
+    if let Some(h) = height_opt {
+        footer_style.push_str(&format!("height:{}px;", h));
+    }
 
     if props.fixed == Some(true) {
         footer_style.push_str(&format!(
@@ -349,7 +352,7 @@ pub fn Footer(props: FooterProps) -> Element {
 
     rsx! {
         footer {
-            class: format!("flex items-center justify-center px-6 border-t shadow-sm {} {}", theme_class, class),
+            class: format!("border-t shadow-sm {} {}", theme_class, class),
             style: footer_style,
             {props.children}
         }

@@ -18,29 +18,34 @@ pub fn TopNavbar() -> Element {
             header {
                 class: "fixed top-0 left-0 right-0 h-16 bg-white dark:bg-gray-950 border-b border-gray-200 dark:border-gray-800 z-50 transition-colors",
                 nav {
-                    class: "container mx-auto px-4 h-full flex items-center justify-between",
+                    class: "h-full flex items-center",
 
-                // Logo
+                // Logo - 与侧边栏内容左对齐（侧边栏 p-4=16px + 内容 px-2=8px = 24px，所以 pl-6 对齐到第一条红线）
                 div {
-                    class: "flex items-center space-x-8",
+                    class: "flex items-center pl-6 w-64 flex-shrink-0",
                     Link {
                         to: crate::Route::Home {},
                         class: "text-xl font-bold text-gray-900 dark:text-white hover:text-green-600 dark:hover:text-green-400 transition-colors",
                         "Helix UI"
                     }
+                }
 
-                    // 主导航
-                    div {
-                        class: "flex items-center space-x-1",
-                        NavLink { to: crate::Route::Home {}, label: i18n::t("nav.home") }
-                        NavLink { to: crate::Route::Introduction {}, label: i18n::t("nav.docs") }
-                        NavLink { to: crate::Route::ComponentsPage {}, label: i18n::t("nav.components") }
+                // 主导航 - 与主内容区域左对齐（侧边栏256px后，再pl-4=16px+链接px-4=16px，文本从256+16+16=288px开始，与主内容对齐）
+                div {
+                    class: "flex items-center justify-start pl-4",
+                    Link {
+                        to: crate::Route::Home {},
+                        class: "px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition-colors",
+                        active_class: "text-gray-900 dark:text-white bg-gray-100 dark:bg-gray-800",
+                        "{i18n::t(\"nav.home\")}"
                     }
+                    NavLink { to: crate::Route::Introduction {}, label: i18n::t("nav.docs") }
+                    NavLink { to: crate::Route::ComponentsPage {}, label: i18n::t("nav.components") }
                 }
 
                 // 右侧工具栏
                 div {
-                    class: "flex items-center space-x-4",
+                    class: "flex items-center space-x-4 ml-auto mr-4",
 
                     // 版本号
                     div {
